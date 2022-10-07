@@ -1,4 +1,4 @@
-package data.scripts.supplyDemandLibary;
+package data.scripts.supplyDemandLibary.old;
 
 
 import com.fs.starfarer.api.campaign.econ.Industry;
@@ -7,7 +7,7 @@ import com.fs.starfarer.api.campaign.econ.MutableCommodityQuantity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class crewReplacer_SupplyDemandChange {
+public class old_crewReplacer_SupplyDemandChange {
     public boolean supply;//false = demand. true = supply.
     public String name;
     public boolean onOff = true;
@@ -15,7 +15,7 @@ public class crewReplacer_SupplyDemandChange {
     private ArrayList<String> out = new ArrayList<>();
     private ArrayList<String> exception = new ArrayList<>();
     private ArrayList<String> requirement = new ArrayList<>();
-    public crewReplacer_SupplyDemandChange(String nametemp,boolean supplytemp){
+    public old_crewReplacer_SupplyDemandChange(String nametemp, boolean supplytemp){
         name = nametemp;
         supply = supplytemp;
     }

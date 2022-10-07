@@ -1,14 +1,22 @@
-
-remove all listiners.
-(done)finish supplyDemandLibary (see folder for info)
-(done)test supplyDemandLibary. (running supply demand library from crew replacer is an no-go. ill have to run it from an market condition, and that would make this mod unsafe to remove after install.)
-
-create an new 'crew cost' custom job.
--an idea, or proldom i have, is with crew cost. as it is now, players must make new code to beable to apply crew cost to there crew.,
- however, it should be simple to create an job in crewReplacer to do that. dont know if anyone will use it, but they dont have to if they dont want to.
- *Needs:
- -to beable to apply crew cost at the start of the momth, week, day, or always.
-    -when applying the code over time, it should be able to know how mush cost an crew used, by calculating the advradge crew
-     in your fleet of this type over that time.
-    -should be able to apply any item as costs for the crew. for example, credits, food, supply, mettle, other crew, exstra.
-    -should beagle to apply an by product to the crew cost? might be very easy if i allow crew to have negative cost.
+to do list:
+supplyDemandLibary:
+    create masterList:
+        -the masterList is an collection of lists. its were all lists ever made are stored.
+        -every time an list is added/requested with an industry reference that dose not exist, creates an new set of lists for that industry reference.
+        -remembers weather or not an industry has an MarketRetrofits reference, and if so, runs all change data in that industry?
+    create lists:
+        -lists are collection of sets. one list handles one industry.
+        -an list holds an organized by order list of all 'changes', with references back to said 'changes' 'set'. organized by order.
+        -when activated, an list runs through all changes in order, each time it reaches an new set, it checks to see if that set is valid.
+        -list holds references to its required industry ID.
+    create sets
+        -sets are were i calculate and run code. they decide what is allowed, and what is not.
+        -they also run and calculate all changes in the order they want to be calculated in.
+        -should be able to automatically apply itself to to the 'lists' that are required for its wanted industry.
+    finish testing the 'applyMutableStat' function in supplyBase.
+        -i made the class extend an MutableState. no idea if this is the right call or not.
+    x) test the following:
+        -demandSwap
+        -supplySwap
+        -supplyAdd
+        -demandAdd
