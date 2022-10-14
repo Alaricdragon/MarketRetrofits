@@ -2,10 +2,10 @@ package data.scripts.supplyDemandLibary.changes;
 
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MutableCommodityQuantity;
-import data.scripts.supplyDemandLibary.base.MarketRetrofit_SwapperBase;
+import data.scripts.supplyDemandLibary.base.MarketRetrofit_CCSwapperBase;
 
-public class MarketRetrofit_SwapDemand extends MarketRetrofit_SwapperBase {
-    MarketRetrofit_SwapDemand(String name, float orderT, String removeCommodity, String addCommodity){
+public class MarketRetrofit_CCSwapDemand extends MarketRetrofit_CCSwapperBase {
+    public MarketRetrofit_CCSwapDemand(String name, float orderT, String removeCommodity, String addCommodity){
         super(name,orderT,removeCommodity,addCommodity);
     }
     @Override

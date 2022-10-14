@@ -14,3 +14,23 @@ how it works:
         -btw, if anyone knows an market condition that is always active, please tell me, so i dont need to do this every time...
 
     enjoy having markets with vastly different supply and demand changes.
+
+
+
+how it works:
+    1: create set(s). they can be a 'MarketRetrofit_CCSetGenral' or an 'MarketRetrofit_CCSetIndustry'
+        a) MarketRetrofit_CCSetGenral is for when you want to effect all industry's with your change
+        b) MarketRetrofit_CCSetIndustry is for when you want to effect pacific industry's with your change
+            -) applyToIndustry(String industryName) will add this set to an industry. it can be added to all the industrys you want
+        -) all sets require an name. if it shares an name with another set, one or the other will not be changeable. sets with the same names will still work as normal
+        -) custom changes:
+            HERE: this is to be added. need an interface -maybe- for this. maybe not.
+    2: create change(s). they can be any of the following:
+        a) MarketRetrofit_CCAddDemand       for adding demand to an industry's      base stat = market size
+        b) MarketRetrofit_CCAddSupply       for adding supply to an industry's      base star = market size
+        c) MarketRetrofit_CCSwapDemand      for replacing demand on an industry's   base stat = old demand
+        d) MarketRetrofit_CCSwapSupply      for replacing supply on an industry's   base stat = old supply
+
+        -)every change is also an 'MutableStat'. this means that you can modafy the output as you would any other 'MutableStat'. base stat == the before modified value of every mutable stat
+        -)custom changes:
+            HERE: this is to be added. need an interface for this part i think.

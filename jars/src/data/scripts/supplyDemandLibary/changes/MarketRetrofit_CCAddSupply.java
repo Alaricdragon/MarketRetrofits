@@ -1,10 +1,10 @@
 package data.scripts.supplyDemandLibary.changes;
 
 import com.fs.starfarer.api.campaign.econ.Industry;
-import data.scripts.supplyDemandLibary.base.MarketRetrofit_AddDemandSupplyBase;
+import data.scripts.supplyDemandLibary.base.MarketRetrofit_CCAddDemandSupplyBase;
 
-public class MarketRetrofit_addSupply extends MarketRetrofit_AddDemandSupplyBase {
-    MarketRetrofit_addSupply(String name, float orderT,String addedT){
+public class MarketRetrofit_CCAddSupply extends MarketRetrofit_CCAddDemandSupplyBase {
+    public MarketRetrofit_CCAddSupply(String name, float orderT, String addedT){
         super(name,orderT,addedT);
     }
     @Override

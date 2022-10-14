@@ -3,7 +3,7 @@ package data.scripts.supplyDemandLibary.base;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.combat.MutableStat;
 
-public class MarketRetrofit_commoditiesChangeBase extends MutableStat {
+public class MarketRetrofit_CCBase extends MutableStat {
     /*
         to do list:
         swap out the float modifiers with an mutable state modifiers.
@@ -12,7 +12,7 @@ public class MarketRetrofit_commoditiesChangeBase extends MutableStat {
     public String ID ="";
     public float order = 0;
     public float modifiers;
-    protected MarketRetrofit_commoditiesChangeBase(String name, float orderT){
+    protected MarketRetrofit_CCBase(String name, float orderT){
         super(0);
         ID = name;
         order = orderT;
