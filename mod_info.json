@@ -6,5 +6,5 @@
 	"description":"libary for changeing stats of markets",
 	"gameVersion":"0.95a-RC15",
 	"jars":["jars/marketRetrofit.jar"],
-	"modPlugin":"data.scripts.crew_replacer_startup",
+	"modPlugin":"data.scripts.marketReplacer_startup",
 }

@@ -11,7 +11,11 @@ public class MarketRetrofit_CCSwapDemand extends MarketRetrofit_CCSwapperBase {
     @Override
     public void apply(Industry industry,String ID){
         MutableCommodityQuantity supply = industry.getDemand(removedCommodity);
-        industry.getDemand(addedCommodity).getQuantity().modifyFlat(ID, applyMutableStat(supply.getQuantity().base));
+        float a = supply.getQuantity().getModifiedValue();
+        if(a == 0){
+            return;
+        }
+        industry.getDemand(addedCommodity).getQuantity().modifyFlat(ID, applyMutableStat(a));
         supply.getQuantity().modifyMult(ID,0);
     }
     @Override

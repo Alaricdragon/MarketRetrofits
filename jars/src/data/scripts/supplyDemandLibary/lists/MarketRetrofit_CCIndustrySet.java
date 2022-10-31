@@ -16,7 +16,7 @@ public class MarketRetrofit_CCIndustrySet {
         industry = industryID;
     }
     public void addSet(MarketRetrofit_CCSetBase set){
-        addChangesToList(set);
+        //addChangesToList(set);
         sets.add(set);
     }
     public void removeSet(MarketRetrofit_CCSetBase set){
@@ -28,7 +28,7 @@ public class MarketRetrofit_CCIndustrySet {
         int a = 0;
         for(MarketRetrofit_CCBase change: changes){
             if(apply[links.get(a)]) {
-                change.apply(industry, getID(change,sets.get(links.get(a))));
+                change.apply(industry, getID(a));//getID(change,sets.get(links.get(a))));
             }
             a++;
         }
@@ -36,8 +36,18 @@ public class MarketRetrofit_CCIndustrySet {
     public void unApply(Industry industry){
         int a = 0;
         for(MarketRetrofit_CCBase change: changes){
-            change.unApply(industry,getID(change,sets.get(links.get(a))));
+            change.unApply(industry,getID(a));//getID(change,sets.get(links.get(a))));
             a++;
+        }
+    }
+    public void startup(){
+        ArrayList<MarketRetrofit_CCSetBase> sets_temp = sets;
+        sets = new ArrayList<>();
+        links = new ArrayList<>();
+        changes = new ArrayList<>();
+        for(MarketRetrofit_CCSetBase a: sets_temp) {
+            addChangesToList(a);
+            sets.add(a);
         }
     }
     private void addChangesToList(MarketRetrofit_CCSetBase set){
@@ -73,14 +83,20 @@ public class MarketRetrofit_CCIndustrySet {
             }
             if(!done){
                 if(max == changes.size()){
-                    float priority1 = changes.get(max - 1).order;
-                    if(priority > priority1){
-                        changes.add(max,change);
-                        links.add(max,pos);
-                        //crewPriority.add(temp);
-                    }else{
-                        changes.add(max - 1,change);
-                        links.add(max - 1,pos);
+                    //backup for first item.
+                    if(changes.size() == 0){
+                        links.add(pos);
+                        changes.add(change);
+                    }else {
+                        float priority1 = changes.get(max - 1).order;
+                        if (priority > priority1) {
+                            changes.add(max, change);
+                            links.add(max, pos);
+                            //crewPriority.add(temp);
+                        } else {
+                            changes.add(max - 1, change);
+                            links.add(max - 1, pos);
+                        }
                     }
                 }else{
                     float priority1 = changes.get(max).order;
@@ -115,5 +131,8 @@ public class MarketRetrofit_CCIndustrySet {
     }
     private String getID(MarketRetrofit_CCBase a, MarketRetrofit_CCSetBase b){
         return "" + a.ID + "_" + b.ID;
+    }
+    private String getID(int item){
+        return "" + item;
     }
 }

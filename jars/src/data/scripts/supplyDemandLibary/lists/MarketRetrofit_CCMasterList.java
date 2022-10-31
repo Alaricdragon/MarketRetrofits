@@ -17,6 +17,14 @@ public class MarketRetrofit_CCMasterList {
         return null;
     }
 
+    public static void startup(){
+        for (MarketRetrofit_CCIndustrySet a : IndustrySets){
+            a.startup();
+        }
+        GeneralSets.startup();
+    }
+    private static void applyGenralSetToSets(){
+    }
     private static void addSetToSets(MarketRetrofit_CCSetBase set){
         sets.add(set);
     }
@@ -35,6 +43,7 @@ public class MarketRetrofit_CCMasterList {
         if(!done){
             MarketRetrofit_CCIndustrySet a = new MarketRetrofit_CCIndustrySet(industryName);
             IndustrySets.add(a);
+            a.addSet(set);
         }
         addSetToSets(set);
     }

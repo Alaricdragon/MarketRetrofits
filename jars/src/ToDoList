@@ -1,21 +1,35 @@
+current:
 to do list:
+MarketRetrofit IndustryChanger:
+    -requirements:
+    needs to be simple to use.
+    using it should give the option of replacing the industry immediately? what?
+
+    ok so here the plan:
+    make one main class. call it 'marketRetrofit_Industry'.
+    every industry supported by MarketRetrofits must have this class trigger it, or an exstension of this class.
+    ...
+    ok got my lists online. got everything up. some issues (maybe).
+        1- some classes seem to want to return 'super' of there inharent classes. this means that my class must also inharate the same classes
+        2- some things seem to always want an output. i will need to defalt them to super as well.
+        3-
 supplyDemandLibary:
     create masterList:
-        -the masterList is an collection of lists. its were all lists ever made are stored.
-        -every time an list is added/requested with an industry reference that dose not exist, creates an new set of lists for that industry reference.
+        -(done)the masterList is an collection of lists. its were all lists ever made are stored.
+        -(done)every time an list is added/requested with an industry reference that dose not exist, creates an new set of lists for that industry reference.
         -remembers weather or not an industry has an MarketRetrofits reference, and if so, runs all change data in that industry?
-    create lists:
+    (done)create lists:
         -lists are collection of sets. one list handles one industry.
         -an list holds an organized by order list of all 'changes', with references back to said 'changes' 'set'. organized by order.
         -when activated, an list runs through all changes in order, each time it reaches an new set, it checks to see if that set is valid.
         -list holds references to its required industry ID.
-    create sets
+    (done)create sets
         -sets are were i calculate and run code. they decide what is allowed, and what is not.
         -they also run and calculate all changes in the order they want to be calculated in.
         -should be able to automatically apply itself to to the 'lists' that are required for its wanted industry.
-    finish testing the 'applyMutableStat' function in supplyBase.
+    (done)finish testing the 'applyMutableStat' function in supplyBase.
         -i made the class extend an MutableState. no idea if this is the right call or not.
-    x) test the following:
+    (done) test the following:
         -demandSwap
         -supplySwap
         -supplyAdd
