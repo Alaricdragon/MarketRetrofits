@@ -13,6 +13,9 @@ MarketRetrofit IndustryChanger:
         1- some classes seem to want to return 'super' of there inharent classes. this means that my class must also inharate the same classes
         2- some things seem to always want an output. i will need to defalt them to super as well.
         3-
+    ...
+    ok im done setting it up. im going to test it on mineing industry now.
+    relink the mineing industry to this one in the CSV file.
 supplyDemandLibary:
     create masterList:
         -(done)the masterList is an collection of lists. its were all lists ever made are stored.

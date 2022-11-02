@@ -38,9 +38,11 @@ public class MarketRetrofits_IndustryList {
     public MarketRetrofits_InstanceIndustry getActiveInstance(MarketAPI market){
         for(MarketRetrofits_InstanceIndustry a: sets){
             if(a.canImply(market)){
+                a.setMarket(market);
                 return a;
             }
         }
+        defaultInstance.setMarket(market);
         return defaultInstance;
     }
 }

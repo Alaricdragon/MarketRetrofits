@@ -1,6 +1,7 @@
 package data.scripts;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
+import data.scripts.industries.Implementation.defaultIndustrys.MarketRetrofit_MiningInstance;
 import data.scripts.listiners.marketRetrofit_marketInteractionListiner;
 import data.scripts.listiners.marketRetrofit_marketListiner;
 import data.scripts.supplyDemandLibary.base.MarketRetrofit_CCSetBase;
@@ -26,18 +27,22 @@ public class marketReplacer_startup extends BaseModPlugin {
         MarketRetrofit_CCMasterList.startup();
     }
     private static void startup2(){
-        test();
+        //test();
     }
     private static void applyListeners(){
         marketRetrofit_marketListiner a = new marketRetrofit_marketListiner();
         Global.getSector().getEconomy().addUpdateListener(a);
         //Global.getSector().addTransientListener(new marketRetrofit_marketInteractionListiner(false));
     }
+    private static void applyDefaultIndustryInstances(){
+        MarketRetrofit_MiningInstance miningInstance = new MarketRetrofit_MiningInstance("mining",0);
+        miningInstance.applyToIndustry("mining");
+    }
     private static void test(){
         /**/
         MarketRetrofit_CCSwapSupply a = new MarketRetrofit_CCSwapSupply("name",0,"crew","fuel");
-        //MarketRetrofit_CCSetGenral b = new MarketRetrofit_CCSetGenral("MainThing");
-        //b.addChange(a);
+        MarketRetrofit_CCSetGenral b = new MarketRetrofit_CCSetGenral("MainThing");
+        b.addChange(a);
 
         MarketRetrofit_CCAddDemand c = new MarketRetrofit_CCAddDemand("name",0,"lobster");
         c.modifyMult("aa",2);

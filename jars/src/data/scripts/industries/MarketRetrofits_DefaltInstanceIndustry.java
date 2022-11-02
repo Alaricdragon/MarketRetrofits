@@ -1,515 +1,485 @@
 package data.scripts.industries;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
-import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.*;
 import com.fs.starfarer.api.combat.MutableStat;
-import com.fs.starfarer.api.impl.campaign.econ.ResourceDepositsCondition;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import com.fs.starfarer.campaign.econ.Market;
-import data.scripts.industries.Lists.MarketRetrofits_IndustryList;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryMasterList;
 
-import java.awt.*;
-
-public class MarketRetrofits_InstanceIndustry extends BaseIndustry implements MarketImmigrationModifier{
-    /* this is the stored data of an industry. this is what a user will extend if they want to add an instanced industry.
-    *  requires:
-    *  mimics of every industry function, that all try to run the base industry
-    * */
-    public String ID;
-    public float order;
-    public MarketRetrofits_IndustryList industryGroup = null;
-    public void setMarket(MarketAPI newMarket){
-        market = newMarket;
+public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofits_InstanceIndustry{
+    /*this is the class that an industry would extend, if and only if said industry wants to be the default industry for an industry type.*/
+    public MarketRetrofits_DefaltInstanceIndustry(String name, float orderT) {
+        super(name, orderT);
     }
-    public MarketRetrofits_InstanceIndustry(String name,float orderT) {
-        ID = name;
-        order = orderT;
-    }
+    @Override
     public void applyToIndustry(String industry){
         //apply to industry here.
-        MarketRetrofits_IndustryMasterList.addInstance(industry,this);
+        MarketRetrofits_IndustryMasterList.setDefaltInstance(industry,this);
         industryGroup = MarketRetrofits_IndustryMasterList.getInstance(industry);
     }
-    //this class requires every single function held in baseIndustry, as well as an an function to determon if its active or not.
-    protected boolean Active = true;
-    public boolean canImply(MarketAPI market){
-        return Active;
-    }
-
-
-
-
     @Override
     public void apply() {
-        industryGroup.defaultInstance.apply();
-        //industryGroup.defaultInstance.apply();
+        super.apply();
         //get whatever industry should be used and use its methods here
     }
 
     @Override
     public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
-        industryGroup.defaultInstance.modifyIncoming(market,incoming);
     }
     @Override
     public void	addAICoreSection(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
-        industryGroup.defaultInstance.addAICoreSection(tooltip,mode);
+        super.addAICoreSection(tooltip,mode);
     }
     @Override
     public void	addAICoreSection(TooltipMakerAPI tooltip, java.lang.String coreId, Industry.AICoreDescriptionMode mode){
-        industryGroup.defaultInstance.addAICoreSection(tooltip,coreId,mode);
+        super.addAICoreSection(tooltip,coreId,mode);
     }
     @Override
     protected void	addAlphaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
-        industryGroup.defaultInstance.addAlphaCoreDescription(tooltip,mode);
+        super.addAlphaCoreDescription(tooltip,mode);
     }
     @Override
     protected void	addBetaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
-        industryGroup.defaultInstance.addBetaCoreDescription(tooltip,mode);
+        super.addBetaCoreDescription(tooltip,mode);
     }
     @Override
     protected void	addGammaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
-        industryGroup.defaultInstance.addGammaCoreDescription(tooltip,mode);
+        super.addGammaCoreDescription(tooltip,mode);
     }
     @Override
     protected void	addGroundDefensesImpactSection(TooltipMakerAPI tooltip, float bonus, java.lang.String... commodities){
-        industryGroup.defaultInstance.addGroundDefensesImpactSection(tooltip,bonus,commodities);
+        super.addGroundDefensesImpactSection(tooltip,bonus,commodities);
     }
     @Override
     public void	addImproveDesc(TooltipMakerAPI info, Industry.ImprovementDescriptionMode mode){
-        industryGroup.defaultInstance.addImproveDesc(info,mode);
+        super.addImproveDesc(info,mode);
     }
     @Override
     public void	addImprovedSection(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded){
-        industryGroup.defaultInstance.addImprovedSection(mode,tooltip,expanded);
+        super.addImprovedSection(mode,tooltip,expanded);
     }
     @Override
     public void	addInstalledItemsSection(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded){
-        industryGroup.defaultInstance.addInstalledItemsSection(mode,tooltip,expanded);
+        super.addInstalledItemsSection(mode,tooltip,expanded);
     }
     @Override
     protected boolean addNonAICoreInstalledItems(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded){
-        return industryGroup.defaultInstance.addNonAICoreInstalledItems(mode,tooltip,expanded);
+        return super.addNonAICoreInstalledItems(mode,tooltip,expanded);
     }
     @Override
     protected void	addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode){
-        industryGroup.defaultInstance.addPostDemandSection(tooltip,hasDemand,mode);
+        super.addPostDemandSection(tooltip,hasDemand,mode);
     }
     @Override
     protected void	addPostDescriptionSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode){
-        industryGroup.defaultInstance.addPostDescriptionSection(tooltip,mode);
+        super.addPostDescriptionSection(tooltip,mode);
     }
     @Override
     protected void	addPostSupplySection(TooltipMakerAPI tooltip, boolean hasSupply, Industry.IndustryTooltipMode mode){
-        industryGroup.defaultInstance.addPostSupplySection(tooltip,hasSupply,mode);
+        super.addPostSupplySection(tooltip,hasSupply,mode);
     }
     @Override
     protected void	addPostUpkeepSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode){
-        industryGroup.defaultInstance.addPostUpkeepSection(tooltip,mode);
+        super.addPostUpkeepSection(tooltip,mode);
     }
     @Override
     protected void	addRightAfterDescriptionSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode){
-        industryGroup.defaultInstance.addRightAfterDescriptionSection(tooltip,mode);
+        super.addRightAfterDescriptionSection(tooltip,mode);
     }
     @Override
     protected void	addStabilityPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode){
-        industryGroup.defaultInstance.addStabilityPostDemandSection(tooltip,hasDemand,mode);
+        super.addStabilityPostDemandSection(tooltip,hasDemand,mode);
     }
     @Override
     //Override
     public MarketCMD.RaidDangerLevel adjustCommodityDangerLevel(java.lang.String commodityId, MarketCMD.RaidDangerLevel level){
-        return industryGroup.defaultInstance.adjustCommodityDangerLevel(commodityId,level);
+        return super.adjustCommodityDangerLevel(commodityId,level);
     }
     @Override
     //Override
     public MarketCMD.RaidDangerLevel adjustItemDangerLevel(java.lang.String itemId, java.lang.String data, MarketCMD.RaidDangerLevel level){
-        return industryGroup.defaultInstance.adjustItemDangerLevel(itemId,data,level);
+        return super.adjustItemDangerLevel(itemId,data,level);
     }
     @Override
     //Includes nonecon "commodities" such as AI cores.
     public int	adjustMarineTokensToRaidItem(java.lang.String itemId, java.lang.String data, int marineTokens){
-        return industryGroup.defaultInstance.adjustMarineTokensToRaidItem(itemId,data,marineTokens);
+        return super.adjustMarineTokensToRaidItem(itemId,data,marineTokens);
     }
     @Override
     public void	advance(float amount){
-        industryGroup.defaultInstance.advance(amount);
+        super.advance(amount);
     }
     @Override
     public void	apply(boolean withIncomeUpdate){
-        industryGroup.defaultInstance.apply(withIncomeUpdate);
+        super.apply(withIncomeUpdate);
     }
     @Override
     protected void	applyAICoreModifiers(){
-        industryGroup.defaultInstance.applyAICoreModifiers();
+        super.applyAICoreModifiers();
     }
     @Override
     protected void	applyAICoreToIncomeAndUpkeep(){
-        industryGroup.defaultInstance.applyAICoreToIncomeAndUpkeep();
+        super.applyAICoreToIncomeAndUpkeep();
     }
     @Override
     protected void	applyAlphaCoreModifiers(){
-        industryGroup.defaultInstance.applyAlphaCoreModifiers();
+        super.applyAlphaCoreModifiers();
     }
     @Override
     protected void	applyAlphaCoreSupplyAndDemandModifiers(){
-        industryGroup.defaultInstance.applyAlphaCoreSupplyAndDemandModifiers();
+        super.applyAlphaCoreSupplyAndDemandModifiers();
     }
     @Override
     protected void	applyBetaCoreModifiers(){
-        industryGroup.defaultInstance.applyBetaCoreModifiers();
+        super.applyBetaCoreModifiers();
     }
     @Override
     protected void	applyBetaCoreSupplyAndDemandModifiers(){
-        industryGroup.defaultInstance.applyBetaCoreSupplyAndDemandModifiers();
+        super.applyBetaCoreSupplyAndDemandModifiers();
     }
     @Override
-    protected void	applyDeficitToProduction(int index, Pair<java.lang.String,java.lang.Integer> deficit, java.lang.String... commodities){
-        industryGroup.defaultInstance.applyDeficitToProduction(index,deficit,commodities);
+    protected void	applyDeficitToProduction(int index, Pair<String, Integer> deficit, java.lang.String... commodities){
+        super.applyDeficitToProduction(index,deficit,commodities);
     }
     @Override
     protected void	applyGammaCoreModifiers(){
-        industryGroup.defaultInstance.applyGammaCoreModifiers();
+        super.applyGammaCoreModifiers();
     }
     @Override
     protected void	applyGammaCoreSupplyAndDemandModifiers(){
-        industryGroup.defaultInstance.applyGammaCoreSupplyAndDemandModifiers();
+        super.applyGammaCoreSupplyAndDemandModifiers();
     }
     @Override
     protected void	applyImproveModifiers(){
-        industryGroup.defaultInstance.applyImproveModifiers();
+        super.applyImproveModifiers();
     }
     @Override
     protected void	applyIncomeAndUpkeep(float sizeOverride){
-        industryGroup.defaultInstance.applyIncomeAndUpkeep(sizeOverride);
+        super.applyIncomeAndUpkeep(sizeOverride);
     }
     @Override
     protected void	applyNoAICoreModifiers(){
-        industryGroup.defaultInstance.applyNoAICoreModifiers();
+        super.applyNoAICoreModifiers();
     }
     @Override
     protected void	buildingFinished(){
-        industryGroup.defaultInstance.buildingFinished();
+        super.buildingFinished();
     }
     @Override
     //public static void	buildNextInQueue(MarketAPI market)
     public boolean	canBeDisrupted(){
-        return industryGroup.defaultInstance.canBeDisrupted();
+        return super.canBeDisrupted();
     }
     @Override
     public void	cancelUpgrade(){
-        industryGroup.defaultInstance.cancelUpgrade();
+        super.cancelUpgrade();
     }
     @Override
     public boolean	canDowngrade(){
-        return industryGroup.defaultInstance.canDowngrade();
+        return super.canDowngrade();
     }
     @Override
     public boolean	canImprove(){
-        return industryGroup.defaultInstance.canImprove();
+        return super.canImprove();
     }
     @Override
     protected boolean canImproveToIncreaseProduction(){
-        return industryGroup.defaultInstance.canImproveToIncreaseProduction();
+        return super.canImproveToIncreaseProduction();
     }
     @Override
     public boolean	canInstallAICores(){
-        return industryGroup.defaultInstance.canInstallAICores();
+        return super.canInstallAICores();
     }
     @Override
     public boolean	canShutDown(){
-        return industryGroup.defaultInstance.canShutDown();
+        return super.canShutDown();
     }
     @Override
     public boolean	canUpgrade(){
-        return industryGroup.defaultInstance.canUpgrade();
+        return super.canUpgrade();
     }
     @Override
     public void	clearUnmodified(){
-        industryGroup.defaultInstance.clearUnmodified();
+        super.clearUnmodified();
     }
     @Override
     protected BaseIndustry clone(){
-        return industryGroup.defaultInstance.clone();
+        return super.clone();
     }
     @Override
     public void	createTooltip(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded){
-        industryGroup.defaultInstance.createTooltip(mode,tooltip,expanded);
+        super.createTooltip(mode,tooltip,expanded);
     }
     @Override
     public void	demand(int index, java.lang.String commodityId, int quantity, java.lang.String desc){
-        industryGroup.defaultInstance.demand(index,commodityId,quantity,desc);
+        super.demand(index,commodityId,quantity,desc);
     }
     @Override
     public void	demand(java.lang.String commodityId, int quantity){
-        industryGroup.defaultInstance.demand(commodityId,quantity);
+        super.demand(commodityId,quantity);
     }
     @Override
     public void	demand(java.lang.String commodityId, int quantity, java.lang.String desc){
-        industryGroup.defaultInstance.demand(commodityId,quantity,desc);
+        super.demand(commodityId,quantity,desc);
     }
     @Override
     public void	demand(java.lang.String modId, java.lang.String commodityId, int quantity, java.lang.String desc){
-        industryGroup.defaultInstance.demand(modId,commodityId,quantity,desc);
+        super.demand(modId,commodityId,quantity,desc);
     }
     @Override
     protected void	disruptionFinished(){
-        industryGroup.defaultInstance.disruptionFinished();
+        super.disruptionFinished();
     }
     @Override
     public void	doPostSaveRestore(){
-        industryGroup.defaultInstance.doPostSaveRestore();
+        super.doPostSaveRestore();
     }
     @Override
     public void	doPreSaveCleanup(){
-        industryGroup.defaultInstance.doPreSaveCleanup();
+        super.doPreSaveCleanup();
     }
     @Override
     public void	downgrade(){
-        industryGroup.defaultInstance.downgrade();
+        super.downgrade();
     }
     @Override
     public void	finishBuildingOrUpgrading(){
-        industryGroup.defaultInstance.finishBuildingOrUpgrading();
+        super.finishBuildingOrUpgrading();
     }
     @Override
     public CargoAPI generateCargoForGatheringPoint(java.util.Random random){
-        return industryGroup.defaultInstance.generateCargoForGatheringPoint(random);
+        return super.generateCargoForGatheringPoint(random);
     }
     @Override
     public java.lang.String	getAICoreId(){
-        return industryGroup.defaultInstance.getAICoreId();
+        return super.getAICoreId();
     }
     @Override
     public java.util.List<Pair<java.lang.String,java.lang.Integer>>	getAllDeficit(){
-        return industryGroup.defaultInstance.getAllDeficit();
+        return super.getAllDeficit();
     }
     @Override
     public java.util.List<Pair<java.lang.String,java.lang.Integer>>	getAllDeficit(java.lang.String... commodityIds){
-        return industryGroup.defaultInstance.getAllDeficit(commodityIds);
+        return super.getAllDeficit(commodityIds);
     }
     @Override
     public java.util.List<MutableCommodityQuantity>	getAllDemand(){
-        return industryGroup.defaultInstance.getAllDemand();
+        return super.getAllDemand();
     }
     @Override
     public java.util.List<MutableCommodityQuantity>	getAllSupply(){
-        return industryGroup.defaultInstance.getAllSupply();
+        return super.getAllSupply();
     }
     @Override
     protected int	getBaseStabilityMod(){
-        return industryGroup.defaultInstance.getBaseStabilityMod();
+        return super.getBaseStabilityMod();
     }
     @Override
     public float	getBaseUpkeep(){
-        return industryGroup.defaultInstance.getBaseUpkeep();
+        return super.getBaseUpkeep();
     }
     @Override
     public float	getBuildCost(){
-        return industryGroup.defaultInstance.getBuildCost();
+        return super.getBuildCost();
     }
     @Override
     public java.lang.Float	getBuildCostOverride(){
-        return industryGroup.defaultInstance.getBuildCostOverride();
+        return super.getBuildCostOverride();
     }
     @Override
     public java.lang.String	getBuildOrUpgradeDaysText(){
-        return industryGroup.defaultInstance.getBuildOrUpgradeDaysText();
+        return super.getBuildOrUpgradeDaysText();
     }
     @Override
     public float	getBuildOrUpgradeProgress(){
-        return industryGroup.defaultInstance.getBuildOrUpgradeProgress();
+        return super.getBuildOrUpgradeProgress();
     }
     @Override
     public java.lang.String	getBuildOrUpgradeProgressText(){
-        return industryGroup.defaultInstance.getBuildOrUpgradeProgressText();
+        return super.getBuildOrUpgradeProgressText();
     }
     @Override
     public float	getBuildProgress(){
-        return industryGroup.defaultInstance.getBuildProgress();
+        return super.getBuildProgress();
     }
     @Override
     public float	getBuildTime(){
-        return industryGroup.defaultInstance.getBuildTime();
+        return super.getBuildTime();
     }
     @Override
     public java.lang.String	getCanNotShutDownReason(){
-        return industryGroup.defaultInstance.getCanNotShutDownReason();
+        return super.getCanNotShutDownReason();
     }
     @Override
     protected CargoAPI	getCargoForInteractionMode(MarketAPI.MarketInteractionMode mode){
-        return industryGroup.defaultInstance.getCargoForInteractionMode(mode);
+        return super.getCargoForInteractionMode(mode);
     }
     @Override
     public java.lang.String	getCargoTitleForGatheringPoint(){
-        return industryGroup.defaultInstance.getCargoTitleForGatheringPoint();
+        return super.getCargoTitleForGatheringPoint();
     }
     @Override
     /*public static float	getCommodityEconUnitMult(float size){
-        return industryGroup.defaultInstance.getComm
+        return super.getComm
     }*/
     public java.lang.String	getCurrentImage(){
-        return industryGroup.defaultInstance.getCurrentImage();
+        return super.getCurrentImage();
     }
     @Override
     public java.lang.String	getCurrentName(){
-        return industryGroup.defaultInstance.getCurrentName();
+        return super.getCurrentName();
     }
     @Override
     protected float	getDeficitMult(java.lang.String... commodities){
-        return industryGroup.defaultInstance.getDeficitMult(commodities);
+        return super.getDeficitMult(commodities);
     }
     @Override
     /*public static java.lang.String	getDeficitText(java.lang.String commodityId){
-        return industryGroup.defaultInstance.getDeficitText();
+        return super.getDeficitText();
     }*/
     public MutableCommodityQuantity	getDemand(java.lang.String id){
-        return industryGroup.defaultInstance.getDemand(id);
+        return super.getDemand(id);
     }
     @Override
     public MutableStat getDemandReduction(){
-        return industryGroup.defaultInstance.getDemandReduction();
+        return super.getDemandReduction();
     }
     @Override
     public MutableStat	getDemandReductionFromOther(){
-        return industryGroup.defaultInstance.getDemandReductionFromOther();
+        return super.getDemandReductionFromOther();
     }
     @Override
     protected java.lang.String	getDescriptionOverride(){
-        return industryGroup.defaultInstance.getDescriptionOverride();
+        return super.getDescriptionOverride();
     }
     @Override
     public float	getDisruptedDays(){
-        return industryGroup.defaultInstance.getDisruptedDays();
+        return super.getDisruptedDays();
     }
     @Override
     public java.lang.String	getDisruptedKey(){
-        return industryGroup.defaultInstance.getDisruptedKey();
+        return super.getDisruptedKey();
     }
     @Override
     public java.lang.String	getId(){
-        return industryGroup.defaultInstance.getId();
+        return super.getId();
     }
     @Override
     public float	getImproveBonusXP(){
-        return industryGroup.defaultInstance.getImproveBonusXP();
+        return super.getImproveBonusXP();
     }
     @Override
     public java.lang.String	getImproveDialogTitle(){
-        return industryGroup.defaultInstance.getImproveDialogTitle();
+        return super.getImproveDialogTitle();
     }
     @Override
     protected java.lang.String	getImprovementsDescForModifiers(){
-        return industryGroup.defaultInstance.getImprovementsDescForModifiers();
+        return super.getImprovementsDescForModifiers();
     }
     @Override
     public java.lang.String	getImproveMenuText(){
-        return industryGroup.defaultInstance.getImproveMenuText();
+        return super.getImproveMenuText();
     }
     @Override
     protected int	getImproveProductionBonus(){
-        return industryGroup.defaultInstance.getImproveProductionBonus();
+        return super.getImproveProductionBonus();
     }
     @Override
     public java.lang.String	getImproveSoundId(){
-        return industryGroup.defaultInstance.getImproveSoundId();
+        return super.getImproveSoundId();
     }
     @Override
     public int	getImproveStoryPoints(){
-        return industryGroup.defaultInstance.getImproveStoryPoints();
+        return super.getImproveStoryPoints();
     }
     @Override
     public MutableStat	getIncome(){
-        return industryGroup.defaultInstance.getIncome();
+        return super.getIncome();
     }
     @Override
     public java.util.List<InstallableIndustryItemPlugin>	getInstallableItems(){
-        return industryGroup.defaultInstance.getInstallableItems();
+        return super.getInstallableItems();
     }
     @Override
     public MarketAPI	getMarket(){
-        return industryGroup.defaultInstance.getMarket();
+        return super.getMarket();
     }
     @Override
     public Pair<java.lang.String,java.lang.Integer>	getMaxDeficit(java.lang.String... commodityIds){
-        return industryGroup.defaultInstance.getMaxDeficit(commodityIds);
+        return super.getMaxDeficit(commodityIds);
     }
     @Override
     protected java.lang.String	getModId(){
-        return industryGroup.defaultInstance.getModId();
+        return super.getModId();
     }
     @Override
     protected java.lang.String	getModId(int index){
-        return industryGroup.defaultInstance.getModId(index);
+        return super.getModId(index);
     }
     @Override
     public java.lang.String	getNameForModifier(){
-        return industryGroup.defaultInstance.getNameForModifier();
+        return super.getNameForModifier();
     }
     @Override
     public float	getPatherInterest(){
-        return industryGroup.defaultInstance.getPatherInterest();
+        return super.getPatherInterest();
     }
     @Override
     public float	getSizeMult(){
-        return industryGroup.defaultInstance.getSizeMult();
+        return super.getSizeMult();
     }
     @Override
     /*public static float getSizeMult(float size){
-        return industryGroup.defaultInstance.getSizeMult(size);
+        return super.getSizeMult(size);
     }*/
     public IndustrySpecAPI getSpec(){
-        return industryGroup.defaultInstance.getSpec();
+        return super.getSpec();
     }
     @Override
-    public SpecialItemData	getSpecialItem(){
-        return industryGroup.defaultInstance.getSpecialItem();
+    public SpecialItemData getSpecialItem(){
+        return super.getSpecialItem();
     }
     @Override
     protected Pair<java.lang.String,java.lang.Integer>	getStabilityAffectingDeficit(){
-        return industryGroup.defaultInstance.getStabilityAffectingDeficit();
+        return super.getStabilityAffectingDeficit();
     }
     @Override
     protected int	getStabilityPenalty(){
-        return industryGroup.defaultInstance.getStabilityPenalty();
+        return super.getStabilityPenalty();
     }
     @Override
     public MutableCommodityQuantity	getSupply(java.lang.String id){
-        return industryGroup.defaultInstance.getSupply(id);
+        return super.getSupply(id);
     }
     @Override
     public MutableStat	getSupplyBonus(){
-        return industryGroup.defaultInstance.getSupplyBonus();
+        return super.getSupplyBonus();
     }
     @Override
     public MutableStat	getSupplyBonusFromOther() {
-        return industryGroup.defaultInstance.getSupplyBonusFromOther();
+        return super.getSupplyBonusFromOther();
     }
     @Override
     public float	getTooltipWidth(){
-        return industryGroup.defaultInstance.getTooltipWidth();
+        return super.getTooltipWidth();
     }
     @Override
     public java.lang.String	getUnavailableReason(){
-        return industryGroup.defaultInstance.getUnavailableReason();
+        return super.getUnavailableReason();
     }
     @Override
     public MutableStat	getUpkeep(){
-        return industryGroup.defaultInstance.getUpkeep();
+        return super.getUpkeep();
     }
     @Override
     public java.util.List<SpecialItemData>	getVisibleInstalledItems(){
-        return industryGroup.defaultInstance.getVisibleInstalledItems();
+        return super.getVisibleInstalledItems();
     }
     @Override
     protected boolean	hasPostDemandSection(boolean hasDemand, Industry.IndustryTooltipMode mode){
@@ -517,200 +487,200 @@ public class MarketRetrofits_InstanceIndustry extends BaseIndustry implements Ma
     }
     @Override
     public void	init(java.lang.String id, MarketAPI market){
-        industryGroup.defaultInstance.init(id,market);
+        super.init(id,market);
     }
     @Override
     public void	initWithParams(java.util.List<java.lang.String> params){
-        industryGroup.defaultInstance.initWithParams(params);
+        super.initWithParams(params);
     }
     @Override
     //Used when loading market from an economy .json file.
     protected boolean	isAICoreId(java.lang.String str){
-        return industryGroup.defaultInstance.isAICoreId(str);
+        return super.isAICoreId(str);
     }
     @Override
     public boolean	isAvailableToBuild(){
-        return industryGroup.defaultInstance.isAvailableToBuild();
+        return super.isAvailableToBuild();
     }
     @Override
     public boolean	isBuilding(){
-        return industryGroup.defaultInstance.isBuilding();
+        return super.isBuilding();
     }
     @Override
     //Building OR upgrading.
     public boolean	isDemandLegal(CommodityOnMarketAPI com){
-        return industryGroup.defaultInstance.isDemandLegal(com);
+        return super.isDemandLegal(com);
     }
     @Override
     public boolean	isDisrupted(){
-        return industryGroup.defaultInstance.isDisrupted();
+        return super.isDisrupted();
     }
     @Override
     public boolean	isFunctional(){
-        return industryGroup.defaultInstance.isFunctional();
+        return super.isFunctional();
     }
     @Override
     //Building and not upgrading.
     public boolean	isHidden(){
-        return industryGroup.defaultInstance.isHidden();
+        return super.isHidden();
     }
     @Override
     public boolean	isImproved(){
-        return industryGroup.defaultInstance.isImproved();
+        return super.isImproved();
     }
     @Override
     public boolean	isIndustry(){
-        return industryGroup.defaultInstance.isIndustry();
+        return super.isIndustry();
     }
     @Override
     public boolean	isOther(){
-        return industryGroup.defaultInstance.isOther();
+        return super.isOther();
     }
     @Override
     public boolean	isStructure(){
-        return industryGroup.defaultInstance.isStructure();
+        return super.isStructure();
     }
     @Override
     public boolean	isSupplyLegal(CommodityOnMarketAPI com){
-        return industryGroup.defaultInstance.isSupplyLegal(com);
+        return super.isSupplyLegal(com);
     }
     @Override
     public boolean	isTooltipExpandable(){
-        return industryGroup.defaultInstance.isTooltipExpandable();
+        return super.isTooltipExpandable();
     }
     @Override
     public boolean	isUpgrading(){
-        return industryGroup.defaultInstance.isUpgrading();
+        return super.isUpgrading();
     }
     @Override
     //Upgrading, but not the initial building process.
     protected void	modifyStabilityWithBaseMod(){
-        industryGroup.defaultInstance.modifyStabilityWithBaseMod();
+        super.modifyStabilityWithBaseMod();
     }
     @Override
     public void	notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade){
-        industryGroup.defaultInstance.notifyBeingRemoved(mode,forUpgrade);
+        super.notifyBeingRemoved(mode,forUpgrade);
     }
     @Override
     public void	notifyColonyRenamed(){
-        industryGroup.defaultInstance.notifyColonyRenamed();
+        super.notifyColonyRenamed();
     }
     @Override
     protected void	notifyDisrupted(){
-        industryGroup.defaultInstance.notifyDisrupted();
+        super.notifyDisrupted();
     }
     @Override
     protected java.lang.Object	readResolve(){
-        return industryGroup.defaultInstance.readResolve();
+        return super.readResolve();
     }
     @Override
     public void	reapply(){
-        industryGroup.defaultInstance.reapply();
+        super.reapply();
     }
     @Override
     //Calls unapply() and then reapply().
     protected void	sendBuildOrUpgradeMessage(){
-        industryGroup.defaultInstance.sendBuildOrUpgradeMessage();
+        super.sendBuildOrUpgradeMessage();
     }
     @Override
     public void	setAICoreId(java.lang.String aiCoreId){
-        industryGroup.defaultInstance.setAICoreId(aiCoreId);
+        super.setAICoreId(aiCoreId);
     }
     @Override
     public void	setBuildCostOverride(float buildCostOverride){
-        industryGroup.defaultInstance.setBuildCostOverride(buildCostOverride);
+        super.setBuildCostOverride(buildCostOverride);
     }
     @Override
     public void	setBuildProgress(float buildProgress){
-        industryGroup.defaultInstance.setBuildProgress(buildProgress);
+        super.setBuildProgress(buildProgress);
     }
     @Override
     public void	setDisrupted(float days){
-        industryGroup.defaultInstance.setDisrupted(days);
+        super.setDisrupted(days);
     }
     @Override
     public void	setDisrupted(float days, boolean useMax){
-        industryGroup.defaultInstance.setDisrupted(days,useMax);
+        super.setDisrupted(days,useMax);
     }
     @Override
     public void	setHidden(boolean hidden){
-        industryGroup.defaultInstance.setHidden(hidden);
+        super.setHidden(hidden);
     }
     @Override
     public void	setImproved(boolean improved){
-        industryGroup.defaultInstance.setImproved(improved);
+        super.setImproved(improved);
     }
     @Override
     public void	setSpecialItem(SpecialItemData special){
-        industryGroup.defaultInstance.setSpecialItem(special);
+        super.setSpecialItem(special);
     }
     @Override
     public boolean	showShutDown(){
-        return industryGroup.defaultInstance.showShutDown();
+        return super.showShutDown();
     }
     @Override
     public boolean	showWhenUnavailable(){
-        return industryGroup.defaultInstance.showWhenUnavailable();
+        return super.showWhenUnavailable();
     }
     @Override
     public void	startBuilding(){
-        industryGroup.defaultInstance.startBuilding();
+        super.startBuilding();
     }
     @Override
     public void	startUpgrading(){
-        industryGroup.defaultInstance.startUpgrading();
+        super.startUpgrading();
     }
     @Override
     public void	supply(int index, java.lang.String commodityId, int quantity, java.lang.String desc){
-        industryGroup.defaultInstance.supply(index,commodityId,quantity,desc);
+        super.supply(index,commodityId,quantity,desc);
     }
     @Override
     public void	supply(java.lang.String commodityId, int quantity){
-        industryGroup.defaultInstance.supply(commodityId,quantity);
+        super.supply(commodityId,quantity);
     }
     @Override
     public void	supply(java.lang.String commodityId, int quantity, java.lang.String desc){
-        industryGroup.defaultInstance.supply(commodityId,quantity,desc);
+        super.supply(commodityId,quantity,desc);
     }
     @Override
     public void	supply(java.lang.String modId, java.lang.String commodityId, int quantity, java.lang.String desc){
-        industryGroup.defaultInstance.supply(modId,commodityId,quantity,desc);
+        super.supply(modId,commodityId,quantity,desc);
     }
     @Override
     public void	unapply(){
-        industryGroup.defaultInstance.unapply();
+        super.unapply();
     }
     @Override
     protected void	unmodifyStabilityWithBaseMod(){
-        industryGroup.defaultInstance.unmodifyStabilityWithBaseMod();
+        super.unmodifyStabilityWithBaseMod();
     }
     @Override
     protected void	updateAICoreToSupplyAndDemandModifiers(){
-        industryGroup.defaultInstance.updateAICoreToSupplyAndDemandModifiers();
+        super.updateAICoreToSupplyAndDemandModifiers();
     }
     @Override
     protected void	updateImprovementSupplyAndDemandModifiers(){
-        industryGroup.defaultInstance.updateImprovementSupplyAndDemandModifiers();
+        super.updateImprovementSupplyAndDemandModifiers();
     }
     @Override
     public void	updateIncomeAndUpkeep(){
-        industryGroup.defaultInstance.updateIncomeAndUpkeep();
+        super.updateIncomeAndUpkeep();
     }
     @Override
     protected void	updateSupplyAndDemandModifiers(){
-        industryGroup.defaultInstance.updateSupplyAndDemandModifiers();
+        super.updateSupplyAndDemandModifiers();
     }
     @Override
     protected void	upgradeFinished(Industry previous){
-        industryGroup.defaultInstance.upgradeFinished(previous);
+        super.upgradeFinished(previous);
     }
     @Override
     public boolean	wantsToUseSpecialItem(SpecialItemData data){
-        return industryGroup.defaultInstance.wantsToUseSpecialItem(data);
+        return super.wantsToUseSpecialItem(data);
     }
     @Override
     //Return false if already using one of that type, unless the other one is better.
     protected java.lang.Object	writeReplace() {
-        return industryGroup.defaultInstance.writeReplace();
+        return super.writeReplace();
     }
 }
