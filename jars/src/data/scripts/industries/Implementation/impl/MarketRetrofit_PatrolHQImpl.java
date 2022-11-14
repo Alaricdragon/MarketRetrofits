@@ -1,4 +1,10 @@
 package data.scripts.industries.Implementation.impl;
 
-public class MarketRetrofit_PatrolHQImpl {
+import data.scripts.industries.MarketRetrofit_BaseIndustry;
+
+public class MarketRetrofit_PatrolHQImpl extends MarketRetrofit_BaseIndustry {
+    @Override
+    public String MarketRetrofits_IndustryID(){
+        return "patrolhq";
+    }
 }

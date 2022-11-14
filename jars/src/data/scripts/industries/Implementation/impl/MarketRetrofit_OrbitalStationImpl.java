@@ -1,2 +1,10 @@
-package data.scripts.industries.Implementation.impl;public class MarketRetrofit_OrbitalStationImpl {
+package data.scripts.industries.Implementation.impl;
+
+import data.scripts.industries.MarketRetrofit_BaseIndustry;
+
+public class MarketRetrofit_OrbitalStationImpl extends MarketRetrofit_BaseIndustry {
+    @Override
+    public String MarketRetrofits_IndustryID(){
+        return "station_base";
+    }
 }

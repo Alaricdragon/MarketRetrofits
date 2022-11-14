@@ -1,4 +1,10 @@
 package data.scripts.industries.Implementation.impl;
 
-public class MarketRetrofit_StarFortressHighTechImpl {
+import data.scripts.industries.MarketRetrofit_BaseIndustry;
+
+public class MarketRetrofit_StarFortressHighTechImpl extends MarketRetrofit_BaseIndustry {
+    @Override
+    public String MarketRetrofits_IndustryID(){
+        return "starfortress_high";
+    }
 }

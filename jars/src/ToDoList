@@ -1,21 +1,11 @@
 current:
 to do list:
 MarketRetrofit IndustryChanger:
-    -requirements:
-    needs to be simple to use.
-    using it should give the option of replacing the industry immediately? what?
-
-    ok so here the plan:
-    make one main class. call it 'marketRetrofit_Industry'.
-    every industry supported by MarketRetrofits must have this class trigger it, or an exstension of this class.
-    ...
-    ok got my lists online. got everything up. some issues (maybe).
-        1- some classes seem to want to return 'super' of there inharent classes. this means that my class must also inharate the same classes
-        2- some things seem to always want an output. i will need to defalt them to super as well.
-        3-
-    ...
-    ok im done setting it up. im going to test it on mineing industry now.
-    relink the mineing industry to this one in the CSV file.
+    BUG:
+        -mining industry has like 30X supply or demand at random? need to look into this...
+    -finish industry list so it remembers its industry instances in prioriity order.
+    -finish added all the default instances for all the base game industry's.
+    -test and make sure this works for every industry i activate. NOTE: dose not play nice with saves when i actavate a new industry.
 supplyDemandLibary:
     create masterList:
         -(done)the masterList is an collection of lists. its were all lists ever made are stored.
