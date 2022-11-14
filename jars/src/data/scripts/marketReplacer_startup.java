@@ -17,7 +17,7 @@ import data.scripts.supplyDemandLibary.sets.MarketRetrofit_CCSetIndustry;
 public class marketReplacer_startup extends BaseModPlugin {
     @Override
     public void onApplicationLoad() {
-        startup2();
+        applyDefaultIndustryInstances();
     }
 
     @Override
@@ -25,9 +25,6 @@ public class marketReplacer_startup extends BaseModPlugin {
         super.onGameLoad(newGame);
         applyListeners();
         MarketRetrofit_CCMasterList.startup();
-    }
-    private static void startup2(){
-        //test();
     }
     private static void applyListeners(){
         marketRetrofit_marketListiner a = new marketRetrofit_marketListiner();

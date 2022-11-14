@@ -22,30 +22,20 @@ import data.scripts.industries.Lists.MarketRetrofits_IndustryMasterList;
 
 import java.awt.*;
 
-public class MarketRetrofits_InstanceIndustry extends BaseIndustry implements MarketImmigrationModifier{
+public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInstanceIndustry{
     /* this is the stored data of an industry. this is what a user will extend if they want to add an instanced industry.
     *  requires:
     *  mimics of every industry function, that all try to run the base industry
     * */
-    public String ID;
-    public float order;
-    public MarketRetrofits_IndustryList industryGroup = null;
-    public void setMarket(MarketAPI newMarket){
-        market = newMarket;
-    }
+
     public MarketRetrofits_InstanceIndustry(String name,float orderT) {
-        ID = name;
-        order = orderT;
+        super(name, orderT);
     }
+    @Override
     public void applyToIndustry(String industry){
         //apply to industry here.
         MarketRetrofits_IndustryMasterList.addInstance(industry,this);
         industryGroup = MarketRetrofits_IndustryMasterList.getInstance(industry);
-    }
-    //this class requires every single function held in baseIndustry, as well as an an function to determon if its active or not.
-    protected boolean Active = true;
-    public boolean canImply(MarketAPI market){
-        return Active;
     }
 
 

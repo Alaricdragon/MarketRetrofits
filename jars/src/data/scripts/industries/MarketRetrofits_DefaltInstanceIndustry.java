@@ -5,27 +5,47 @@ import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.*;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.impl.campaign.ids.Industries;
+import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Pair;
+import data.scripts.industries.Lists.MarketRetrofits_IndustryList;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryMasterList;
 
-public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofits_InstanceIndustry{
+public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry implements MarketImmigrationModifier{
     /*this is the class that an industry would extend, if and only if said industry wants to be the default industry for an industry type.*/
+    public String ID;
+    public float order;
+    public MarketRetrofits_IndustryList industryGroup = null;
     public MarketRetrofits_DefaltInstanceIndustry(String name, float orderT) {
-        super(name, orderT);
+        ID = name;
+        order = orderT;
     }
-    @Override
+    //@Override
     public void applyToIndustry(String industry){
         //apply to industry here.
         MarketRetrofits_IndustryMasterList.setDefaltInstance(industry,this);
         industryGroup = MarketRetrofits_IndustryMasterList.getInstance(industry);
     }
+    //this class requires every single function held in baseIndustry, as well as an an function to determon if its active or not.
+    protected boolean Active = true;
+    public boolean canImply(MarketAPI market){
+        return Active;
+    }
+    public void setMarket(MarketAPI newMarket){
+        this.market = newMarket;
+        //newMarket.getSize();
+        /*if(market == null){
+            float a[] = {};
+            a[1] = 2;
+        }*/
+    }
     @Override
     public void apply() {
-        super.apply();
+        //super.apply();
         //get whatever industry should be used and use its methods here
     }
 
@@ -500,7 +520,13 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofits_Inst
     }
     @Override
     public boolean	isAvailableToBuild(){
-        return super.isAvailableToBuild();
+        /*if(market == null){
+            float a[] = {};
+            a[1] = 2;
+        }*/
+        if (market.hasTag(Tags.MARKET_NO_INDUSTRIES_ALLOWED)) return false;
+        return market.hasIndustry(Industries.POPULATION) && !getId().equals(Industries.POPULATION);
+        //return super.isAvailableToBuild();
     }
     @Override
     public boolean	isBuilding(){
@@ -631,7 +657,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofits_Inst
         super.startUpgrading();
     }
     @Override
-    public void	supply(int index, java.lang.String commodityId, int quantity, java.lang.String desc){
+    public void	supply(int index, String commodityId, int quantity, String desc){
         super.supply(index,commodityId,quantity,desc);
     }
     @Override
