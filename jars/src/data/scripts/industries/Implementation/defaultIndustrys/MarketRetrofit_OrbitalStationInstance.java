@@ -67,7 +67,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 
-public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_DefaltInstanceIndustry implements FleetEventListener {
+public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_DefaltInstanceIndustry {//implements FleetEventListener {
     public MarketRetrofit_OrbitalStationInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -608,7 +608,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         }
     }
 
-
+    @Override
     public void reportBattleOccurred(CampaignFleetAPI fleet, CampaignFleetAPI primaryWinner, BattleAPI battle) {
 
     }
@@ -627,7 +627,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
 
         matchStationAndCommanderToCurrentIndustry();
     }
-
+    @Override
     public void reportFleetDespawnedToListener(CampaignFleetAPI fleet, CampaignEventListener.FleetDespawnReason reason, Object param) {
         if (fleet != stationFleet) return; // shouldn't happen...
 

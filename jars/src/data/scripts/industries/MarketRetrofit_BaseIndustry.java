@@ -1,12 +1,12 @@
 package data.scripts.industries;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CargoAPI;
-import com.fs.starfarer.api.campaign.PlanetAPI;
-import com.fs.starfarer.api.campaign.SpecialItemData;
+import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.*;
+import com.fs.starfarer.api.campaign.listeners.FleetEventListener;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.impl.campaign.fleets.RouteManager;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
@@ -18,7 +18,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Random;
 
-public class MarketRetrofit_BaseIndustry extends BaseIndustry implements MarketImmigrationModifier{
+public class MarketRetrofit_BaseIndustry extends BaseIndustry implements MarketImmigrationModifier, FleetEventListener, RouteManager.RouteFleetSpawner{
     /* this is the industry base for all instance industry.
     * this is what an user would extend if they wanted to there industry to support this mod*/
     //protected String Industry = "";
@@ -30,11 +30,6 @@ public class MarketRetrofit_BaseIndustry extends BaseIndustry implements MarketI
         MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(market).apply();
         //MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(market).apply();
         //get whatever industry should be used and use its methods here
-    }
-
-    @Override
-    public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
-        MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(market).modifyIncoming(market,incoming);
     }
     @Override
     public void	addAICoreSection(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
@@ -690,4 +685,42 @@ public class MarketRetrofit_BaseIndustry extends BaseIndustry implements MarketI
     protected java.lang.Object	writeReplace() {
         return MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(market).writeReplace();
     }
+
+    //HERE apply all implementations
+    @Override
+    public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
+        MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(market).modifyIncoming(market,incoming);
+    }
+
+    @Override
+    public void reportFleetDespawnedToListener(CampaignFleetAPI fleet, CampaignEventListener.FleetDespawnReason reason, Object param) {
+        MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(market).reportFleetDespawnedToListener(fleet,reason,param);
+    }
+
+    @Override
+    public void reportBattleOccurred(CampaignFleetAPI fleet, CampaignFleetAPI primaryWinner, BattleAPI battle) {
+        MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(market).reportBattleOccurred(fleet,primaryWinner,battle);
+
+    }
+
+    @Override
+    public CampaignFleetAPI spawnFleet(RouteManager.RouteData route) {
+        return MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(market).spawnFleet(route);
+    }
+
+    @Override
+    public boolean shouldCancelRouteAfterDelayCheck(RouteManager.RouteData route) {
+        return MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(market).shouldCancelRouteAfterDelayCheck(route);
+    }
+
+    @Override
+    public boolean shouldRepeat(RouteManager.RouteData route) {
+        return MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(market).shouldRepeat(route);
+    }
+
+    @Override
+    public void reportAboutToBeDespawnedByRouteManager(RouteManager.RouteData route) {
+        MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(market).reportAboutToBeDespawnedByRouteManager(route);
+    }
+
 }

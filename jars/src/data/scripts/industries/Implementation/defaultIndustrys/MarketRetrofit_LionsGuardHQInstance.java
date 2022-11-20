@@ -54,7 +54,7 @@ import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 
 
-public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltInstanceIndustry implements RouteManager.RouteFleetSpawner, FleetEventListener {
+public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltInstanceIndustry {//implements RouteManager.RouteFleetSpawner, FleetEventListener {
     public MarketRetrofit_LionsGuardHQInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -228,10 +228,10 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
             route.addSegment(new RouteManager.RouteSegment(patrolDays, market.getPrimaryEntity()));
         }
     }
-
+    @Override
     public void reportAboutToBeDespawnedByRouteManager(RouteManager.RouteData route) {
     }
-
+    @Override
     public boolean shouldRepeat(RouteManager.RouteData route) {
         return false;
     }
@@ -264,15 +264,15 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
         }
         return 0;
     }
-
+    @Override
     public boolean shouldCancelRouteAfterDelayCheck(RouteManager.RouteData route) {
         return false;
     }
-
+    @Override
     public void reportBattleOccurred(CampaignFleetAPI fleet, CampaignFleetAPI primaryWinner, BattleAPI battle) {
 
     }
-
+    @Override
     public void reportFleetDespawnedToListener(CampaignFleetAPI fleet, CampaignEventListener.FleetDespawnReason reason, Object param) {
         if (!isFunctional()) return;
 
@@ -287,7 +287,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
             }
         }
     }
-
+    @Override
     public CampaignFleetAPI spawnFleet(RouteManager.RouteData route) {
 
         MilitaryBase.PatrolFleetData custom = (MilitaryBase.PatrolFleetData) route.getCustom();

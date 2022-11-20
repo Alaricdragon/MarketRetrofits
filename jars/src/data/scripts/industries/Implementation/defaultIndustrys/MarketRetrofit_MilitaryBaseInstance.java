@@ -64,7 +64,7 @@ import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 
-public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltInstanceIndustry implements RouteFleetSpawner, FleetEventListener{
+public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltInstanceIndustry {//implements RouteManager.RouteFleetSpawner, FleetEventListener{
     public MarketRetrofit_MilitaryBaseInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -450,13 +450,13 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
             this.type = type;
         }
     }
-
+    @Override
     public void reportAboutToBeDespawnedByRouteManager(RouteManager.RouteData route) {
 //		if (route.getActiveFleet() == null) return;
 //		PatrolFleetData custom = (PatrolFleetData) route.getCustom();
 //		custom.despawnFP = route.getActiveFleet().getFleetPoints();
     }
-
+    @Override
     public boolean shouldRepeat(RouteManager.RouteData route) {
 //		PatrolFleetData custom = (PatrolFleetData) route.getCustom();
 ////		return custom.spawnFP == custom.despawnFP ||
@@ -497,16 +497,16 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
     public String getRouteSourceId() {
         return getMarket().getId() + "_" + "military";
     }
-
+    @Override
     public boolean shouldCancelRouteAfterDelayCheck(RouteManager.RouteData route) {
         return false;
     }
 
-
+    @Override
     public void reportBattleOccurred(CampaignFleetAPI fleet, CampaignFleetAPI primaryWinner, BattleAPI battle) {
 
     }
-
+    @Override
     public void reportFleetDespawnedToListener(CampaignFleetAPI fleet, CampaignEventListener.FleetDespawnReason reason, Object param) {
         if (!isFunctional()) return;
 
@@ -537,7 +537,7 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
         }
         return (int) Math.round(combat);
     }
-
+    @Override
     public CampaignFleetAPI spawnFleet(RouteManager.RouteData route) {
 
         MilitaryBase.PatrolFleetData custom = (MilitaryBase.PatrolFleetData) route.getCustom();

@@ -47,8 +47,8 @@ public class marketReplacer_startup extends BaseModPlugin {
         MarketRetrofit_TechminingInstance c = new MarketRetrofit_TechminingInstance("techmining",0);
         c.applyToIndustry("techmining");
 
-        MarketRetrofit_RefiningInstance d = new MarketRetrofit_RefiningInstance("techmining",0);
-        d.applyToIndustry("techmining");
+        MarketRetrofit_RefiningInstance d = new MarketRetrofit_RefiningInstance("refining",0);
+        d.applyToIndustry("refining");
 
         MarketRetrofit_SpaceportInstance e = new MarketRetrofit_SpaceportInstance("spaceport",0);
         e.applyToIndustry("spaceport");

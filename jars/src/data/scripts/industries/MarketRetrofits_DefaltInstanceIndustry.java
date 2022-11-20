@@ -1,10 +1,11 @@
 package data.scripts.industries;
 
-import com.fs.starfarer.api.campaign.CargoAPI;
-import com.fs.starfarer.api.campaign.SpecialItemData;
+import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.*;
+import com.fs.starfarer.api.campaign.listeners.FleetEventListener;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.impl.campaign.fleets.RouteManager;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
@@ -15,7 +16,7 @@ import com.fs.starfarer.api.util.Pair;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryList;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryMasterList;
 
-public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry implements MarketImmigrationModifier{
+public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{// implements MarketImmigrationModifier, FleetEventListener, RouteManager.RouteFleetSpawner{
     /*this is the class that an industry would extend, if and only if said industry wants to be the default industry for an industry type.*/
     public String ID;
     public float order;
@@ -47,10 +48,6 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry impleme
     public void apply() {
         //super.apply();
         //get whatever industry should be used and use its methods here
-    }
-
-    @Override
-    public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
     }
     @Override
     public void	addAICoreSection(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
@@ -503,7 +500,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry impleme
     }
     @Override
     protected boolean	hasPostDemandSection(boolean hasDemand, Industry.IndustryTooltipMode mode){
-        return hasPostDemandSection(hasDemand,mode);
+        return super.hasPostDemandSection(hasDemand,mode);
     }
     @Override
     public void	init(java.lang.String id, MarketAPI market){
@@ -708,5 +705,40 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry impleme
     //Return false if already using one of that type, unless the other one is better.
     protected java.lang.Object	writeReplace() {
         return super.writeReplace();
+    }
+
+
+    //HERE
+    //overwriten this data or something i dont remember lol
+    //@Override
+    public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
+    }
+    //@Override
+    public void reportFleetDespawnedToListener(CampaignFleetAPI fleet, CampaignEventListener.FleetDespawnReason reason, Object param) {
+    }
+
+    //@Override
+    public void reportBattleOccurred(CampaignFleetAPI fleet, CampaignFleetAPI primaryWinner, BattleAPI battle) {
+
+    }
+
+    //@Override
+    public CampaignFleetAPI spawnFleet(RouteManager.RouteData route) {
+        return null;
+    }
+
+    //@Override
+    public boolean shouldCancelRouteAfterDelayCheck(RouteManager.RouteData route) {
+        return false;
+    }
+
+    //@Override
+    public boolean shouldRepeat(RouteManager.RouteData route) {
+        return false;
+    }
+
+    //@Override
+    public void reportAboutToBeDespawnedByRouteManager(RouteManager.RouteData route) {
+
     }
 }

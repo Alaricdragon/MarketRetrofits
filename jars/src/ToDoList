@@ -2,10 +2,22 @@ current:
 to do list:
 MarketRetrofit IndustryChanger:
     BUG:
-        -mining industry has like 30X supply or demand at random? need to look into this...
+        -mining industry and farming has like 30X supply or demand at random? need to look into this...
+        -patralHQ, milltaryBase and HighCommand DO NOT deploy patrols from the faction they should.
+            theory: this may be caused by buggy bugs, do to the fact that the industry no longer exstends the required types (even though the used instance dose)
+            in this vain, -anything- that extends things may need to have there extensions added to market retrofit before this all works.
+            theory: dose haveing all industrys implement all things resalt in issues? if so, i may need to make my own classes that i can implement on will that do the required things.
+            -UPDATE: attempted this. it worked* but failed at the same time. the issue: implementing something calls the function directly. i want the function to be called through the industry.
+            sollution? have all instances NOT implement. have the base industry implement. this should work.
+            so tired right now. i will have to spend some time and fix this tomorrow.
     -finish industry list so it remembers its industry instances in prioriity order.
     -finish added all the default instances for all the base game industry's.
     -test and make sure this works for every industry i activate. NOTE: dose not play nice with saves when i actavate a new industry.
+
+
+
+
+
 supplyDemandLibary:
     create masterList:
         -(done)the masterList is an collection of lists. its were all lists ever made are stored.

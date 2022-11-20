@@ -1,13 +1,12 @@
 package data.scripts.industries;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CargoAPI;
-import com.fs.starfarer.api.campaign.PlanetAPI;
-import com.fs.starfarer.api.campaign.SpecialItemData;
+import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.*;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.econ.ResourceDepositsCondition;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.impl.campaign.fleets.RouteManager;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
@@ -46,11 +45,6 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         industryGroup.defaultInstance.apply();
         //industryGroup.defaultInstance.apply();
         //get whatever industry should be used and use its methods here
-    }
-
-    @Override
-    public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
-        industryGroup.defaultInstance.modifyIncoming(market,incoming);
     }
     @Override
     public void	addAICoreSection(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
@@ -702,5 +696,41 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
     //Return false if already using one of that type, unless the other one is better.
     protected java.lang.Object	writeReplace() {
         return industryGroup.defaultInstance.writeReplace();
+    }
+
+    //HERE implemented functions
+    @Override
+    public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
+        industryGroup.defaultInstance.modifyIncoming(market,incoming);
+    }
+
+    @Override
+    public void reportFleetDespawnedToListener(CampaignFleetAPI fleet, CampaignEventListener.FleetDespawnReason reason, Object param) {
+        industryGroup.defaultInstance.reportFleetDespawnedToListener(fleet,reason,param);
+    }
+
+    @Override
+    public void reportBattleOccurred(CampaignFleetAPI fleet, CampaignFleetAPI primaryWinner, BattleAPI battle) {
+        industryGroup.defaultInstance.reportBattleOccurred(fleet,primaryWinner,battle);
+    }
+
+    @Override
+    public CampaignFleetAPI spawnFleet(RouteManager.RouteData route) {
+        return industryGroup.defaultInstance.spawnFleet(route);
+    }
+
+    @Override
+    public boolean shouldCancelRouteAfterDelayCheck(RouteManager.RouteData route) {
+        return industryGroup.defaultInstance.shouldCancelRouteAfterDelayCheck(route);
+    }
+
+    @Override
+    public boolean shouldRepeat(RouteManager.RouteData route) {
+        return industryGroup.defaultInstance.shouldRepeat(route);
+    }
+
+    @Override
+    public void reportAboutToBeDespawnedByRouteManager(RouteManager.RouteData route) {
+        industryGroup.defaultInstance.reportAboutToBeDespawnedByRouteManager(route);
     }
 }
