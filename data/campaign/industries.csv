@@ -1,15 +1,15 @@
 id,name,cost mult,build time,income,upkeep,downgrade,upgrade,tags,data,image,plugin,desc,order,disruptDanger
 population,Population & Infrastructure,,,10,3,,,"population, unraidable, no_saturation_bombardment",,graphics/icons/industry/population.png,data.scripts.industries.Implementation.impl.MarketRetrofit_PopulationImpl,"The basic infrastructure required to support a given population, from rickety orbital hab-modules to megacities and everything between.",100,
 farming,Farming,15,60,,1,,,"farming, industry, rural",,graphics/icons/industry/farming.png,data.scripts.industries.Implementation.impl.MarketRetrofit_FarmingImpl,"Agriculture is a trade and technology as old as civilization itself; for thousands of cycles Humanity has harnessed the power of natural, modified, and artificial biological machines for sustenance. So it has always been, so it shall be so long as humans are human.",200,LOW
-aquaculture,Aquaculture,50,60,,3,,,"farming, industry, rural",,graphics/icons/industry/aquaculture.png,data.scripts.industries.Implementation.impl.MarketRetrofit_FarmingImpl,"Farming on a water world requires a significant initial investment in bioengineering suitable species, but once the process takes off, algae farms and fisheries can be operated by the population without requiring much in the way of specialized training or equipment.",210,MEDIUM
+aquaculture,Aquaculture,50,60,,3,,,"farming, industry, rural",,graphics/icons/industry/aquaculture.png,data.scripts.industries.Implementation.impl.MarketRetrofit_AquacaltureImpl,"Farming on a water world requires a significant initial investment in bioengineering suitable species, but once the process takes off, algae farms and fisheries can be operated by the population without requiring much in the way of specialized training or equipment.",210,MEDIUM
 mining,Mining,20,60,,2,,,"mining, industry, industrial",,graphics/icons/industry/mining.png,data.scripts.industries.Implementation.impl.MarketRetrofit_MiningImpl,"Metal and metalloid ores, organics, and volatile compounds all require heavy equipment, special infrastructure, and a skilled workforce to extract. The harsh work attracts a certain type, and an administration that's not willing to look the other way now and again may find itself running short of willing personnel.",300,MEDIUM
 techmining,Tech-Mining,30,45,,2,,,"techmining, industry, industrial",,graphics/icons/industry/techmining.png,data.scripts.industries.Implementation.impl.MarketRetrofit_TechminingImpl,"Techmining is the motley art of recovering valuable artifacts from Domain ruins. Requires special tools to deal with unique hazards and expert judgement to know where to look for a good haul of baubles. The oldest techminers are a strange lot, clutching luck-charms and refusing to work without their rituals.",400,MEDIUM
 refining,Refining,45,90,,3,,,"refining, industry, industrial",,graphics/icons/industry/refining.png,data.scripts.industries.Implementation.impl.MarketRetrofit_RefiningImpl,"Smelting plants here convert ores and transplutonic ores into metals and transplutonics, respectively. Teleoperated robotics are used to handle the most dangerous tasks, usually.",500,MEDIUM
 spaceport,Spaceport,10,15,,3,,megaport,"spaceport, important, structure",,graphics/icons/industry/spaceport.png,data.scripts.industries.Implementation.impl.MarketRetrofit_SpaceportImpl,Facilities for loading and unloading cargo and performing basic starship repairs. A colony without a spaceport is virtually inaccessible to interstellar trade.,150,HIGH
-megaport,Megaport,60,150,,4,spaceport,,"spaceport, structure",,graphics/icons/industry/megaport.png,data.scripts.industries.Implementation.impl.MarketRetrofit_SpaceportImpl,"A vast starport where the stars can touch the dirt. Regimented lander gantries and armoured fuel tanks are laced together by access-roads and short-haul cargo trams feeding a sprawl of warehouse districts and logistics terminals, all making the colony vastly more accessible.",151,EXTREME
+megaport,Megaport,60,150,,4,spaceport,,"spaceport, structure",,graphics/icons/industry/megaport.png,data.scripts.industries.Implementation.impl.MarketRetrofit_MegaportImpl,"A vast starport where the stars can touch the dirt. Regimented lander gantries and armoured fuel tanks are laced together by access-roads and short-haul cargo trams feeding a sprawl of warehouse districts and logistics terminals, all making the colony vastly more accessible.",151,EXTREME
 lightindustry,Light Industry,45,90,,8,,,"lightindustry, industry, rural",,graphics/icons/industry/light_industry.png,data.scripts.industries.Implementation.impl.MarketRetrofit_LightindustryImpl,Produces domestic and luxury goods. One of the few industries relatively unaffected by the Collapse due to its low-tech nature.,1400,MEDIUM
 heavyindustry,Heavy Industry,100,120,,12,,orbitalworks,"heavyindustry, uses_blueprints, industry, industrial",,graphics/icons/industry/heavy_industry.png,data.scripts.industries.Implementation.impl.MarketRetrofit_HeavyIndustryImpl,"Centralized manufacturing infrastructure for production of heavy industrial equipment, supplies, and weapons. Also capable of producing barely-spaceworthy starships; a nanoforge can be installed to improve production quality.",1600,HIGH
-orbitalworks,Orbital Works,60,150,,12,heavyindustry,,"heavyindustry, uses_blueprints, industry, industrial",,graphics/icons/industry/orbital_works.png,data.scripts.industries.Implementation.impl.MarketRetrofit_HeavyIndustryImpl,"Centralized manufacturing infrastructure for production of heavy industrial equipment, supplies, and weapons. Also capable of producing barely-spaceworthy starships; a nanoforge can be installed to improve production quality.
+orbitalworks,Orbital Works,60,150,,12,heavyindustry,,"heavyindustry, uses_blueprints, industry, industrial",,graphics/icons/industry/orbital_works.png,data.scripts.industries.Implementation.impl.MarketRetrofit_OrbitalworksImpl,"Centralized manufacturing infrastructure for production of heavy industrial equipment, supplies, and weapons. Also capable of producing barely-spaceworthy starships; a nanoforge can be installed to improve production quality.
 
 Upgraded with an orbital component that further facilitates ship construction, resulting in fewer manufacturing defects.",1700,HIGH
 fuelprod,Fuel Production,90,120,,10,,,"fuelprod, industry, industrial",,graphics/icons/industry/fuel_production.png,data.scripts.industries.Implementation.impl.MarketRetrofit_fuelprodImpl,"This facility produces starship fuel, the life-blood of interstellar civilization. Lacking Domain-tech components, fuel production is a laborious and slow process.",1800,HIGH
@@ -21,70 +21,70 @@ orbitalstation,Orbital Station - Low Tech,50,90,,3,,battlestation,"station, sub_
 radius:55,
 variant:station1_Standard,
 fleetName:Orbital Station,
-}",graphics/icons/industry/orbital_station.png,data.scripts.industries.Implementation.impl.MarketRetrofit_OrbitalStationImpl,"A low-tech space station, featuring heavy armor and medium firepower.
+}",graphics/icons/industry/orbital_station.png,data.scripts.industries.Implementation.impl.MarketRetrofit_OrbitalStationLowTechImpla,"A low-tech space station, featuring heavy armor and medium firepower.
 
 Must be reduced before invasions or bombardment can be attempted.",2010,
 battlestation,Battlestation - Low Tech,100,120,,4,orbitalstation,starfortress,"station, battlestation, unraidable, structure","{
 radius:65,
 variant:station2_Standard,
 fleetName:Battlestation,
-}",graphics/icons/industry/battlestation.png,data.scripts.industries.Implementation.impl.MarketRetrofit_OrbitalStationImpl,"A space station, augmented with a heavy bastion and point-defense citadels.
+}",graphics/icons/industry/battlestation.png,data.scripts.industries.Implementation.impl.MarketRetrofit_BattlestationLowTechImpl,"A space station, augmented with a heavy bastion and point-defense citadels.
 
 Must be reduced before invasions or bombardment can be attempted.",2020,
 starfortress,Star Fortress - Low Tech,200,180,,5,battlestation,,"station, starfortress, unraidable, structure","{
 radius:70,
 variant:station3_Standard,
 fleetName:Star Fortress
-}",graphics/icons/industry/battlestation.png,data.scripts.industries.Implementation.impl.MarketRetrofit_OrbitalStationImpl,"An up-armored battlestation, featuring Merlon-class defense drones and an extensive minefield.
+}",graphics/icons/industry/battlestation.png,data.scripts.industries.Implementation.impl.MarketRetrofit_StarFortressLowTechImpl,"An up-armored battlestation, featuring Merlon-class defense drones and an extensive minefield.
 
 Must be reduced before invasions or bombardment can be attempted.",2030,
 orbitalstation_mid,Orbital Station - Midline,50,90,,3,,battlestation_mid,"station, sub_item, unraidable, structure","{
 radius:55,
 variant:station1_midline_Standard,
 fleetName:Orbital Station,
-}",graphics/icons/industry/orbital_station.png,data.scripts.industries.Implementation.impl.MarketRetrofit_OrbitalStationImpl,"A midline space station, featuring heavy firepower on one side and rapid axial rotation.
+}",graphics/icons/industry/orbital_station.png,data.scripts.industries.Implementation.impl.MarketRetrofit_OrbitalStationMidlineImpl,"A midline space station, featuring heavy firepower on one side and rapid axial rotation.
 
 Must be reduced before invasions or bombardment can be attempted.",2040,
 battlestation_mid,Battlestation - Midline,100,120,,4,orbitalstation_mid,starfortress_mid,"station, battlestation, unraidable, structure","{
 radius:65,
 variant:station2_midline_Standard,
 fleetName:Battlestation,
-}",graphics/icons/industry/battlestation.png,data.scripts.industries.Implementation.impl.MarketRetrofit_OrbitalStationImpl,"A space station, augmented with missile support modules.
+}",graphics/icons/industry/battlestation.png,data.scripts.industries.Implementation.impl.MarketRetrofit_BattlestationMidlineImpl,"A space station, augmented with missile support modules.
 
 Must be reduced before invasions or bombardment can be attempted.",2050,
 starfortress_mid,Star Fortress - Midline,200,180,,5,battlestation_mid,,"station, starfortress, unraidable, structure","{
 radius:70,
 variant:station3_midline_Standard,
 fleetName:Star Fortress
-}",graphics/icons/industry/battlestation.png,data.scripts.industries.Implementation.impl.MarketRetrofit_OrbitalStationImpl,"An up-armored battlestation, featuring Ravelin-class defense drones and an extensive minefield.
+}",graphics/icons/industry/battlestation.png,data.scripts.industries.Implementation.impl.MarketRetrofit_StatFortressMidlineImpl,"An up-armored battlestation, featuring Ravelin-class defense drones and an extensive minefield.
 
 Must be reduced before invasions or bombardment can be attempted.",2060,
 orbitalstation_high,Orbital Station - High Tech,50,90,,3,,battlestation_high,"station, sub_item, unraidable, structure","{
 radius:55,
 variant:station1_hightech_Standard,
 fleetName:Orbital Station,
-}",graphics/icons/industry/orbital_station.png,data.scripts.industries.Implementation.impl.MarketRetrofit_OrbitalStationImpl,"A high-tech space station, featuring heavy rotating shields, a fighter complement, and medium firepower.
+}",graphics/icons/industry/orbital_station.png,data.scripts.industries.Implementation.impl.MarketRetrofit_OrbitalStationHighTechImpl,"A high-tech space station, featuring heavy rotating shields, a fighter complement, and medium firepower.
 
 Must be reduced before invasions or bombardment can be attempted.",2070,
 battlestation_high,Battlestation - High Tech,100,120,,4,orbitalstation_high,starfortress_high,"station, battlestation, unraidable, structure","{
 radius:65,
 variant:station2_hightech_Standard,
 fleetName:Battlestation,
-}",graphics/icons/industry/battlestation.png,data.scripts.industries.Implementation.impl.MarketRetrofit_OrbitalStationImpl,"A space station, augmented with a defensive citadel featuring heavy firepower.
+}",graphics/icons/industry/battlestation.png,data.scripts.industries.Implementation.impl.MarketRetrofit_BattlestationHighTechImpl,"A space station, augmented with a defensive citadel featuring heavy firepower.
 
 Must be reduced before invasions or bombardment can be attempted.",2080,
 starfortress_high,Star Fortress - High Tech,200,180,,5,battlestation_high,,"station, starfortress, unraidable, structure","{
 radius:70,
 variant:station3_hightech_Standard,
 fleetName:Star Fortress
-}",graphics/icons/industry/battlestation.png,data.scripts.industries.Implementation.impl.MarketRetrofit_OrbitalStationImpl,"An up-armored battlestation, featuring Gargoyle-class defense drones and long-range targeted mine teleporters.
+}",graphics/icons/industry/battlestation.png,data.scripts.industries.Implementation.impl.MarketRetrofit_StarFortressHighTechImpl,"An up-armored battlestation, featuring Gargoyle-class defense drones and long-range targeted mine teleporters.
 
 Must be reduced before invasions or bombardment can be attempted.",2090,
 grounddefenses,Ground Defenses,30,60,,2,,heavybatteries,"grounddefenses, unraidable, tactical_bombardment, structure",,graphics/icons/industry/ground_defenses.png,data.scripts.industries.Implementation.impl.MarketRetrofit_GroundDefensesImpl,"A dispersed, semi-autonomous network of small, hidden weapon installations which makes the prospect of a direct ground assault and even simple raids extremely costly to the attacker. Only overwhelming orbital bombardment or massively disproportionate active screening can suppress these defenses.  ",2200,
-heavybatteries,Heavy Batteries,60,90,,3,grounddefenses,,"grounddefenses, unraidable, tactical_bombardment, structure",,graphics/icons/industry/heavy_batteries.png,data.scripts.industries.Implementation.impl.MarketRetrofit_GroundDefensesImpl,"Armoured subsurface batteries supplement a dispersed network of small, hidden weapon installations. Ground-based batteries are capable of truly awesome firepower, though it only manifests by making ground operations more difficult, as no starship captain would be foolish enough to get within their firing envelopes.",2300,
-patrolhq,Patrol HQ,60,60,,8,,militarybase,"patrol, unraidable, tactical_bombardment, structure",,graphics/icons/industry/patrol_hq.png,data.scripts.industries.Implementation.impl.MarketRetrofit_MilitaryBaseImpl,"The requisite hangars, maintenance bays, command/control center, barracks, and logistics operations required to project force throughout a star system. Once established, militarized patrols will hunt pirates and protect friendly convoys.",2400,
+heavybatteries,Heavy Batteries,60,90,,3,grounddefenses,,"grounddefenses, unraidable, tactical_bombardment, structure",,graphics/icons/industry/heavy_batteries.png,data.scripts.industries.Implementation.impl.MarketRetrofit_HeavyBatteriesImpl,"Armoured subsurface batteries supplement a dispersed network of small, hidden weapon installations. Ground-based batteries are capable of truly awesome firepower, though it only manifests by making ground operations more difficult, as no starship captain would be foolish enough to get within their firing envelopes.",2300,
+patrolhq,Patrol HQ,60,60,,8,,militarybase,"patrol, unraidable, tactical_bombardment, structure",,graphics/icons/industry/patrol_hq.png,data.scripts.industries.Implementation.impl.MarketRetrofit_PatrolHQImpl,"The requisite hangars, maintenance bays, command/control center, barracks, and logistics operations required to project force throughout a star system. Once established, militarized patrols will hunt pirates and protect friendly convoys.",2400,
 militarybase,Military Base,90,120,,10,patrolhq,highcommand,"military, unraidable, tactical_bombardment, industry",,graphics/icons/industry/military_base.png,data.scripts.industries.Implementation.impl.MarketRetrofit_MilitaryBaseImpl,"These facilities enable force projection between star systems. Any such military undertaking is a massive logistical operation requiring coordination of dozens, perhaps hundreds of star ships and thousands of officers, crew, and soldiers.",2500,
-highcommand,High Command,30,120,,14,militarybase,,"command, unraidable, tactical_bombardment, industry",,graphics/icons/industry/high_command.png,data.scripts.industries.Implementation.impl.MarketRetrofit_MilitaryBaseImpl,Transtellar empire is possible only through an exceptional corps of officers and bureaucrats given authority over the resources of entire star systems. An established high command allows military operations to be organized and executed across the Sector.,2600,
+highcommand,High Command,30,120,,14,militarybase,,"command, unraidable, tactical_bombardment, industry",,graphics/icons/industry/high_command.png,data.scripts.industries.Implementation.impl.MarketRetrofit_HighCommandImpl,Transtellar empire is possible only through an exceptional corps of officers and bureaucrats given authority over the resources of entire star systems. An established high command allows military operations to be organized and executed across the Sector.,2600,
 lionsguard,Lion's Guard HQ,90,60,,6,,,"military, unraidable, tactical_bombardment, structure",,graphics/icons/industry/lions_guard.png,data.scripts.industries.Implementation.impl.MarketRetrofit_LionsGuardHQImpl,"Headquarters of the feared personal guard of Phillip ""The Lion of Sindria"" Andrada. Boasting superb training and access to the best equipment credits can buy, the fanatical loyalty of the Guard is maintained through a system of perks and incentives that both elevate and isolate the Guard from the Diktat's regular military.",2650,
 planetaryshield,Planetary Shield,150,90,,3,,,"grounddefenses, structure",,graphics/icons/industry/planetary_shield.png,data.scripts.industries.Implementation.impl.MarketRetrofit_PlanetaryShieldImpl,An envelope of charged plasma seeded with exotic virtual particles producing effects which disrupt the combat effectiveness of long-range bombardment and even incursion by small vessels. The planetary shield can be continually charged and controlled by a central source and presents a formidable obstacle to any form of ground assault.,2700,EXTREME
 waystation,Waystation,20,60,,2,,,"waystation, structure",,graphics/icons/industry/waystation.png,data.scripts.industries.Implementation.impl.MarketRetrofit_WaystationImpl,A supply and maintenance depot for interstellar fleets. Increases a colony's accessibility.,155,MEDIUM

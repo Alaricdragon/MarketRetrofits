@@ -432,7 +432,7 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
             RouteManager.OptionalFleetData extra = new RouteManager.OptionalFleetData(market);
             extra.fleetType = type.getFleetType();
 
-            RouteManager.RouteData route = RouteManager.getInstance().addRoute(sid, market, Misc.genRandomSeed(), extra, this, custom);
+            RouteManager.RouteData route = RouteManager.getInstance().addRoute(sid, market, Misc.genRandomSeed(), extra, (RouteFleetSpawner) this, custom);////HERE. (casting) this is added by me
             extra.strength = (float) getPatrolCombatFP(type, route.getRandom());
             extra.strength = Misc.getAdjustedStrength(extra.strength, market);
 
@@ -549,7 +549,7 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
 
         if (fleet == null || fleet.isEmpty()) return null;
 
-        fleet.addEventListener(this);
+        fleet.addEventListener((FleetEventListener) this);//HERE. (casting) this is added by me
 
         market.getContainingLocation().addEntity(fleet);
         fleet.setFacing((float) Math.random() * 360f);

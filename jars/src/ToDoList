@@ -1,4 +1,5 @@
 current:
+DISABLED IN MOD MENU AT THE MOMENT CAYSES CRASHES
 to do list:
 MarketRetrofit IndustryChanger:
     BUG:
@@ -10,6 +11,12 @@ MarketRetrofit IndustryChanger:
             -UPDATE: attempted this. it worked* but failed at the same time. the issue: implementing something calls the function directly. i want the function to be called through the industry.
             sollution? have all instances NOT implement. have the base industry implement. this should work.
             so tired right now. i will have to spend some time and fix this tomorrow.
+            ---
+            attempted a hot fix. failed. every instance industry that implements something applys it somewere else. the issue? if i dont set them to be a item, they are not one, if that makes sense.
+            the sollotion? make my own interface modals that are usable and let a class inharent the right values for this to work? maybe...
+            that also might not be the issue, and it might have more to do with the issues that are being caused by the market assing issues.
+            Note: the only factions with patrols are eater 'neutral' or 'pirates' it seems random and the same for all worlds?
+        -Theroy bug: i have reason to think that the market is not being assigned right. this may be causing issues with things like patrol fleets spawning
     -finish industry list so it remembers its industry instances in prioriity order.
     -finish added all the default instances for all the base game industry's.
     -test and make sure this works for every industry i activate. NOTE: dose not play nice with saves when i actavate a new industry.

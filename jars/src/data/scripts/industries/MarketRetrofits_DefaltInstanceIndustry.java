@@ -16,7 +16,7 @@ import com.fs.starfarer.api.util.Pair;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryList;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryMasterList;
 
-public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{// implements MarketImmigrationModifier, FleetEventListener, RouteManager.RouteFleetSpawner{
+public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry implements MarketImmigrationModifier, FleetEventListener, RouteManager.RouteFleetSpawner{
     /*this is the class that an industry would extend, if and only if said industry wants to be the default industry for an industry type.*/
     public String ID;
     public float order;
@@ -710,34 +710,34 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{// impl
 
     //HERE
     //overwriten this data or something i dont remember lol
-    //@Override
+    @Override
     public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
     }
-    //@Override
+    @Override
     public void reportFleetDespawnedToListener(CampaignFleetAPI fleet, CampaignEventListener.FleetDespawnReason reason, Object param) {
     }
 
-    //@Override
+    @Override
     public void reportBattleOccurred(CampaignFleetAPI fleet, CampaignFleetAPI primaryWinner, BattleAPI battle) {
 
     }
 
-    //@Override
+    @Override
     public CampaignFleetAPI spawnFleet(RouteManager.RouteData route) {
         return null;
     }
 
-    //@Override
+    @Override
     public boolean shouldCancelRouteAfterDelayCheck(RouteManager.RouteData route) {
         return false;
     }
 
-    //@Override
+    @Override
     public boolean shouldRepeat(RouteManager.RouteData route) {
         return false;
     }
 
-    //@Override
+    @Override
     public void reportAboutToBeDespawnedByRouteManager(RouteManager.RouteData route) {
 
     }
