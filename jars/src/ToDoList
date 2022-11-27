@@ -1,8 +1,8 @@
 current:
-DISABLED IN MOD MENU AT THE MOMENT CAYSES CRASHES
+ALL MILTARY BASES DISABLED IN INDUSTRY.CSV FILE. REACTAVATE TO TEST
 to do list:
 MarketRetrofit IndustryChanger:
-    BUG:
+    (Fixed)BUG:
         -mining industry and farming has like 30X supply or demand at random? need to look into this...
         -patralHQ, milltaryBase and HighCommand DO NOT deploy patrols from the faction they should.
             theory: this may be caused by buggy bugs, do to the fact that the industry no longer exstends the required types (even though the used instance dose)
@@ -15,14 +15,36 @@ MarketRetrofit IndustryChanger:
             attempted a hot fix. failed. every instance industry that implements something applys it somewere else. the issue? if i dont set them to be a item, they are not one, if that makes sense.
             the sollotion? make my own interface modals that are usable and let a class inharent the right values for this to work? maybe...
             that also might not be the issue, and it might have more to do with the issues that are being caused by the market assing issues.
-            Note: the only factions with patrols are eater 'neutral' or 'pirates' it seems random and the same for all worlds?
-        -Theroy bug: i have reason to think that the market is not being assigned right. this may be causing issues with things like patrol fleets spawning
+            //(seems like i fixed that by moveing some things around)Note: the only factions with patrols are eater 'neutral' or 'pirates' it seems random and the same for all worlds?
+            --
+            i currently have a hot fix active that is called 'if(route == null){return;}' in both miltary base and lions gaurd HQ instances'.
+            this prevents a random crash from crashing my game. but i fear it will have issues if left in the code.
+            OBJECTIVE: run some type of console log through the code. this -should- tell me if the industry is having market issues.
+            causes: i -think- it might be from wrong market ID issues.
+                    why? because there is no check by default (so it always works under normal conditions.). something has to be messing up, and unless having the instance exstend the industry is that important, there is alsmost nothing else it can be
+
+            Theory: use 'getMarket' to determine market. in BaseIndustry. remove the override to getMarket.
+        -Theroy bug:    i have reason to think that the market is not being assigned right. this may be causing issues with things like patrol fleets spawning
+                        possable causes? it might have something to do with exstended classes not haveing the same instance. if so, i might need to do something like getMarket() instead of this.market. that might work?
     -finish industry list so it remembers its industry instances in prioriity order.
     -finish added all the default instances for all the base game industry's.
     -test and make sure this works for every industry i activate. NOTE: dose not play nice with saves when i actavate a new industry.
 
+    did testing. it seemed the issue was something to do with markets. but i am unsure what.
+    did a few things:
+        1) added a way to get the used industry. so i replaced all of 'this' with 'getIndustry()'
+        2) removed all implementations. all data can be ran through BaseIndustry. all things can be set with '(cast)getIndustry()'
+    that seemed to fix it.
 
-
+    see if i require to change all 'market' to 'getMarket()'
+    FIX EVERYTHING IN ISSUES.
+        -might be because im not useing instances of instance industry (haha)
+    MarketRetrofit_OrbitalStationInstance:
+        need to replace 'this' with '(option cast)getIndustry()'
+        need to remove its implements.
+        not doing so now because im scared of it.
+    MarketRetrofit_PopulationInstance
+        need to replace one more 'this' with '(option cast)getIndustry()'
 
 
 supplyDemandLibary:

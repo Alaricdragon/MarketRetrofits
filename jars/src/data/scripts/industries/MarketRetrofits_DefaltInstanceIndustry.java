@@ -16,11 +16,18 @@ import com.fs.starfarer.api.util.Pair;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryList;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryMasterList;
 
-public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry implements MarketImmigrationModifier, FleetEventListener, RouteManager.RouteFleetSpawner{
+public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{// implements MarketImmigrationModifier, FleetEventListener, RouteManager.RouteFleetSpawner{
     /*this is the class that an industry would extend, if and only if said industry wants to be the default industry for an industry type.*/
     public String ID;
     public float order;
     public MarketRetrofits_IndustryList industryGroup = null;
+    Industry industry;
+    public void applyIndustry(Industry industryT){
+        industry = industryT;
+    }
+    public Industry getIndustry(){
+        return this.industry;
+    }
     public MarketRetrofits_DefaltInstanceIndustry(String name, float orderT) {
         ID = name;
         order = orderT;
@@ -36,14 +43,10 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry impleme
     public boolean canImply(MarketAPI market){
         return Active;
     }
+    /*
     public void setMarket(MarketAPI newMarket){
         this.market = newMarket;
-        //newMarket.getSize();
-        /*if(market == null){
-            float a[] = {};
-            a[1] = 2;
-        }*/
-    }
+    }*/
     @Override
     public void apply() {
         //super.apply();
@@ -383,10 +386,11 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry impleme
     public java.lang.String	getDisruptedKey(){
         return super.getDisruptedKey();
     }
+    /*//HERE
     @Override
     public java.lang.String	getId(){
         return super.getId();
-    }
+    }*/
     @Override
     public float	getImproveBonusXP(){
         return super.getImproveBonusXP();
@@ -423,10 +427,10 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry impleme
     public java.util.List<InstallableIndustryItemPlugin>	getInstallableItems(){
         return super.getInstallableItems();
     }
-    @Override
+    /*@Override//HERE
     public MarketAPI	getMarket(){
         return super.getMarket();
-    }
+    }*/
     @Override
     public Pair<java.lang.String,java.lang.Integer>	getMaxDeficit(java.lang.String... commodityIds){
         return super.getMaxDeficit(commodityIds);
@@ -710,34 +714,34 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry impleme
 
     //HERE
     //overwriten this data or something i dont remember lol
-    @Override
+    //@Override
     public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
     }
-    @Override
+    //@Override
     public void reportFleetDespawnedToListener(CampaignFleetAPI fleet, CampaignEventListener.FleetDespawnReason reason, Object param) {
     }
 
-    @Override
+    //@Override
     public void reportBattleOccurred(CampaignFleetAPI fleet, CampaignFleetAPI primaryWinner, BattleAPI battle) {
 
     }
 
-    @Override
+    //@Override
     public CampaignFleetAPI spawnFleet(RouteManager.RouteData route) {
         return null;
     }
 
-    @Override
+    //@Override
     public boolean shouldCancelRouteAfterDelayCheck(RouteManager.RouteData route) {
         return false;
     }
 
-    @Override
+    //@Override
     public boolean shouldRepeat(RouteManager.RouteData route) {
         return false;
     }
 
-    @Override
+    //@Override
     public void reportAboutToBeDespawnedByRouteManager(RouteManager.RouteData route) {
 
     }

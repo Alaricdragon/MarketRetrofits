@@ -9,7 +9,7 @@ import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.listeners.FleetEventListener;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
-import com.fs.starfarer.api.impl.campaign.econ.impl.MilitaryBase;
+//import com.fs.starfarer.api.impl.campaign.econ.impl.MilitaryBase;
 import com.fs.starfarer.api.impl.campaign.fleets.*;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
@@ -54,7 +54,7 @@ import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 
 
-public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltInstanceIndustry {//implements RouteManager.RouteFleetSpawner, FleetEventListener {
+public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltInstanceIndustry {//implements RouteFleetSpawner, FleetEventListener {
     public MarketRetrofit_LionsGuardHQInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -217,30 +217,30 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
             if (picker.isEmpty()) return;
 
             FleetFactory.PatrolType type = picker.pick();
-            MilitaryBase.PatrolFleetData custom = new MilitaryBase.PatrolFleetData(type);
+            PatrolFleetData custom = new PatrolFleetData(type);
 
             RouteManager.OptionalFleetData extra = new RouteManager.OptionalFleetData(market);
             extra.fleetType = type.getFleetType();
 
-            RouteManager.RouteData route = RouteManager.getInstance().addRoute(sid, market, Misc.genRandomSeed(), extra, this, custom);
+            RouteData route = RouteManager.getInstance().addRoute(sid, market, Misc.genRandomSeed(), extra, (RouteFleetSpawner) getIndustry(), custom);//HERE. this not being set right may be the issue... very frustrating
             float patrolDays = 35f + (float) Math.random() * 10f;
 
             route.addSegment(new RouteManager.RouteSegment(patrolDays, market.getPrimaryEntity()));
         }
     }
     @Override
-    public void reportAboutToBeDespawnedByRouteManager(RouteManager.RouteData route) {
+    public void reportAboutToBeDespawnedByRouteManager(RouteData route) {
     }
     @Override
-    public boolean shouldRepeat(RouteManager.RouteData route) {
+    public boolean shouldRepeat(RouteData route) {
         return false;
     }
 
     public int getCount(FleetFactory.PatrolType... types) {
         int count = 0;
-        for (RouteManager.RouteData data : RouteManager.getInstance().getRoutesForSource(getRouteSourceId())) {
-            if (data.getCustom() instanceof MilitaryBase.PatrolFleetData) {
-                MilitaryBase.PatrolFleetData custom = (MilitaryBase.PatrolFleetData) data.getCustom();
+        for (RouteData data : RouteManager.getInstance().getRoutesForSource(getRouteSourceId())) {
+            if (data.getCustom() instanceof PatrolFleetData) {
+                PatrolFleetData custom = (PatrolFleetData) data.getCustom();
                 for (FleetFactory.PatrolType type : types) {
                     if (type == custom.type) {
                         count++;
@@ -265,7 +265,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
         return 0;
     }
     @Override
-    public boolean shouldCancelRouteAfterDelayCheck(RouteManager.RouteData route) {
+    public boolean shouldCancelRouteAfterDelayCheck(RouteData route) {
         return false;
     }
     @Override
@@ -277,9 +277,10 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
         if (!isFunctional()) return;
 
         if (reason == CampaignEventListener.FleetDespawnReason.REACHED_DESTINATION) {
-            RouteManager.RouteData route = RouteManager.getInstance().getRoute(getRouteSourceId(), fleet);
-            if (route.getCustom() instanceof MilitaryBase.PatrolFleetData) {
-                MilitaryBase.PatrolFleetData custom = (MilitaryBase.PatrolFleetData) route.getCustom();
+            RouteData route = RouteManager.getInstance().getRoute(getRouteSourceId(), fleet);
+            //if(route == null){return;}//HERE
+            if (route.getCustom() instanceof PatrolFleetData) {
+                PatrolFleetData custom = (PatrolFleetData) route.getCustom();
                 if (custom.spawnFP > 0) {
                     float fraction  = fleet.getFleetPoints() / custom.spawnFP;
                     returningPatrolValue += fraction;
@@ -288,9 +289,9 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
         }
     }
     @Override
-    public CampaignFleetAPI spawnFleet(RouteManager.RouteData route) {
+    public CampaignFleetAPI spawnFleet(RouteData route) {
 
-        MilitaryBase.PatrolFleetData custom = (MilitaryBase.PatrolFleetData) route.getCustom();
+        PatrolFleetData custom = (PatrolFleetData) route.getCustom();
         FleetFactory.PatrolType type = custom.type;
 
         Random random = route.getRandom();
@@ -339,7 +340,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
         fleet.setFaction(market.getFactionId(), true);
         fleet.setNoFactionInName(true);
 
-        fleet.addEventListener(this);
+        fleet.addEventListener((FleetEventListener) getIndustry());
 
 //		PatrolAssignmentAIV2 ai = new PatrolAssignmentAIV2(fleet, custom);
 //		fleet.addScript(ai);

@@ -1,6 +1,8 @@
 package data.scripts.industries.Lists;
 
+import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 import data.scripts.industries.MarketRetrofits_InstanceIndustry;
 
@@ -36,14 +38,16 @@ public class MarketRetrofits_IndustryList {
         }
         return false;
     }
-    public MarketRetrofits_DefaltInstanceIndustry getActiveInstance(MarketAPI market){
+    public MarketRetrofits_DefaltInstanceIndustry getActiveInstance(MarketAPI market, String IDT, Industry industry){
         for(MarketRetrofits_DefaltInstanceIndustry a: sets){
             if(a.canImply(market)){
-                a.setMarket(market);
+                a.init(IDT,market);
+                a.applyIndustry(industry);
                 return a;
             }
         }
-        defaultInstance.setMarket(market);
+        defaultInstance.init(IDT,market);
+        defaultInstance.applyIndustry(industry);
         return defaultInstance;
     }
 }

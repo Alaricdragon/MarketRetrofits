@@ -45,7 +45,7 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltInstanceIndustry {
+public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltInstanceIndustry {//implements MarketImmigrationModifier{
     public MarketRetrofit_TechminingInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -92,13 +92,13 @@ public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltIns
             supply.clear();
         }
 
-        market.addTransientImmigrationModifier(this);
+        market.addTransientImmigrationModifier((MarketImmigrationModifier) getIndustry());//HERE
     }
 
 
     @Override
     public void unapply() {
-        market.removeTransientImmigrationModifier(this);
+        market.removeTransientImmigrationModifier((MarketImmigrationModifier) getIndustry());//HERE
     }
 
 

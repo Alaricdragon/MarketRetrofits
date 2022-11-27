@@ -5,10 +5,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionDoctrineAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.SpecialItemData;
-import com.fs.starfarer.api.campaign.econ.CommodityMarketDataAPI;
-import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
-import com.fs.starfarer.api.campaign.econ.Industry;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.econ.*;
 import com.fs.starfarer.api.campaign.listeners.ColonyOtherFactorsListener;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.characters.MutableCharacterStatsAPI;
@@ -34,7 +31,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltInstanceIndustry {
+public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltInstanceIndustry {//implements MarketImmigrationModifier {
     public MarketRetrofit_PopulationInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -53,7 +50,7 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
     public static boolean HAZARD_INCREASES_DEFENSE = false;
     @Override
     public void apply() {
-        modifyStability(this, market, getModId(3));
+        modifyStability(getIndustry(), market, getModId(3));//HERE
 
 //		if (market.getId().equals("chicomoztoc")) {
 //		System.out.println("wefwefwe");
@@ -198,9 +195,9 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
         market.getStats().getDynamic().getMod(Stats.ADMIN_PROB_MOD).modifyFlat(getModId(1),
                 ADMIN_PROB_PER_SIZE * Math.max(0, market.getSize() - 3));
 
-        modifyStability2(this, market, getModId(3));
+        modifyStability2(getIndustry(), market, getModId(3));//HERE
 
-        market.addTransientImmigrationModifier(this);
+        market.addTransientImmigrationModifier((MarketImmigrationModifier) getIndustry());//HERE
 
 
 //		// if there's no queued spaceport, setHasSpaceport() is called by Spaceport (if it's present at the market)
@@ -284,7 +281,7 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
 
         unmodifyStability(market, getModId(3));
 
-        market.removeTransientImmigrationModifier(this);
+        market.removeTransientImmigrationModifier((MarketImmigrationModifier) getIndustry());//HERE
     }
     @Override
     protected boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
@@ -782,7 +779,7 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
                             market.getContainingLocation(), loc, Entities.FUSION_LAMP, getMarket().getFactionId());//Factions.NEUTRAL);
                     if (added != null) {
                         lamp = added.entity;
-                        market.getContainingLocation().addScript(new MarketRetrofit_PopulationInstance.LampRemover(lamp, market, this));
+                        market.getContainingLocation().addScript(new MarketRetrofit_PopulationInstance.LampRemover(lamp, market, this));//HERE
                     }
                 }
             }

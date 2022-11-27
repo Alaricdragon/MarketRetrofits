@@ -3,6 +3,7 @@ package data.scripts.industries;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.*;
+import com.fs.starfarer.api.campaign.listeners.FleetEventListener;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.econ.ResourceDepositsCondition;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
@@ -380,10 +381,10 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
     public java.lang.String	getDisruptedKey(){
         return industryGroup.defaultInstance.getDisruptedKey();
     }
-    @Override
+    /*@Override//HERE
     public java.lang.String	getId(){
         return industryGroup.defaultInstance.getId();
-    }
+    }*/
     @Override
     public float	getImproveBonusXP(){
         return industryGroup.defaultInstance.getImproveBonusXP();
@@ -420,10 +421,11 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
     public java.util.List<InstallableIndustryItemPlugin>	getInstallableItems(){
         return industryGroup.defaultInstance.getInstallableItems();
     }
+    /*//HERE
     @Override
     public MarketAPI	getMarket(){
         return industryGroup.defaultInstance.getMarket();
-    }
+    }*/
     @Override
     public Pair<java.lang.String,java.lang.Integer>	getMaxDeficit(java.lang.String... commodityIds){
         return industryGroup.defaultInstance.getMaxDeficit(commodityIds);
@@ -733,4 +735,5 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
     public void reportAboutToBeDespawnedByRouteManager(RouteManager.RouteData route) {
         industryGroup.defaultInstance.reportAboutToBeDespawnedByRouteManager(route);
     }
+
 }

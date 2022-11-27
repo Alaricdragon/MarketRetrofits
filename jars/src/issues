@@ -1,0 +1,30 @@
+MarketRetrofit IndustryChanger:
+    broken instances:
+
+        MarketRetrofit_MilitaryBaseInstance:
+            breaks save files.
+            how? it says its trying to convert itself into a root manager:
+            com.thoughtworks.xstream.converters.ConversionException:
+                Cannot convert type
+                data.scripts.industries.Implementation.defaultIndustrys.MarketRetrofit_MilitaryBaseInstance
+                to type
+                com.fs.starfarer.api.impl.campaign.fleets.RouteManager$RouteFleetSpawner
+             were & why this happens in unknown.
+
+         MarketRetrofit_MiningInstance & MarketRetrofit_FarmingInstance:
+            for a unknown reason, at random, will apply the same -extremely high- output values.
+            running theory is that the output is a combination of -all- output on the map.
+            why? i think its because the CSV files is making specs of every industry it calls? and instanceIndustry is not.
+
+        MarketRetrofit_OrbitalStationInstance:
+            for a known reason, is NOT updating stations at all.
+            (dose remove them if you remove the industry though)
+            reason:
+            it calls for a last station, and a new station, and a station update thing.
+            i just need to change the 'this' for something more workable.
+                -NOT GOING TO WORK.
+                one instance of 'this' wants to look at previous instances of 'this' and wants them to have particle files.
+                theory: impl folder, were the thing is applyed in the first place... yes...
+                    -if i move that data there, i will need to have it grab every instance of said data there.
+
+

@@ -66,8 +66,8 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD.RaidDangerLe
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-
-public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_DefaltInstanceIndustry {//implements FleetEventListener {
+//HERE. i am terrafied to replace the this statments here, becuase then i have to contend with something terrible.. prev stations.
+public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_DefaltInstanceIndustry implements FleetEventListener {
     public MarketRetrofit_OrbitalStationInstance(String name, float orderT) {
         super(name, orderT);
     }
