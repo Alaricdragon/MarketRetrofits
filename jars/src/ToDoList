@@ -1,31 +1,9 @@
 current:
-ALL MILTARY BASES DISABLED IN INDUSTRY.CSV FILE. REACTAVATE TO TEST
+MOVED industry.csv FILE TO 'old' FOLDER. MOVE BACK TO 'campaing' to reactavate
 to do list:
 MarketRetrofit IndustryChanger:
-    (Fixed)BUG:
+    (still not fixed)BUG:
         -mining industry and farming has like 30X supply or demand at random? need to look into this...
-        -patralHQ, milltaryBase and HighCommand DO NOT deploy patrols from the faction they should.
-            theory: this may be caused by buggy bugs, do to the fact that the industry no longer exstends the required types (even though the used instance dose)
-            in this vain, -anything- that extends things may need to have there extensions added to market retrofit before this all works.
-            theory: dose haveing all industrys implement all things resalt in issues? if so, i may need to make my own classes that i can implement on will that do the required things.
-            -UPDATE: attempted this. it worked* but failed at the same time. the issue: implementing something calls the function directly. i want the function to be called through the industry.
-            sollution? have all instances NOT implement. have the base industry implement. this should work.
-            so tired right now. i will have to spend some time and fix this tomorrow.
-            ---
-            attempted a hot fix. failed. every instance industry that implements something applys it somewere else. the issue? if i dont set them to be a item, they are not one, if that makes sense.
-            the sollotion? make my own interface modals that are usable and let a class inharent the right values for this to work? maybe...
-            that also might not be the issue, and it might have more to do with the issues that are being caused by the market assing issues.
-            //(seems like i fixed that by moveing some things around)Note: the only factions with patrols are eater 'neutral' or 'pirates' it seems random and the same for all worlds?
-            --
-            i currently have a hot fix active that is called 'if(route == null){return;}' in both miltary base and lions gaurd HQ instances'.
-            this prevents a random crash from crashing my game. but i fear it will have issues if left in the code.
-            OBJECTIVE: run some type of console log through the code. this -should- tell me if the industry is having market issues.
-            causes: i -think- it might be from wrong market ID issues.
-                    why? because there is no check by default (so it always works under normal conditions.). something has to be messing up, and unless having the instance exstend the industry is that important, there is alsmost nothing else it can be
-
-            Theory: use 'getMarket' to determine market. in BaseIndustry. remove the override to getMarket.
-        -Theroy bug:    i have reason to think that the market is not being assigned right. this may be causing issues with things like patrol fleets spawning
-                        possable causes? it might have something to do with exstended classes not haveing the same instance. if so, i might need to do something like getMarket() instead of this.market. that might work?
     -finish industry list so it remembers its industry instances in prioriity order.
     -finish added all the default instances for all the base game industry's.
     -test and make sure this works for every industry i activate. NOTE: dose not play nice with saves when i actavate a new industry.
@@ -37,6 +15,101 @@ MarketRetrofit IndustryChanger:
     that seemed to fix it.
 
     see if i require to change all 'market' to 'getMarket()'
+    issue:
+        attempted a full fix of a issue with instances being used when they should not be.
+        did not work at all. the issue:
+        CANNOT copy instances. will need to alter them to be FRAMES ONLY.
+        need to build a way to store junk data in a baseIndustry, and access it from an instance
+    THEORY:
+        the baseIndustry class has a property called clone. right now clone is getting clones of instances, and not of base industry.
+        the instance industrys are NOT built to do the following:
+        1) hold data.
+        2) be used as anything other then a frame
+        3) be interacted with by outside forcese to do anything related to holding data.
+        this is causing issues. many baseIndustry functions pass data onto the instances.
+        many baseIndustry functions get data from the instances.
+        but i want them to be able to use and send data.
+        i have a way to tell when/when not a instance industry is useing a function.
+        i do not have a way to do that with default instance industry.
+    found issues through analysis:
+        1) some functions require to be ran through the baseIndustry that they are suppose to represent.
+        2) some functions want to store / use data from a baseIndustry. cannot allow instances to do this.
+        3) some instance want to store data to themselves, but they should instead be transferred to there MarketRetrofits_BaseIndustry
+        4) MarketRetrofit_BaseIndustry never gets to run its functions because DefaltInstance is running instead
+    solutions:
+        1) remove the old DefaultInstance. replace with same data extending MarketRetrofit_BaseIndustry instead
+            -fixes all times MarketRetrofit_BaseIndustry cant run because of DefaultInstance.
+        2) create a 'data dump' set of functions and classes that can be used to store and get data by InstanceIndustry
+            -when implemented, this will let all data rest on the MarketRetrofit_BaseIndustry, wish should fix a host of issues.
+        3) find and identify every class that needs to:
+            *)run a .supper when not in use by a InstanceIndustry
+            *)run a .super always.
+            *)not be editable by a instance at all.
+            *)NOTE: its possible, but unlikely, that all classes always need to be ran thorough a super.
+            -this and 1 should completely fix the issue of code failing to run through the correct paths
+        4) in industry list, make the industry return null instead of default instance.
+            -lets me check for instance industry before running my own industry.
+        issues:
+            will not be able to prevent MarketRetrofit_BaseIndustry from running. preventing use of instance industry sometimes.
+        solutions:
+            a) give up on the idea of industry being different based on instances. instead add a super to every function..?
+            b) keep industry's being based on instances. always run super in MarketRetrofit_BaseIndustry?
+            c) what the hell do i do anyhow?
+    Current plan:
+        1) add supers to every thing in MarketRetrofit_BaseIndustry provided:
+            its not a description (default descriptions remain the same between everything)
+            it creates some sort of change between things (some functions are empty)
+        2) add 2 from solutions
+        3) remove some functions from the things instance industry and default industry is allowed to change completely
+            -maybe let them still run code when that happens, just make the default ran code not do anything?
+        4) remove some .super defaults from defaultIndustry
+            things to remove:
+                applyAICoreModifiers
+                buildingFinished
+                cancelUpgrade
+                canDowngrade
+                downgrade
+                finishBuildingOrUpgrading
+
+        5) set some things in MarketRetrofit_BaseIndustry to run there super when no other thing is ran
+            things like that will be tage with:
+                APPLY SUPER FROM CLASS AS DEFAULT
+            current list:
+                applyAICoreModifiers
+                applyAICoreToIncomeAndUpkeep
+                applyAlphaCoreSupplyAndDemandModifiers
+                applyBetaCoreSupplyAndDemandModifiers
+                applyDeficitToProduction
+                applyGammaCoreSupplyAndDemandModifiers
+                applyIncomeAndUpkeep
+                clearUnmodified
+                getBaseUpkeep
+                getBuildOrUpgradeDaysText
+                getBuildOrUpgradeProgress
+                getBuildOrUpgradeProgressText
+                getCargoForInteractionMode
+                getCargoTitleForGatheringPoint
+                getCurrentImage
+                getCurrentName
+                getDeficitMult
+                getDisruptedDays
+                getImproveDialogTitle?
+                getImproveProductionBonus?
+                getImproveStoryPoints
+                getIncome
+                getInstallableItems
+            theory:
+                if i manage to find a way to pass the default class and all its various data types down to default industry, this might be unneeded
+        6) decide if i want to let the following be overriding?
+            current list:
+                demand
+                doPostSaveRestore
+                doPreSaveCleanup
+        *) for now am NOT going to remove all default instances, as i feel like i could make them work
+        *) STATUS:
+            not completed. at 'getInstallableItems' function in MarketRetrofits_BaseIndustry
+
+
     FIX EVERYTHING IN ISSUES.
         -might be because im not useing instances of instance industry (haha)
     MarketRetrofit_OrbitalStationInstance:

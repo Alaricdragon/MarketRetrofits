@@ -223,10 +223,10 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
     public void	clearUnmodified(){
         industryGroup.defaultInstance.clearUnmodified();
     }
-    @Override
+    /*@Override//HERE
     protected BaseIndustry clone(){
         return industryGroup.defaultInstance.clone();
-    }
+    }*/
     @Override
     public void	createTooltip(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded){
         industryGroup.defaultInstance.createTooltip(mode,tooltip,expanded);
