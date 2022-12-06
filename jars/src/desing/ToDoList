@@ -1,0 +1,26 @@
+current:
+MOVED industry.csv FILE TO 'old' FOLDER. MOVE BACK TO 'campaing' to reactavate
+to do list:
+    Industry Replacer:
+        see new folder called 'industry replaced'
+supplyDemandLibary:
+    create masterList:
+        -(done)the masterList is an collection of lists. its were all lists ever made are stored.
+        -(done)every time an list is added/requested with an industry reference that dose not exist, creates an new set of lists for that industry reference.
+        -remembers weather or not an industry has an MarketRetrofits reference, and if so, runs all change data in that industry?
+    (done)create lists:
+        -lists are collection of sets. one list handles one industry.
+        -an list holds an organized by order list of all 'changes', with references back to said 'changes' 'set'. organized by order.
+        -when activated, an list runs through all changes in order, each time it reaches an new set, it checks to see if that set is valid.
+        -list holds references to its required industry ID.
+    (done)create sets
+        -sets are were i calculate and run code. they decide what is allowed, and what is not.
+        -they also run and calculate all changes in the order they want to be calculated in.
+        -should be able to automatically apply itself to to the 'lists' that are required for its wanted industry.
+    (done)finish testing the 'applyMutableStat' function in supplyBase.
+        -i made the class extend an MutableState. no idea if this is the right call or not.
+    (done) test the following:
+        -demandSwap
+        -supplySwap
+        -supplyAdd
+        -demandAdd

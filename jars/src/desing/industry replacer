@@ -1,6 +1,52 @@
-current:
-MOVED industry.csv FILE TO 'old' FOLDER. MOVE BACK TO 'campaing' to reactavate
-to do list:
+industry are extremely complicated. there is a lot of interaction going back and forwards here. this creates issues.
+current to do list:
+    1) build way to accuses and storage data in 'base industry'
+instance industry
+    issues:
+        1)  something i forgot at first is that a 'instance industry' dose not hold all the values and data that it is trying to get
+            from its 'base industry'. it also dose not have the functions of the 'base industry'
+        2)  default data from the 'games base industry' is not what i want to run in my 'instance industry' by default
+            as a result i -cannot use .super for anything-, as it would try to run with the default instances code and cause issues
+    solutions:
+        1)  get all data and functions from 'base industry'
+        2)  store all data in 'base industry'
+             -requires a way tog et and store data. ill get to this.
+        3)  replace all functions in 'default industry' with copy's of functions from 'games base industry', well calling its
+            functions and variables from its 'base industry'
+
+(MarketRetrofit) base industry:
+    issues:
+        1)  getting data to and from this class.
+    solutions:
+        1)  give 'instance industry' a reference to this class every time a function is called.
+        2)  create a set of functions for storing and receiving data
+            every function would correspond to a data type, and would let the me send and receive data as i please
+
+
+
+status of default industry and base industry:
+    some functions require different things to run. some functions require different amount of work to get right.
+    i have been looking at my functions and seeing what i required to do, for both 'instance industry' and 'default industry'.
+    i want to have the option to override all the classes, even if it is silly, because someone might need one someday.
+
+    i have created some lists to what i thought i needed to do, but they are insufficient. so, new lists:
+    2 sets of lists. one for 'base industry' and one for 'default industry'
+    the 'base industry' one is for what i need to do in 'base industry' to get it working there.
+    the 'default industry' one is for what i need to do there.
+
+    Base Industry:
+        run super -> instance:
+
+        run instance -> super:
+
+        run instance:
+
+    default instance:
+        idea: copy all the code from 'game base industry' into default industry, because that's what im doing anyhow.
+
+
+
+old lists and ideas. here as temp.
 MarketRetrofit IndustryChanger:
     (still not fixed)BUG:
         -mining industry and farming has like 30X supply or demand at random? need to look into this...
@@ -71,7 +117,9 @@ MarketRetrofit IndustryChanger:
                 downgrade
                 finishBuildingOrUpgrading
 
-        5) set some things in MarketRetrofit_BaseIndustry to run there super when no other thing is ran
+        5) (imply: 4) set some things in MarketRetrofit_BaseIndustry to run there super when no other thing is ran
+            NOTE: some items call other functions. all of said items -need- to be rewritten to call from the main industry? maybe?
+            NOTE: some of said functions are just for getting data or variables. remove them if needed.
             things like that will be tage with:
                 APPLY SUPER FROM CLASS AS DEFAULT
             current list:
@@ -98,6 +146,39 @@ MarketRetrofit IndustryChanger:
                 getImproveStoryPoints
                 getIncome
                 getInstallableItems
+                getPatherInterest
+                getSizeMult
+                getSpec
+                getSpecialItem
+                getStabilityAffectingDeficit
+                getStabilityPenalty
+                getSupply
+                getSupplyBonus
+                getSupplyBonusFromOther
+                getUpkeep
+                getVisibleInstalledItems
+                isAvailableToBuild
+                isBuilding
+                isDisrupted
+                isFunctional
+                isHidden
+                modifyStabilityWithBaseMod
+                notifyBeingRemoved
+                sendBuildOrUpgradeMessage
+                setAICoreId
+                setBuildCostOverride
+                setSpecialItem
+                showWhenUnavailable
+                startBuilding
+                startUpgrading
+                supply
+                unapply
+                updateAICoreToSupplyAndDemandModifiers
+                updateImprovementSupplyAndDemandModifiers
+                updateIncomeAndUpkeep
+                updateSupplyAndDemandModifiers
+                upgradeFinished
+                wantsToUseSpecialItem
             theory:
                 if i manage to find a way to pass the default class and all its various data types down to default industry, this might be unneeded
         6) decide if i want to let the following be overriding?
@@ -105,10 +186,30 @@ MarketRetrofit IndustryChanger:
                 demand
                 doPostSaveRestore
                 doPreSaveCleanup
+                isImproved
+                isIndustry
+                isOther
+                isStructure
+                isUpgrading
+                readResolve
+                reapply
+                setBuildProgress
+                setDisrupted
+                setHidden
+                setImproved
+                unmodifyStabilityWithBaseMod
+                writeReplace
         *) for now am NOT going to remove all default instances, as i feel like i could make them work
         *) STATUS:
             not completed. at 'getInstallableItems' function in MarketRetrofits_BaseIndustry
 
+
+        i need beter rules for this:
+        x catagorys:
+        1) as intended (run though default industry. that's how it should work)
+        2) super base -> default extra (super is ran through base always. extra code cen be ran through instance industry)
+        3) default extra -> super base (same as 2, but if you need to run default before extra).
+        4)
 
     FIX EVERYTHING IN ISSUES.
         -might be because im not useing instances of instance industry (haha)
@@ -119,25 +220,3 @@ MarketRetrofit IndustryChanger:
     MarketRetrofit_PopulationInstance
         need to replace one more 'this' with '(option cast)getIndustry()'
 
-
-supplyDemandLibary:
-    create masterList:
-        -(done)the masterList is an collection of lists. its were all lists ever made are stored.
-        -(done)every time an list is added/requested with an industry reference that dose not exist, creates an new set of lists for that industry reference.
-        -remembers weather or not an industry has an MarketRetrofits reference, and if so, runs all change data in that industry?
-    (done)create lists:
-        -lists are collection of sets. one list handles one industry.
-        -an list holds an organized by order list of all 'changes', with references back to said 'changes' 'set'. organized by order.
-        -when activated, an list runs through all changes in order, each time it reaches an new set, it checks to see if that set is valid.
-        -list holds references to its required industry ID.
-    (done)create sets
-        -sets are were i calculate and run code. they decide what is allowed, and what is not.
-        -they also run and calculate all changes in the order they want to be calculated in.
-        -should be able to automatically apply itself to to the 'lists' that are required for its wanted industry.
-    (done)finish testing the 'applyMutableStat' function in supplyBase.
-        -i made the class extend an MutableState. no idea if this is the right call or not.
-    (done) test the following:
-        -demandSwap
-        -supplySwap
-        -supplyAdd
-        -demandAdd

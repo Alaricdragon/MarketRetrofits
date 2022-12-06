@@ -16,42 +16,55 @@ import com.fs.starfarer.api.util.Pair;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryList;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryMasterList;
 
-public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{// implements MarketImmigrationModifier, FleetEventListener, RouteManager.RouteFleetSpawner{
+public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry {// implements MarketImmigrationModifier, FleetEventListener, RouteManager.RouteFleetSpawner{
     /*this is the class that an industry would extend, if and only if said industry wants to be the default industry for an industry type.*/
     public String ID;
     public float order;
     public MarketRetrofits_IndustryList industryGroup = null;
     Industry industry;
-    public void applyIndustry(Industry industryT){
+
+    public void applyIndustry(Industry industryT) {
         industry = industryT;
     }
-    public Industry getIndustry(){
+
+    public Industry getIndustry() {
         return this.industry;
     }
+
     public MarketRetrofits_DefaltInstanceIndustry(String name, float orderT) {
         ID = name;
         order = orderT;
     }
+
     //@Override
-    public void applyToIndustry(String industry){
+    public void applyToIndustry(String industry) {
         //apply to industry here.
-        MarketRetrofits_IndustryMasterList.setDefaltInstance(industry,this);
+        MarketRetrofits_IndustryMasterList.setDefaltInstance(industry, this);
         industryGroup = MarketRetrofits_IndustryMasterList.getInstance(industry);
     }
+
     //this class requires every single function held in baseIndustry, as well as an an function to determon if its active or not.
     protected boolean Active = true;
-    public boolean canImply(MarketAPI market){
+
+    public boolean canImply(MarketAPI market) {
         return Active;
     }
     /*
     public void setMarket(MarketAPI newMarket){
         this.market = newMarket;
     }*/
-    @Override
-    public void apply() {
-        //super.apply();
-        //get whatever industry should be used and use its methods here
-    }
+
+
+
+
+
+
+
+
+
+
+
+
     @Override
     public void	addAICoreSection(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
         super.addAICoreSection(tooltip,mode);
@@ -348,42 +361,50 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{// impl
     /*public static float	getCommodityEconUnitMult(float size){
         return super.getComm
     }*/
-    public java.lang.String	getCurrentImage(){
+    public java.lang.String getCurrentImage() {
         return super.getCurrentImage();
     }
+
     @Override
-    public java.lang.String	getCurrentName(){
+    public java.lang.String getCurrentName() {
         return super.getCurrentName();
     }
+
     @Override
-    protected float	getDeficitMult(java.lang.String... commodities){
+    protected float getDeficitMult(java.lang.String... commodities) {
         return super.getDeficitMult(commodities);
     }
+
     @Override
     /*public static java.lang.String	getDeficitText(java.lang.String commodityId){
         return super.getDeficitText();
     }*/
-    public MutableCommodityQuantity	getDemand(java.lang.String id){
+    public MutableCommodityQuantity getDemand(java.lang.String id) {
         return super.getDemand(id);
     }
+
     @Override
-    public MutableStat getDemandReduction(){
+    public MutableStat getDemandReduction() {
         return super.getDemandReduction();
     }
+
     @Override
-    public MutableStat	getDemandReductionFromOther(){
+    public MutableStat getDemandReductionFromOther() {
         return super.getDemandReductionFromOther();
     }
+
     @Override
-    protected java.lang.String	getDescriptionOverride(){
+    protected java.lang.String getDescriptionOverride() {
         return super.getDescriptionOverride();
     }
+
     @Override
-    public float	getDisruptedDays(){
+    public float getDisruptedDays() {
         return super.getDisruptedDays();
     }
+
     @Override
-    public java.lang.String	getDisruptedKey(){
+    public java.lang.String getDisruptedKey() {
         return super.getDisruptedKey();
     }
     /*//HERE
@@ -391,6 +412,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{// impl
     public java.lang.String	getId(){
         return super.getId();
     }*/
+
     @Override
     public float	getImproveBonusXP(){
         return super.getImproveBonusXP();
@@ -514,6 +536,12 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{// impl
     public void	initWithParams(java.util.List<java.lang.String> params){
         super.initWithParams(params);
     }
+
+    @Override
+    public void apply() {
+
+    }
+
     @Override
     //Used when loading market from an economy .json file.
     protected boolean	isAICoreId(java.lang.String str){
@@ -525,6 +553,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{// impl
             float a[] = {};
             a[1] = 2;
         }*/
+
         if (market.hasTag(Tags.MARKET_NO_INDUSTRIES_ALLOWED)) return false;
         return market.hasIndustry(Industries.POPULATION) && !getId().equals(Industries.POPULATION);
         //return super.isAvailableToBuild();
