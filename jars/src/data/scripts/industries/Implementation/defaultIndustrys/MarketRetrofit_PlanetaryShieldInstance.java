@@ -7,20 +7,12 @@ import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.ids.Strings;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
 
 
 import java.awt.Color;
 
-import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.PlanetAPI;
-import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
-import com.fs.starfarer.api.impl.campaign.ids.Stats;
-import com.fs.starfarer.api.impl.campaign.ids.Strings;
-import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
-
-public class MarketRetrofit_PlanetaryShieldInstance extends MarketRetrofits_DefaltInstanceIndustry {
+public class MarketRetrofit_PlanetaryShieldInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
     public MarketRetrofit_PlanetaryShieldInstance(String name, float orderT) {
         super(name, orderT);
     }

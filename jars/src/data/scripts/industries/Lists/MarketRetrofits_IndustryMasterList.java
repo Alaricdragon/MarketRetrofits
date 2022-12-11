@@ -1,6 +1,7 @@
 package data.scripts.industries.Lists;
 
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
 import data.scripts.industries.MarketRetrofits_InstanceIndustry;
 
 import java.util.ArrayList;

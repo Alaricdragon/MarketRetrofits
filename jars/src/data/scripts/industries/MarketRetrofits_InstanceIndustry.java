@@ -1,28 +1,17 @@
 package data.scripts.industries;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.*;
-import com.fs.starfarer.api.campaign.listeners.FleetEventListener;
 import com.fs.starfarer.api.combat.MutableStat;
-import com.fs.starfarer.api.impl.campaign.econ.ResourceDepositsCondition;
-import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.fleets.RouteManager;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import com.fs.starfarer.campaign.econ.Market;
-import data.scripts.industries.Lists.MarketRetrofits_IndustryList;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryMasterList;
 
-import java.awt.*;
-
-public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInstanceIndustry{
+public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInstanceIndustry {
     /* this is the stored data of an industry. this is what a user will extend if they want to add an instanced industry.
     *  requires:
     *  mimics of every industry function, that all try to run the base industry
@@ -56,19 +45,19 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         industryGroup.defaultInstance.addAICoreSection(tooltip,coreId,mode);
     }
     @Override
-    protected void	addAlphaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
+    public void	addAlphaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
         industryGroup.defaultInstance.addAlphaCoreDescription(tooltip,mode);
     }
     @Override
-    protected void	addBetaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
+    public void	addBetaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
         industryGroup.defaultInstance.addBetaCoreDescription(tooltip,mode);
     }
     @Override
-    protected void	addGammaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
+    public void	addGammaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
         industryGroup.defaultInstance.addGammaCoreDescription(tooltip,mode);
     }
     @Override
-    protected void	addGroundDefensesImpactSection(TooltipMakerAPI tooltip, float bonus, java.lang.String... commodities){
+    public void	addGroundDefensesImpactSection(TooltipMakerAPI tooltip, float bonus, java.lang.String... commodities){
         industryGroup.defaultInstance.addGroundDefensesImpactSection(tooltip,bonus,commodities);
     }
     @Override
@@ -84,31 +73,31 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         industryGroup.defaultInstance.addInstalledItemsSection(mode,tooltip,expanded);
     }
     @Override
-    protected boolean addNonAICoreInstalledItems(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded){
+    public boolean addNonAICoreInstalledItems(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded){
         return industryGroup.defaultInstance.addNonAICoreInstalledItems(mode,tooltip,expanded);
     }
     @Override
-    protected void	addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode){
+    public void	addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode){
         industryGroup.defaultInstance.addPostDemandSection(tooltip,hasDemand,mode);
     }
     @Override
-    protected void	addPostDescriptionSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode){
+    public void	addPostDescriptionSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode){
         industryGroup.defaultInstance.addPostDescriptionSection(tooltip,mode);
     }
     @Override
-    protected void	addPostSupplySection(TooltipMakerAPI tooltip, boolean hasSupply, Industry.IndustryTooltipMode mode){
+    public void	addPostSupplySection(TooltipMakerAPI tooltip, boolean hasSupply, Industry.IndustryTooltipMode mode){
         industryGroup.defaultInstance.addPostSupplySection(tooltip,hasSupply,mode);
     }
     @Override
-    protected void	addPostUpkeepSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode){
+    public void	addPostUpkeepSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode){
         industryGroup.defaultInstance.addPostUpkeepSection(tooltip,mode);
     }
     @Override
-    protected void	addRightAfterDescriptionSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode){
+    public void	addRightAfterDescriptionSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode){
         industryGroup.defaultInstance.addRightAfterDescriptionSection(tooltip,mode);
     }
     @Override
-    protected void	addStabilityPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode){
+    public void	addStabilityPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode){
         industryGroup.defaultInstance.addStabilityPostDemandSection(tooltip,hasDemand,mode);
     }
     @Override
@@ -135,55 +124,55 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         industryGroup.defaultInstance.apply(withIncomeUpdate);
     }
     @Override
-    protected void	applyAICoreModifiers(){
+    public void	applyAICoreModifiers(){
         industryGroup.defaultInstance.applyAICoreModifiers();
     }
     @Override
-    protected void	applyAICoreToIncomeAndUpkeep(){
+    public void	applyAICoreToIncomeAndUpkeep(){
         industryGroup.defaultInstance.applyAICoreToIncomeAndUpkeep();
     }
     @Override
-    protected void	applyAlphaCoreModifiers(){
+    public void	applyAlphaCoreModifiers(){
         industryGroup.defaultInstance.applyAlphaCoreModifiers();
     }
     @Override
-    protected void	applyAlphaCoreSupplyAndDemandModifiers(){
+    public void	applyAlphaCoreSupplyAndDemandModifiers(){
         industryGroup.defaultInstance.applyAlphaCoreSupplyAndDemandModifiers();
     }
     @Override
-    protected void	applyBetaCoreModifiers(){
+    public void	applyBetaCoreModifiers(){
         industryGroup.defaultInstance.applyBetaCoreModifiers();
     }
     @Override
-    protected void	applyBetaCoreSupplyAndDemandModifiers(){
+    public void	applyBetaCoreSupplyAndDemandModifiers(){
         industryGroup.defaultInstance.applyBetaCoreSupplyAndDemandModifiers();
     }
     @Override
-    protected void	applyDeficitToProduction(int index, Pair<java.lang.String,java.lang.Integer> deficit, java.lang.String... commodities){
+    public void	applyDeficitToProduction(int index, Pair<java.lang.String,java.lang.Integer> deficit, java.lang.String... commodities){
         industryGroup.defaultInstance.applyDeficitToProduction(index,deficit,commodities);
     }
     @Override
-    protected void	applyGammaCoreModifiers(){
+    public void	applyGammaCoreModifiers(){
         industryGroup.defaultInstance.applyGammaCoreModifiers();
     }
     @Override
-    protected void	applyGammaCoreSupplyAndDemandModifiers(){
+    public void	applyGammaCoreSupplyAndDemandModifiers(){
         industryGroup.defaultInstance.applyGammaCoreSupplyAndDemandModifiers();
     }
     @Override
-    protected void	applyImproveModifiers(){
+    public void	applyImproveModifiers(){
         industryGroup.defaultInstance.applyImproveModifiers();
     }
     @Override
-    protected void	applyIncomeAndUpkeep(float sizeOverride){
+    public void	applyIncomeAndUpkeep(float sizeOverride){
         industryGroup.defaultInstance.applyIncomeAndUpkeep(sizeOverride);
     }
     @Override
-    protected void	applyNoAICoreModifiers(){
+    public void	applyNoAICoreModifiers(){
         industryGroup.defaultInstance.applyNoAICoreModifiers();
     }
     @Override
-    protected void	buildingFinished(){
+    public void	buildingFinished(){
         industryGroup.defaultInstance.buildingFinished();
     }
     @Override
@@ -204,7 +193,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         return industryGroup.defaultInstance.canImprove();
     }
     @Override
-    protected boolean canImproveToIncreaseProduction(){
+    public boolean canImproveToIncreaseProduction(){
         return industryGroup.defaultInstance.canImproveToIncreaseProduction();
     }
     @Override
@@ -224,7 +213,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         industryGroup.defaultInstance.clearUnmodified();
     }
     /*@Override//HERE
-    protected BaseIndustry clone(){
+    public BaseIndustry clone(){
         return industryGroup.defaultInstance.clone();
     }*/
     @Override
@@ -248,7 +237,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         industryGroup.defaultInstance.demand(modId,commodityId,quantity,desc);
     }
     @Override
-    protected void	disruptionFinished(){
+    public void	disruptionFinished(){
         industryGroup.defaultInstance.disruptionFinished();
     }
     @Override
@@ -292,7 +281,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         return industryGroup.defaultInstance.getAllSupply();
     }
     @Override
-    protected int	getBaseStabilityMod(){
+    public int	getBaseStabilityMod(){
         return industryGroup.defaultInstance.getBaseStabilityMod();
     }
     @Override
@@ -332,7 +321,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         return industryGroup.defaultInstance.getCanNotShutDownReason();
     }
     @Override
-    protected CargoAPI	getCargoForInteractionMode(MarketAPI.MarketInteractionMode mode){
+    public CargoAPI	getCargoForInteractionMode(MarketAPI.MarketInteractionMode mode){
         return industryGroup.defaultInstance.getCargoForInteractionMode(mode);
     }
     @Override
@@ -351,7 +340,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         return industryGroup.defaultInstance.getCurrentName();
     }
     @Override
-    protected float	getDeficitMult(java.lang.String... commodities){
+    public float	getDeficitMult(java.lang.String... commodities){
         return industryGroup.defaultInstance.getDeficitMult(commodities);
     }
     @Override
@@ -370,7 +359,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         return industryGroup.defaultInstance.getDemandReductionFromOther();
     }
     @Override
-    protected java.lang.String	getDescriptionOverride(){
+    public java.lang.String	getDescriptionOverride(){
         return industryGroup.defaultInstance.getDescriptionOverride();
     }
     @Override
@@ -394,7 +383,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         return industryGroup.defaultInstance.getImproveDialogTitle();
     }
     @Override
-    protected java.lang.String	getImprovementsDescForModifiers(){
+    public java.lang.String	getImprovementsDescForModifiers(){
         return industryGroup.defaultInstance.getImprovementsDescForModifiers();
     }
     @Override
@@ -402,7 +391,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         return industryGroup.defaultInstance.getImproveMenuText();
     }
     @Override
-    protected int	getImproveProductionBonus(){
+    public int	getImproveProductionBonus(){
         return industryGroup.defaultInstance.getImproveProductionBonus();
     }
     @Override
@@ -431,11 +420,11 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         return industryGroup.defaultInstance.getMaxDeficit(commodityIds);
     }
     @Override
-    protected java.lang.String	getModId(){
+    public java.lang.String	getModId(){
         return industryGroup.defaultInstance.getModId();
     }
     @Override
-    protected java.lang.String	getModId(int index){
+    public java.lang.String	getModId(int index){
         return industryGroup.defaultInstance.getModId(index);
     }
     @Override
@@ -462,11 +451,11 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         return industryGroup.defaultInstance.getSpecialItem();
     }
     @Override
-    protected Pair<java.lang.String,java.lang.Integer>	getStabilityAffectingDeficit(){
+    public Pair<java.lang.String,java.lang.Integer>	getStabilityAffectingDeficit(){
         return industryGroup.defaultInstance.getStabilityAffectingDeficit();
     }
     @Override
-    protected int	getStabilityPenalty(){
+    public int	getStabilityPenalty(){
         return industryGroup.defaultInstance.getStabilityPenalty();
     }
     @Override
@@ -498,7 +487,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         return industryGroup.defaultInstance.getVisibleInstalledItems();
     }
     @Override
-    protected boolean	hasPostDemandSection(boolean hasDemand, Industry.IndustryTooltipMode mode){
+    public boolean	hasPostDemandSection(boolean hasDemand, Industry.IndustryTooltipMode mode){
         return hasPostDemandSection(hasDemand,mode);
     }
     @Override
@@ -511,7 +500,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
     }
     @Override
     //Used when loading market from an economy .json file.
-    protected boolean	isAICoreId(java.lang.String str){
+    public boolean	isAICoreId(java.lang.String str){
         return industryGroup.defaultInstance.isAICoreId(str);
     }
     @Override
@@ -570,7 +559,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
     }
     @Override
     //Upgrading, but not the initial building process.
-    protected void	modifyStabilityWithBaseMod(){
+    public void	modifyStabilityWithBaseMod(){
         industryGroup.defaultInstance.modifyStabilityWithBaseMod();
     }
     @Override
@@ -582,11 +571,11 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         industryGroup.defaultInstance.notifyColonyRenamed();
     }
     @Override
-    protected void	notifyDisrupted(){
+    public void	notifyDisrupted(){
         industryGroup.defaultInstance.notifyDisrupted();
     }
     @Override
-    protected java.lang.Object	readResolve(){
+    public java.lang.Object	readResolve(){
         return industryGroup.defaultInstance.readResolve();
     }
     @Override
@@ -595,7 +584,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
     }
     @Override
     //Calls unapply() and then reapply().
-    protected void	sendBuildOrUpgradeMessage(){
+    public void	sendBuildOrUpgradeMessage(){
         industryGroup.defaultInstance.sendBuildOrUpgradeMessage();
     }
     @Override
@@ -667,15 +656,15 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         industryGroup.defaultInstance.unapply();
     }
     @Override
-    protected void	unmodifyStabilityWithBaseMod(){
+    public void	unmodifyStabilityWithBaseMod(){
         industryGroup.defaultInstance.unmodifyStabilityWithBaseMod();
     }
     @Override
-    protected void	updateAICoreToSupplyAndDemandModifiers(){
+    public void	updateAICoreToSupplyAndDemandModifiers(){
         industryGroup.defaultInstance.updateAICoreToSupplyAndDemandModifiers();
     }
     @Override
-    protected void	updateImprovementSupplyAndDemandModifiers(){
+    public void	updateImprovementSupplyAndDemandModifiers(){
         industryGroup.defaultInstance.updateImprovementSupplyAndDemandModifiers();
     }
     @Override
@@ -683,11 +672,11 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
         industryGroup.defaultInstance.updateIncomeAndUpkeep();
     }
     @Override
-    protected void	updateSupplyAndDemandModifiers(){
+    public void	updateSupplyAndDemandModifiers(){
         industryGroup.defaultInstance.updateSupplyAndDemandModifiers();
     }
     @Override
-    protected void	upgradeFinished(Industry previous){
+    public void	upgradeFinished(Industry previous){
         industryGroup.defaultInstance.upgradeFinished(previous);
     }
     @Override
@@ -696,7 +685,7 @@ public class MarketRetrofits_InstanceIndustry extends MarketRetrofits_DefaltInst
     }
     @Override
     //Return false if already using one of that type, unless the other one is better.
-    protected java.lang.Object	writeReplace() {
+    public java.lang.Object	writeReplace() {
         return industryGroup.defaultInstance.writeReplace();
     }
 

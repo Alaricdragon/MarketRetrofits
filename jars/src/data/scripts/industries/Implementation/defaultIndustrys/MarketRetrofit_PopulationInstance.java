@@ -13,7 +13,6 @@ import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.econ.CommRelayCondition;
 import com.fs.starfarer.api.impl.campaign.econ.impl.ConstructionQueue;
 import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
-import com.fs.starfarer.api.impl.campaign.econ.impl.PopulationAndInfrastructure;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetFactoryV3;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
@@ -22,7 +21,7 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.lwjgl.util.vector.Vector2f;
@@ -31,7 +30,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltInstanceIndustry {//implements MarketImmigrationModifier {
+public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {//implements MarketImmigrationModifier {
     public MarketRetrofit_PopulationInstance(String name, float orderT) {
         super(name, orderT);
     }

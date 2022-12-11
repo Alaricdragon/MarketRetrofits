@@ -25,198 +25,41 @@ instance industry
 
 
 status of default industry and base industry:
-    some functions require different things to run. some functions require different amount of work to get right.
-    i have been looking at my functions and seeing what i required to do, for both 'instance industry' and 'default industry'.
-    i want to have the option to override all the classes, even if it is silly, because someone might need one someday.
+    (old)
+        some functions require different things to run. some functions require different amount of work to get right.
+        i have been looking at my functions and seeing what i required to do, for both 'instance industry' and 'default industry'.
+        i want to have the option to override all the classes, even if it is silly, because someone might need one someday.
 
-    i have created some lists to what i thought i needed to do, but they are insufficient. so, new lists:
-    2 sets of lists. one for 'base industry' and one for 'default industry'
-    the 'base industry' one is for what i need to do in 'base industry' to get it working there.
-    the 'default industry' one is for what i need to do there.
+        i have created some lists to what i thought i needed to do, but they are insufficient. so, new lists:
+        2 sets of lists. one for 'base industry' and one for 'default industry'
+        the 'base industry' one is for what i need to do in 'base industry' to get it working there.
+        the 'default industry' one is for what i need to do there.
 
-    Base Industry:
-        run super -> instance:
+        Base Industry:
+            run super -> instance:
 
-        run instance -> super:
+            run instance -> super:
 
-        run instance:
+            run instance:
 
-    default instance:
-        idea: copy all the code from 'game base industry' into default industry, because that's what im doing anyhow.
+            run 'set data from instance' before end loop
+        default instance:
 
 
-
-old lists and ideas. here as temp.
-MarketRetrofit IndustryChanger:
-    (still not fixed)BUG:
-        -mining industry and farming has like 30X supply or demand at random? need to look into this...
-    -finish industry list so it remembers its industry instances in prioriity order.
-    -finish added all the default instances for all the base game industry's.
-    -test and make sure this works for every industry i activate. NOTE: dose not play nice with saves when i actavate a new industry.
-
-    did testing. it seemed the issue was something to do with markets. but i am unsure what.
-    did a few things:
-        1) added a way to get the used industry. so i replaced all of 'this' with 'getIndustry()'
-        2) removed all implementations. all data can be ran through BaseIndustry. all things can be set with '(cast)getIndustry()'
-    that seemed to fix it.
-
-    see if i require to change all 'market' to 'getMarket()'
-    issue:
-        attempted a full fix of a issue with instances being used when they should not be.
-        did not work at all. the issue:
-        CANNOT copy instances. will need to alter them to be FRAMES ONLY.
-        need to build a way to store junk data in a baseIndustry, and access it from an instance
-    THEORY:
-        the baseIndustry class has a property called clone. right now clone is getting clones of instances, and not of base industry.
-        the instance industrys are NOT built to do the following:
-        1) hold data.
-        2) be used as anything other then a frame
-        3) be interacted with by outside forcese to do anything related to holding data.
-        this is causing issues. many baseIndustry functions pass data onto the instances.
-        many baseIndustry functions get data from the instances.
-        but i want them to be able to use and send data.
-        i have a way to tell when/when not a instance industry is useing a function.
-        i do not have a way to do that with default instance industry.
-    found issues through analysis:
-        1) some functions require to be ran through the baseIndustry that they are suppose to represent.
-        2) some functions want to store / use data from a baseIndustry. cannot allow instances to do this.
-        3) some instance want to store data to themselves, but they should instead be transferred to there MarketRetrofits_BaseIndustry
-        4) MarketRetrofit_BaseIndustry never gets to run its functions because DefaltInstance is running instead
-    solutions:
-        1) remove the old DefaultInstance. replace with same data extending MarketRetrofit_BaseIndustry instead
-            -fixes all times MarketRetrofit_BaseIndustry cant run because of DefaultInstance.
-        2) create a 'data dump' set of functions and classes that can be used to store and get data by InstanceIndustry
-            -when implemented, this will let all data rest on the MarketRetrofit_BaseIndustry, wish should fix a host of issues.
-        3) find and identify every class that needs to:
-            *)run a .supper when not in use by a InstanceIndustry
-            *)run a .super always.
-            *)not be editable by a instance at all.
-            *)NOTE: its possible, but unlikely, that all classes always need to be ran thorough a super.
-            -this and 1 should completely fix the issue of code failing to run through the correct paths
-        4) in industry list, make the industry return null instead of default instance.
-            -lets me check for instance industry before running my own industry.
+    (current)
+        current plan:
+            1) in default instance, replace everything with a copy from baseIndustry
+            2) in MarketRetrofit_BaseIndustry create 2 functions:
+                2.a) one to call any data from itself
+                2.b) one to set any data in itself
+            3) in default instance, make it so i collect all data form MarketRetrofit_BaseIndustry.
+            4) in MarketRetrofit_BaseIndustry, make it so i recompile all data from default instance
+            5) in default instance, every time i call a baseIndustry function, do so from the industry that is being emulated right now.
+            (im here)6) in instance industry, apply 5 and 3.
         issues:
-            will not be able to prevent MarketRetrofit_BaseIndustry from running. preventing use of instance industry sometimes.
-        solutions:
-            a) give up on the idea of industry being different based on instances. instead add a super to every function..?
-            b) keep industry's being based on instances. always run super in MarketRetrofit_BaseIndustry?
-            c) what the hell do i do anyhow?
-    Current plan:
-        1) add supers to every thing in MarketRetrofit_BaseIndustry provided:
-            its not a description (default descriptions remain the same between everything)
-            it creates some sort of change between things (some functions are empty)
-        2) add 2 from solutions
-        3) remove some functions from the things instance industry and default industry is allowed to change completely
-            -maybe let them still run code when that happens, just make the default ran code not do anything?
-        4) remove some .super defaults from defaultIndustry
-            things to remove:
-                applyAICoreModifiers
-                buildingFinished
-                cancelUpgrade
-                canDowngrade
-                downgrade
-                finishBuildingOrUpgrading
+            1)  i set all functions in default instance to public. im going to try and set the ones that were protected back, and
+                see if that makes it easier to connect to the old instance industry.
 
-        5) (imply: 4) set some things in MarketRetrofit_BaseIndustry to run there super when no other thing is ran
-            NOTE: some items call other functions. all of said items -need- to be rewritten to call from the main industry? maybe?
-            NOTE: some of said functions are just for getting data or variables. remove them if needed.
-            things like that will be tage with:
-                APPLY SUPER FROM CLASS AS DEFAULT
-            current list:
-                applyAICoreModifiers
-                applyAICoreToIncomeAndUpkeep
-                applyAlphaCoreSupplyAndDemandModifiers
-                applyBetaCoreSupplyAndDemandModifiers
-                applyDeficitToProduction
-                applyGammaCoreSupplyAndDemandModifiers
-                applyIncomeAndUpkeep
-                clearUnmodified
-                getBaseUpkeep
-                getBuildOrUpgradeDaysText
-                getBuildOrUpgradeProgress
-                getBuildOrUpgradeProgressText
-                getCargoForInteractionMode
-                getCargoTitleForGatheringPoint
-                getCurrentImage
-                getCurrentName
-                getDeficitMult
-                getDisruptedDays
-                getImproveDialogTitle?
-                getImproveProductionBonus?
-                getImproveStoryPoints
-                getIncome
-                getInstallableItems
-                getPatherInterest
-                getSizeMult
-                getSpec
-                getSpecialItem
-                getStabilityAffectingDeficit
-                getStabilityPenalty
-                getSupply
-                getSupplyBonus
-                getSupplyBonusFromOther
-                getUpkeep
-                getVisibleInstalledItems
-                isAvailableToBuild
-                isBuilding
-                isDisrupted
-                isFunctional
-                isHidden
-                modifyStabilityWithBaseMod
-                notifyBeingRemoved
-                sendBuildOrUpgradeMessage
-                setAICoreId
-                setBuildCostOverride
-                setSpecialItem
-                showWhenUnavailable
-                startBuilding
-                startUpgrading
-                supply
-                unapply
-                updateAICoreToSupplyAndDemandModifiers
-                updateImprovementSupplyAndDemandModifiers
-                updateIncomeAndUpkeep
-                updateSupplyAndDemandModifiers
-                upgradeFinished
-                wantsToUseSpecialItem
-            theory:
-                if i manage to find a way to pass the default class and all its various data types down to default industry, this might be unneeded
-        6) decide if i want to let the following be overriding?
-            current list:
-                demand
-                doPostSaveRestore
-                doPreSaveCleanup
-                isImproved
-                isIndustry
-                isOther
-                isStructure
-                isUpgrading
-                readResolve
-                reapply
-                setBuildProgress
-                setDisrupted
-                setHidden
-                setImproved
-                unmodifyStabilityWithBaseMod
-                writeReplace
-        *) for now am NOT going to remove all default instances, as i feel like i could make them work
-        *) STATUS:
-            not completed. at 'getInstallableItems' function in MarketRetrofits_BaseIndustry
-
-
-        i need beter rules for this:
-        x catagorys:
-        1) as intended (run though default industry. that's how it should work)
-        2) super base -> default extra (super is ran through base always. extra code cen be ran through instance industry)
-        3) default extra -> super base (same as 2, but if you need to run default before extra).
-        4)
-
-    FIX EVERYTHING IN ISSUES.
-        -might be because im not useing instances of instance industry (haha)
-    MarketRetrofit_OrbitalStationInstance:
-        need to replace 'this' with '(option cast)getIndustry()'
-        need to remove its implements.
-        not doing so now because im scared of it.
-    MarketRetrofit_PopulationInstance
-        need to replace one more 'this' with '(option cast)getIndustry()'
-
+        incomplete:
+            1) for 2 of the current plan, i cant store or set custom data yet. only existing data can be set right now.
+            2) right now i have no way to automatically get and set any extra data that i create

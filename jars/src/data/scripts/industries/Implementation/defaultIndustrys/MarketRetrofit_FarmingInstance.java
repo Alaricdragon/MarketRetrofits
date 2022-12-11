@@ -12,12 +12,12 @@ import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class MarketRetrofit_FarmingInstance extends MarketRetrofits_DefaltInstanceIndustry {
+public class MarketRetrofit_FarmingInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
     public MarketRetrofit_FarmingInstance(String name, float orderT) {
         super(name, orderT);
     }

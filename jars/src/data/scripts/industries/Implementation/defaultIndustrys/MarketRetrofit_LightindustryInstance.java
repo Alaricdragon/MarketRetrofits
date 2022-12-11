@@ -4,9 +4,9 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
 
-public class MarketRetrofit_LightindustryInstance extends MarketRetrofits_DefaltInstanceIndustry {
+public class MarketRetrofit_LightindustryInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
     public MarketRetrofit_LightindustryInstance(String name, float orderT) {
         super(name, orderT);
     }

@@ -11,24 +11,11 @@ import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
 
 import java.awt.Color;
 
-import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.campaign.econ.MarketImmigrationModifier;
-import com.fs.starfarer.api.combat.MutableStat;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.Industries;
-import com.fs.starfarer.api.impl.campaign.ids.Stats;
-import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
-import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.api.util.Pair;
-
-public class MarketRetrofit_SpaceportInstance extends MarketRetrofits_DefaltInstanceIndustry {
+public class MarketRetrofit_SpaceportInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
     public MarketRetrofit_SpaceportInstance(String name, float orderT) {
         super(name, orderT);
     }

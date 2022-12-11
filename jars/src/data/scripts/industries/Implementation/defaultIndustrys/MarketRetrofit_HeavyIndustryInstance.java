@@ -7,11 +7,11 @@ import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
 
 import java.awt.*;
 
-public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_DefaltInstanceIndustry {
+public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
     public MarketRetrofit_HeavyIndustryInstance(String name, float orderT) {
         super(name, orderT);
     }

@@ -12,30 +12,14 @@ import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
 import org.lwjgl.util.vector.Vector2f;
 
 
 
 import java.awt.Color;
 
-import org.lwjgl.util.vector.Vector2f;
-
-import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.SectorEntityToken;
-import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.campaign.econ.MarketImmigrationModifier;
-import com.fs.starfarer.api.campaign.listeners.ColonyOtherFactorsListener;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.Factions;
-import com.fs.starfarer.api.impl.campaign.ids.Tags;
-import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
-import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.api.util.Pair;
-
-public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_DefaltInstanceIndustry {
+public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
     public MarketRetrofit_CryorevivalFacilityInstance(String name, float orderT) {
         super(name, orderT);
     }

@@ -9,22 +9,12 @@ import com.fs.starfarer.api.impl.campaign.submarkets.LocalResourcesSubmarketPlug
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
 
 
 import java.awt.Color;
 
-import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.SubmarketPlugin;
-import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
-import com.fs.starfarer.api.combat.MutableStat;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.submarkets.LocalResourcesSubmarketPlugin;
-import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.api.util.Pair;
-
-public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltInstanceIndustry {
+public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
     public MarketRetrofit_WaystationInstance(String name, float orderT) {
         super(name, orderT);
     }

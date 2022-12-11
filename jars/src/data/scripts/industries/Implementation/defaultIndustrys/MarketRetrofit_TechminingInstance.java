@@ -17,35 +17,16 @@ import com.fs.starfarer.api.impl.campaign.procgen.SalvageEntityGenDataSpec;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
-
-import java.awt.*;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CargoAPI;
-import com.fs.starfarer.api.campaign.CargoStackAPI;
-import com.fs.starfarer.api.campaign.FactionAPI;
-import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.MarketImmigrationModifier;
-import com.fs.starfarer.api.campaign.impl.items.BlueprintProviderItem;
-import com.fs.starfarer.api.campaign.impl.items.ModSpecItemPlugin;
-import com.fs.starfarer.api.campaign.rules.MemoryAPI;
-import com.fs.starfarer.api.impl.campaign.ids.Conditions;
-import com.fs.starfarer.api.impl.campaign.ids.Factions;
-import com.fs.starfarer.api.impl.campaign.ids.Stats;
-import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
-import com.fs.starfarer.api.impl.campaign.procgen.SalvageEntityGenDataSpec.DropData;
-import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
-import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
 
-public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltInstanceIndustry {//implements MarketImmigrationModifier{
+public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {//implements MarketImmigrationModifier{
     public MarketRetrofit_TechminingInstance(String name, float orderT) {
         super(name, orderT);
     }
