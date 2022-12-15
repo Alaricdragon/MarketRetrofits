@@ -21,7 +21,7 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.lwjgl.util.vector.Vector2f;
@@ -30,7 +30,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {//implements MarketImmigrationModifier {
+public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltInstanceIndustry {//implements MarketImmigrationModifier {
     public MarketRetrofit_PopulationInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -49,7 +49,7 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
     public static boolean HAZARD_INCREASES_DEFENSE = false;
     @Override
     public void apply() {
-        modifyStability(getIndustry(), market, getModId(3));//HERE
+        modifyStability(getIndustry(), market, CurrentIndustry.getModId(3));//HERE
 
 //		if (market.getId().equals("chicomoztoc")) {
 //		System.out.println("wefwefwe");
@@ -79,28 +79,28 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
         supply(Commodities.ORGANS, size - 5);
 
 
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.DOMESTIC_GOODS);
+        Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.DOMESTIC_GOODS);
         if (deficit.two <= 0) {
-            market.getStability().modifyFlat(getModId(0), 1, "Domestic goods demand met");
+            market.getStability().modifyFlat(CurrentIndustry.getModId(0), 1, "Domestic goods demand met");
         } else {
-            market.getStability().unmodifyFlat(getModId(0));
+            market.getStability().unmodifyFlat(CurrentIndustry.getModId(0));
         }
 
-        deficit = getMaxDeficit(Commodities.LUXURY_GOODS);
+        deficit = CurrentIndustry.getMaxDeficit(Commodities.LUXURY_GOODS);
         if (deficit.two <= 0 && size > luxuryThreshold) {
-            market.getStability().modifyFlat(getModId(1), 1, "Luxury goods demand met");
+            market.getStability().modifyFlat(CurrentIndustry.getModId(1), 1, "Luxury goods demand met");
         } else {
-            market.getStability().unmodifyFlat(getModId(1));
+            market.getStability().unmodifyFlat(CurrentIndustry.getModId(1));
         }
 
-        deficit = getMaxDeficit(Commodities.FOOD);
+        deficit = CurrentIndustry.getMaxDeficit(Commodities.FOOD);
         if (!market.hasCondition(Conditions.HABITABLE)) {
-            deficit = getMaxDeficit(Commodities.FOOD, Commodities.ORGANICS);
+            deficit = CurrentIndustry.getMaxDeficit(Commodities.FOOD, Commodities.ORGANICS);
         }
         if (deficit.two > 0) {
-            market.getStability().modifyFlat(getModId(2), -deficit.two, getDeficitText(deficit.one));
+            market.getStability().modifyFlat(CurrentIndustry.getModId(2), -deficit.two, getDeficitText(deficit.one));
         } else {
-            market.getStability().unmodifyFlat(getModId(2));
+            market.getStability().unmodifyFlat(CurrentIndustry.getModId(2));
         }
 
 
@@ -117,12 +117,12 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
         }
         if (!market.hasSpaceport() && !spaceportFirstInQueue) {
             float accessibilityNoSpaceport = Global.getSettings().getFloat("accessibilityNoSpaceport");
-            market.getAccessibilityMod().modifyFlat(getModId(0), accessibilityNoSpaceport, "No spaceport");
+            market.getAccessibilityMod().modifyFlat(CurrentIndustry.getModId(0), accessibilityNoSpaceport, "No spaceport");
         }
 
         float sizeBonus = getAccessibilityBonus(size);
         if (sizeBonus > 0) {
-            market.getAccessibilityMod().modifyFlat(getModId(1), sizeBonus, "Colony size");
+            market.getAccessibilityMod().modifyFlat(CurrentIndustry.getModId(1), sizeBonus, "Colony size");
         }
 
 
@@ -130,30 +130,30 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
         float stabilityQualityMod = FleetFactoryV3.getShipQualityModForStability(stability);
         float doctrineQualityMod = market.getFaction().getDoctrine().getShipQualityContribution();
 
-        market.getStats().getDynamic().getMod(Stats.FLEET_QUALITY_MOD).modifyFlatAlways(getModId(0), stabilityQualityMod,
+        market.getStats().getDynamic().getMod(Stats.FLEET_QUALITY_MOD).modifyFlatAlways(CurrentIndustry.getModId(0), stabilityQualityMod,
                 "Stability");
 
-        market.getStats().getDynamic().getMod(Stats.FLEET_QUALITY_MOD).modifyFlatAlways(getModId(1), doctrineQualityMod,
+        market.getStats().getDynamic().getMod(Stats.FLEET_QUALITY_MOD).modifyFlatAlways(CurrentIndustry.getModId(1), doctrineQualityMod,
                 Misc.ucFirst(market.getFaction().getEntityNamePrefix()) + " fleet doctrine");
 
         //float stabilityDefenseMult = 0.5f + stability / 10f;
         float stabilityDefenseMult = 0.25f + stability / 10f * 0.75f;
-        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMultAlways(getModId(),
+        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMultAlways(CurrentIndustry.getModId(),
                 stabilityDefenseMult, "Stability");
 
         float baseDef = getBaseGroundDefenses(market.getSize());
-        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyFlatAlways(getModId(),
+        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyFlatAlways(CurrentIndustry.getModId(),
                 baseDef, "Base value for a size " + market.getSize() + " colony");
 
 
         //if (market.getHazardValue() > 1f) {
         if (HAZARD_INCREASES_DEFENSE) {
-            market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMultAlways(getModId(1),
+            market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMultAlways(CurrentIndustry.getModId(1),
                     Math.max(market.getHazardValue(), 1f), "Colony hazard rating");
         }
         //}
 
-        market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).modifyFlat(getModId(), getMaxIndustries(), null);
+        market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).modifyFlat(CurrentIndustry.getModId(), getMaxIndustries(), null);
 
 //		if (market.isPlayerOwned()) {
 //			System.out.println("wfwefwef");
@@ -164,37 +164,37 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
         float deficitShipsMult = FleetFactoryV3.getShipDeficitFleetSizeMult(market);
         float stabilityShipsMult = FleetFactoryV3.getNumShipsMultForStability(stability);
 
-        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyFlatAlways(getModId(0), marketSizeShipsMult,
+        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyFlatAlways(CurrentIndustry.getModId(0), marketSizeShipsMult,
                 "Colony size");
 
-        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyMultAlways(getModId(1), doctrineShipsMult,
+        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyMultAlways(CurrentIndustry.getModId(1), doctrineShipsMult,
                 Misc.ucFirst(market.getFaction().getEntityNamePrefix()) + " fleet doctrine");
 
         if (deficitShipsMult != 1f) {
-            market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyMult(getModId(2), deficitShipsMult,
+            market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyMult(CurrentIndustry.getModId(2), deficitShipsMult,
                     getDeficitText(Commodities.SHIPS));
         } else {
-            market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyMultAlways(getModId(2), deficitShipsMult,
+            market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyMultAlways(CurrentIndustry.getModId(2), deficitShipsMult,
                     getDeficitText(Commodities.SHIPS).replaceAll("shortage", "demand met"));
         }
 
-        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyMultAlways(getModId(3), stabilityShipsMult,
+        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyMultAlways(CurrentIndustry.getModId(3), stabilityShipsMult,
                 "Stability");
 
 
         // chance of spawning officers and admins; some industries further modify this
-        market.getStats().getDynamic().getMod(Stats.OFFICER_PROB_MOD).modifyFlat(getModId(0), OFFICER_BASE_PROB);
-        market.getStats().getDynamic().getMod(Stats.OFFICER_PROB_MOD).modifyFlat(getModId(1),
+        market.getStats().getDynamic().getMod(Stats.OFFICER_PROB_MOD).modifyFlat(CurrentIndustry.getModId(0), OFFICER_BASE_PROB);
+        market.getStats().getDynamic().getMod(Stats.OFFICER_PROB_MOD).modifyFlat(CurrentIndustry.getModId(1),
                 OFFICER_PROB_PER_SIZE * Math.max(0, market.getSize() - 3));
 
-        market.getStats().getDynamic().getMod(Stats.OFFICER_ADDITIONAL_PROB_MULT_MOD).modifyFlat(getModId(0), OFFICER_ADDITIONAL_BASE_PROB);
-        market.getStats().getDynamic().getMod(Stats.OFFICER_IS_MERC_PROB_MOD).modifyFlat(getModId(0), OFFICER_BASE_MERC_PROB);
+        market.getStats().getDynamic().getMod(Stats.OFFICER_ADDITIONAL_PROB_MULT_MOD).modifyFlat(CurrentIndustry.getModId(0), OFFICER_ADDITIONAL_BASE_PROB);
+        market.getStats().getDynamic().getMod(Stats.OFFICER_IS_MERC_PROB_MOD).modifyFlat(CurrentIndustry.getModId(0), OFFICER_BASE_MERC_PROB);
 
-        market.getStats().getDynamic().getMod(Stats.ADMIN_PROB_MOD).modifyFlat(getModId(0), ADMIN_BASE_PROB);
-        market.getStats().getDynamic().getMod(Stats.ADMIN_PROB_MOD).modifyFlat(getModId(1),
+        market.getStats().getDynamic().getMod(Stats.ADMIN_PROB_MOD).modifyFlat(CurrentIndustry.getModId(0), ADMIN_BASE_PROB);
+        market.getStats().getDynamic().getMod(Stats.ADMIN_PROB_MOD).modifyFlat(CurrentIndustry.getModId(1),
                 ADMIN_PROB_PER_SIZE * Math.max(0, market.getSize() - 3));
 
-        modifyStability2(getIndustry(), market, getModId(3));//HERE
+        modifyStability2(getIndustry(), market, CurrentIndustry.getModId(3));//HERE
 
         market.addTransientImmigrationModifier((MarketImmigrationModifier) getIndustry());//HERE
 
@@ -248,54 +248,53 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
     public void unapply() {
         super.unapply();
 
-        market.getStability().unmodify(getModId(0));
-        market.getStability().unmodify(getModId(1));
-        market.getStability().unmodify(getModId(2));
+        market.getStability().unmodify(CurrentIndustry.getModId(0));
+        market.getStability().unmodify(CurrentIndustry.getModId(1));
+        market.getStability().unmodify(CurrentIndustry.getModId(2));
 
-        market.getAccessibilityMod().unmodifyFlat(getModId(0));
-        market.getAccessibilityMod().unmodifyFlat(getModId(1));
+        market.getAccessibilityMod().unmodifyFlat(CurrentIndustry.getModId(0));
 
-        market.getStats().getDynamic().getMod(Stats.FLEET_QUALITY_MOD).unmodifyFlat(getModId(0));
-        market.getStats().getDynamic().getMod(Stats.FLEET_QUALITY_MOD).unmodifyFlat(getModId(1));
+        market.getStats().getDynamic().getMod(Stats.FLEET_QUALITY_MOD).unmodifyFlat(CurrentIndustry.getModId(0));
+        market.getStats().getDynamic().getMod(Stats.FLEET_QUALITY_MOD).unmodifyFlat(CurrentIndustry.getModId(1));
 
-        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyFlat(getModId());
-        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(getModId());
+        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyFlat(CurrentIndustry.getModId());
+        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(CurrentIndustry.getModId());
         if (HAZARD_INCREASES_DEFENSE) {
-            market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(getModId(1)); // hazard value modifier
+            market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(CurrentIndustry.getModId(1)); // hazard value modifier
         }
 
-        market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).unmodifyFlat(getModId());
+        market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).unmodifyFlat(CurrentIndustry.getModId());
 
-        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodifyFlat(getModId(0));
-        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodifyMult(getModId(1));
-        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodifyMult(getModId(2));
-        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodifyMult(getModId(3));
+        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodifyFlat(CurrentIndustry.getModId(0));
+        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodifyMult(CurrentIndustry.getModId(1));
+        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodifyMult(CurrentIndustry.getModId(2));
+        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodifyMult(CurrentIndustry.getModId(3));
 
-        market.getStats().getDynamic().getMod(Stats.OFFICER_PROB_MOD).unmodifyFlat(getModId(0));
-        market.getStats().getDynamic().getMod(Stats.OFFICER_PROB_MOD).unmodifyFlat(getModId(1));
-        market.getStats().getDynamic().getMod(Stats.OFFICER_ADDITIONAL_PROB_MULT_MOD).unmodifyFlat(getModId(0));
-        market.getStats().getDynamic().getMod(Stats.OFFICER_IS_MERC_PROB_MOD).unmodifyFlat(getModId(0));
-        market.getStats().getDynamic().getMod(Stats.ADMIN_PROB_MOD).unmodifyFlat(getModId(0));
-        market.getStats().getDynamic().getMod(Stats.ADMIN_PROB_MOD).unmodifyFlat(getModId(1));
+        market.getStats().getDynamic().getMod(Stats.OFFICER_PROB_MOD).unmodifyFlat(CurrentIndustry.getModId(0));
+        market.getStats().getDynamic().getMod(Stats.OFFICER_PROB_MOD).unmodifyFlat(CurrentIndustry.getModId(1));
+        market.getStats().getDynamic().getMod(Stats.OFFICER_ADDITIONAL_PROB_MULT_MOD).unmodifyFlat(CurrentIndustry.getModId(0));
+        market.getStats().getDynamic().getMod(Stats.OFFICER_IS_MERC_PROB_MOD).unmodifyFlat(CurrentIndustry.getModId(0));
+        market.getStats().getDynamic().getMod(Stats.ADMIN_PROB_MOD).unmodifyFlat(CurrentIndustry.getModId(0));
+        market.getStats().getDynamic().getMod(Stats.ADMIN_PROB_MOD).unmodifyFlat(CurrentIndustry.getModId(1));
 
-        unmodifyStability(market, getModId(3));
+        unmodifyStability(market, CurrentIndustry.getModId(3));
 
         market.removeTransientImmigrationModifier((MarketImmigrationModifier) getIndustry());//HERE
     }
     @Override
-    protected boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
+    public boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
         return true;
     }
 
     @Override
-    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+    public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
 
             MutableStat stabilityMods = new MutableStat(0);
 
             float total = 0;
             for (MutableStat.StatMod mod : market.getStability().getFlatMods().values()) {
-                if (mod.source.startsWith(getModId())) {
+                if (mod.source.startsWith(CurrentIndustry.getModId())) {
                     stabilityMods.modifyFlat(mod.source, mod.value, mod.desc);
                     total += mod.value;
                 }
@@ -546,7 +545,7 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
     }
 
     @Override
-    protected String getDescriptionOverride() {
+    public String getDescriptionOverride() {
         int size = market.getSize();
         String cid = null;
         if (size >= 1 && size <= 9) {
@@ -693,10 +692,10 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
         return true;
     }
     @Override
-    protected void applyImproveModifiers() {
+    public void applyImproveModifiers() {
         if (isImproved()) {
             market.getStability().modifyFlat("PAI_improve", IMPROVE_STABILITY_BONUS,
-                    getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
+                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
         } else {
             market.getStability().unmodifyFlat("PAI_improve");
         }
@@ -718,10 +717,10 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
     }
 
 
-    protected static class LampRemover implements EveryFrameScript {
-        protected SectorEntityToken lamp;
-        protected MarketAPI market;
-        protected MarketRetrofit_PopulationInstance industry;
+    public static class LampRemover implements EveryFrameScript {
+        public SectorEntityToken lamp;
+        public MarketAPI market;
+        public MarketRetrofit_PopulationInstance industry;
 
         public LampRemover(SectorEntityToken lamp, MarketAPI market, MarketRetrofit_PopulationInstance industry) {
             this.lamp = lamp;
@@ -748,9 +747,9 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
         }
     }
 
-    protected String addedHeatCondition = null;
-    protected String removedHeatCondition = null;
-    protected SectorEntityToken lamp;
+    public String addedHeatCondition = null;
+    public String removedHeatCondition = null;
+    public SectorEntityToken lamp;
 
     @Override
     public void setSpecialItem(SpecialItemData special) {
@@ -775,7 +774,7 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
                     loc.orbit = Global.getFactory().createCircularOrbit(focus, (float) Math.random() * 360f,
                             radius, radius / (10f + 10f * (float) Math.random()));
                     BaseThemeGenerator.AddedEntity added = BaseThemeGenerator.addNonSalvageEntity(
-                            market.getContainingLocation(), loc, Entities.FUSION_LAMP, getMarket().getFactionId());//Factions.NEUTRAL);
+                            market.getContainingLocation(), loc, Entities.FUSION_LAMP, CurrentIndustry.getMarket().getFactionId());//Factions.NEUTRAL);
                     if (added != null) {
                         lamp = added.entity;
                         market.getContainingLocation().addScript(new MarketRetrofit_PopulationInstance.LampRemover(lamp, market, this));//HERE

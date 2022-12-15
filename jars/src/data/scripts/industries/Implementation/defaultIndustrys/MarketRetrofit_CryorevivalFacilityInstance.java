@@ -3,6 +3,7 @@ package data.scripts.industries.Implementation.defaultIndustrys;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
+import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ColonyOtherFactorsListener;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
@@ -12,14 +13,14 @@ import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 import org.lwjgl.util.vector.Vector2f;
 
 
 
 import java.awt.Color;
 
-public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
+public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_DefaltInstanceIndustry {
     public MarketRetrofit_CryorevivalFacilityInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -47,13 +48,13 @@ public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_
         super.unapply();
     }
     @Override
-    protected boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
-        return mode != IndustryTooltipMode.NORMAL || isFunctional();
+    public boolean hasPostDemandSection(boolean hasDemand, Industry.IndustryTooltipMode mode) {
+        return mode != Industry.IndustryTooltipMode.NORMAL || isFunctional();
     }
 
     @Override
-    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
-        if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
+    public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode) {
+        if (mode != Industry.IndustryTooltipMode.NORMAL || isFunctional()) {
             Color h = Misc.getHighlightColor();
             float opad = 10f;
 
@@ -73,7 +74,7 @@ public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_
                         "" + Misc.getRoundedValueMaxOneAfterDecimal(p.two),
                         "" + (int)Math.round(distMult * 100f) + "%");
             }
-            if (mode != IndustryTooltipMode.NORMAL) {
+            if (mode != Industry.IndustryTooltipMode.NORMAL) {
                 tooltip.addPara("If any demand is unmet, " +
                                 "the maximum growth bonus is reduced by %s.",
                         opad, h,
@@ -125,43 +126,43 @@ public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_
             incoming.add(Factions.SLEEPER, getImmigrationBonus() * 2f);
             incoming.getWeight().modifyFlat(getModId(), getImmigrationBonus(), getNameForModifier());
 
-            if (Commodities.ALPHA_CORE.equals(getAICoreId())) {
+            if (Commodities.ALPHA_CORE.equals(CurrentIndustry.getAICoreId())) {
                 incoming.getWeight().modifyFlat(getModId(1), (int)(getImmigrationBonus() * ALPHA_CORE_BONUS),
                         "Alpha core (" + getNameForModifier() + ")");
             }
             if (isImproved()) {
                 incoming.getWeight().modifyFlat(getModId(2), (int)(getImmigrationBonus() * IMPROVE_BONUS),
-                        getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
+                        CurrentIndustry.getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
             }
         }
     }
 
 
     @Override
-    protected void applyAlphaCoreModifiers() {
+    public void applyAlphaCoreModifiers() {
     }
 
     @Override
-    protected void applyNoAICoreModifiers() {
+    public void applyNoAICoreModifiers() {
     }
 
     @Override
-    protected void applyAlphaCoreSupplyAndDemandModifiers() {
+    public void applyAlphaCoreSupplyAndDemandModifiers() {
         demandReduction.modifyFlat(getModId(0), DEMAND_REDUCTION, "Alpha core");
     }
     @Override
-    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+    public void addAlphaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode) {
         float opad = 10f;
         Color highlight = Misc.getHighlightColor();
 
         String pre = "Alpha-level AI core currently assigned. ";
-        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+        if (mode == Industry.AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == Industry.AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
             pre = "Alpha-level AI core. ";
         }
         float a = getImmigrationBonus() * ALPHA_CORE_BONUS;
         String str = "+" + (int)Math.round(a);
 
-        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+        if (mode == Industry.AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
             CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
             text.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. " +
@@ -185,14 +186,14 @@ public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_
         return true;
     }
     @Override
-    public void addImproveDesc(TooltipMakerAPI info, ImprovementDescriptionMode mode) {
+    public void addImproveDesc(TooltipMakerAPI info, Industry.ImprovementDescriptionMode mode) {
         float opad = 10f;
         Color highlight = Misc.getHighlightColor();
 
         float a = getImmigrationBonus() * IMPROVE_BONUS;
         String str = "" + (int)Math.round(a);
 
-        if (mode == ImprovementDescriptionMode.INDUSTRY_TOOLTIP) {
+        if (mode == Industry.ImprovementDescriptionMode.INDUSTRY_TOOLTIP) {
             info.addPara("Population growth increased by %s.", 0f, highlight,str);
         } else {
             info.addPara("Increases population growth by %s.", 0f, highlight,str);
@@ -241,8 +242,8 @@ public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_
         return mult;
     }
 
-    protected float getDemandMetPopulationMult() {
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORGANICS);
+    public float getDemandMetPopulationMult() {
+        Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.ORGANICS);
         float demand = getDemand(Commodities.ORGANICS).getQuantity().getModifiedValue();
         float def = deficit.two;
         if (def > demand) def = demand;
@@ -255,11 +256,11 @@ public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_
         return mult;
     }
 
-    protected float getImmigrationBonus() {
+    public float getImmigrationBonus() {
         return getMaxImmigrationBonus() * getDemandMetPopulationMult() * getDistancePopulationMult(market.getLocationInHyperspace());
     }
 
-    protected float getMaxImmigrationBonus() {
+    public float getMaxImmigrationBonus() {
         return getSizeMult() * 10f;
     }
 

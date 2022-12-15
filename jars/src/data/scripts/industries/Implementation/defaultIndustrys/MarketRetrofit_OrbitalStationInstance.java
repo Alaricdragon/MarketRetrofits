@@ -20,7 +20,7 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.awt.Color;
@@ -43,7 +43,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 
 //HERE. i am terrafied to replace the this statments here, becuase then i have to contend with something terrible.. prev stations.
-public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_DefaltInstanceIndustrytemp implements FleetEventListener {
+public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_DefaltInstanceIndustry implements FleetEventListener {
     public MarketRetrofit_OrbitalStationInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -69,7 +69,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
 
         modifyStabilityWithBaseMod();
 
-        applyIncomeAndUpkeep(size);
+        CurrentIndustry.applyIncomeAndUpkeep(size);
 
         demand(Commodities.CREW, size);
         demand(Commodities.SUPPLIES, size);
@@ -78,7 +78,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         if (battlestation) bonus = DEFENSE_BONUS_BATTLESTATION;
         else if (starfortress) bonus = DEFENSE_BONUS_FORTRESS;
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD)
-                .modifyMult(getModId(), 1f + bonus, getNameForModifier());
+                .modifyMult(CurrentIndustry.getModId(), 1f + bonus, getNameForModifier());
 
         matchCommanderToAICore(aiCoreId);
 
@@ -101,7 +101,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(getModId());
     }
 
-    protected void applyCRToStation() {
+    public void applyCRToStation() {
         if (stationFleet != null) {
             float cr = getCR();
             for (FleetMemberAPI member : stationFleet.getFleetData().getMembersListCopy()) {
@@ -121,10 +121,10 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         }
     }
 
-    protected float getCR() {
-        float deficit = getMaxDeficit(Commodities.CREW, Commodities.SUPPLIES).two;
+    public float getCR() {
+        float deficit = CurrentIndustry.getMaxDeficit(Commodities.CREW, Commodities.SUPPLIES).two;
         float demand = Math.max(getDemand(Commodities.CREW).getQuantity().getModifiedInt(),
-                getDemand(Commodities.SUPPLIES).getQuantity().getModifiedInt());
+                CurrentIndustry.getDemand(Commodities.SUPPLIES).getQuantity().getModifiedInt());
 
         if (deficit < 0) deficit = 0f;
         if (demand < 1) {
@@ -150,13 +150,13 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
     }
 
     @Override
-    protected boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
+    public boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
         //return mode == IndustryTooltipMode.NORMAL && isFunctional();
         return mode != IndustryTooltipMode.NORMAL || isFunctional();
     }
 
     @Override
-    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+    public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         //if (mode == IndustryTooltipMode.NORMAL && isFunctional()) {
         if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
             Color h = Misc.getHighlightColor();
@@ -165,19 +165,19 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
             float cr = getCR();
             tooltip.addPara("Station combat readiness: %s", opad, h, "" + Math.round(cr * 100f) + "%");
 
-            addStabilityPostDemandSection(tooltip, hasDemand, mode);
+            CurrentIndustry.addStabilityPostDemandSection(tooltip, hasDemand, mode);
 
             boolean battlestation = getSpec().hasTag(Industries.TAG_BATTLESTATION);
             boolean starfortress = getSpec().hasTag(Industries.TAG_STARFORTRESS);
             float bonus = DEFENSE_BONUS_BASE;
             if (battlestation) bonus = DEFENSE_BONUS_BATTLESTATION;
             else if (starfortress) bonus = DEFENSE_BONUS_FORTRESS;
-            addGroundDefensesImpactSection(tooltip, bonus, Commodities.SUPPLIES);
+            CurrentIndustry.addGroundDefensesImpactSection(tooltip, bonus, Commodities.SUPPLIES);
         }
     }
 
     @Override
-    protected Object readResolve() {
+    public Object readResolve() {
         super.readResolve();
 //		if (tracker == null) {
 //			tracker = new IntervalUtil(0.7f, 1.3f);
@@ -189,11 +189,11 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
 
 
 
-    protected CampaignFleetAPI stationFleet = null;
-    protected boolean usingExistingStation = false;
-    protected SectorEntityToken stationEntity = null;
+    public CampaignFleetAPI stationFleet = null;
+    public boolean usingExistingStation = false;
+    public SectorEntityToken stationEntity = null;
 
-    //protected IntervalUtil tracker = new IntervalUtil(0.7f, 1.3f);
+    //public IntervalUtil tracker = new IntervalUtil(0.7f, 1.3f);
 
     @Override
     public void advance(float amount) {
@@ -261,7 +261,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
 
 
     @Override
-    protected void buildingFinished() {
+    public void buildingFinished() {
         super.buildingFinished();
 
         if (stationEntity != null && stationFleet != null) {
@@ -281,7 +281,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
     }
 
     @Override
-    protected void upgradeFinished(Industry previous) {
+    public void upgradeFinished(Industry previous) {
         super.upgradeFinished(previous);
 
         if (previous instanceof MarketRetrofit_OrbitalStationInstance) {
@@ -303,7 +303,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         }
     }
 
-    protected void removeStationEntityAndFleetIfNeeded() {
+    public void removeStationEntityAndFleetIfNeeded() {
         if (stationEntity != null) {
             stationEntity.getMemoryWithoutUpdate().unset(MemFlags.STATION_FLEET);
             stationEntity.getMemoryWithoutUpdate().unset(MemFlags.STATION_BASE_FLEET);
@@ -345,7 +345,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
 
 
 
-    protected void spawnStation() {
+    public void spawnStation() {
         FleetParamsV3 fParams = new FleetParamsV3(null, null,
                 market.getFactionId(),
                 1f,
@@ -397,7 +397,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
     }
 
 
-    protected void ensureStationEntityIsSetOrCreated() {
+    public void ensureStationEntityIsSetOrCreated() {
         if (stationEntity == null) {
             for (SectorEntityToken entity : market.getConnectedEntities()) {
                 if (entity.hasTag(Tags.STATION)) {
@@ -420,7 +420,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
     }
 
 
-    protected void matchStationAndCommanderToCurrentIndustry() {
+    public void matchStationAndCommanderToCurrentIndustry() {
         stationFleet.getFleetData().clear();
 
         String fleetName = null;
@@ -511,7 +511,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         }
     }
 
-    protected int getHumanCommanderLevel() {
+    public int getHumanCommanderLevel() {
         boolean battlestation = getSpec().hasTag(Industries.TAG_BATTLESTATION);
         boolean starfortress = getSpec().hasTag(Industries.TAG_STARFORTRESS);
 
@@ -523,7 +523,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         return Global.getSettings().getInt("tier1StationOfficerLevel");
     }
 
-    protected void matchCommanderToAICore(String aiCore) {
+    public void matchCommanderToAICore(String aiCore) {
         if (stationFleet == null) return;
 
 //		if (market.isPlayerOwned()) {
@@ -591,14 +591,14 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
 
 
     @Override
-    protected void disruptionFinished() {
+    public void disruptionFinished() {
         super.disruptionFinished();
 
         matchStationAndCommanderToCurrentIndustry();
     }
 
     @Override
-    protected void notifyDisrupted() {
+    public void notifyDisrupted() {
         super.notifyDisrupted();
 
         matchStationAndCommanderToCurrentIndustry();
@@ -642,7 +642,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
 
 
     @Override
-    protected int getBaseStabilityMod() {
+    public int getBaseStabilityMod() {
         boolean battlestation = getSpec().hasTag(Industries.TAG_BATTLESTATION);
         boolean starfortress = getSpec().hasTag(Industries.TAG_STARFORTRESS);
         int stabilityMod = 1;
@@ -655,25 +655,25 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
     }
 
     @Override
-    protected Pair<String, Integer> getStabilityAffectingDeficit() {
-        return getMaxDeficit(Commodities.SUPPLIES, Commodities.CREW);
+    public Pair<String, Integer> getStabilityAffectingDeficit() {
+        return CurrentIndustry.getMaxDeficit(Commodities.SUPPLIES, Commodities.CREW);
     }
 
 
     @Override
-    protected void applyAlphaCoreModifiers() {
+    public void applyAlphaCoreModifiers() {
     }
 
     @Override
-    protected void applyNoAICoreModifiers() {
+    public void applyNoAICoreModifiers() {
     }
 
     @Override
-    protected void applyAlphaCoreSupplyAndDemandModifiers() {
+    public void applyAlphaCoreSupplyAndDemandModifiers() {
         demandReduction.modifyFlat(getModId(0), DEMAND_REDUCTION, "Alpha core");
     }
     @Override
-    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+    public void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
         float opad = 10f;
         Color highlight = Misc.getHighlightColor();
 
@@ -702,10 +702,10 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         return true;
     }
     @Override
-    protected void applyImproveModifiers() {
+    public void applyImproveModifiers() {
         if (isImproved()) {
             market.getStability().modifyFlat("orbital_station_improve", IMPROVE_STABILITY_BONUS,
-                    getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
+                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
         } else {
             market.getStability().unmodifyFlat("orbital_station_improve");
         }
@@ -727,7 +727,7 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
     }
 
 
-    protected boolean isMiltiarized() {
+    public boolean isMiltiarized() {
         boolean battlestation = getSpec().hasTag(Industries.TAG_BATTLESTATION);
         boolean starfortress = getSpec().hasTag(Industries.TAG_STARFORTRESS);
         return battlestation || starfortress;

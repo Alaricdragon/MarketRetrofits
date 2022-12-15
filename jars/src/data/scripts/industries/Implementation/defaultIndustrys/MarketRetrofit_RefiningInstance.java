@@ -2,9 +2,9 @@ package data.scripts.industries.Implementation.defaultIndustrys;
 
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
-public class MarketRetrofit_RefiningInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
+public class MarketRetrofit_RefiningInstance extends MarketRetrofits_DefaltInstanceIndustry {
     public MarketRetrofit_RefiningInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -22,11 +22,11 @@ public class MarketRetrofit_RefiningInstance extends MarketRetrofits_DefaltInsta
         supply(Commodities.METALS, size);
         supply(Commodities.RARE_METALS, size - 2);
 
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY, Commodities.ORE);
-        applyDeficitToProduction(1, deficit, Commodities.METALS);
+        Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.HEAVY_MACHINERY, Commodities.ORE);
+        CurrentIndustry.applyDeficitToProduction(1, deficit, Commodities.METALS);
 
-        deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY, Commodities.RARE_ORE);
-        applyDeficitToProduction(1, deficit, Commodities.RARE_METALS);
+        deficit = CurrentIndustry.getMaxDeficit(Commodities.HEAVY_MACHINERY, Commodities.RARE_ORE);
+        CurrentIndustry.applyDeficitToProduction(1, deficit, Commodities.RARE_METALS);
 
         if (!isFunctional()) {
             supply.clear();
@@ -45,7 +45,7 @@ public class MarketRetrofit_RefiningInstance extends MarketRetrofits_DefaltInsta
     }
 
     @Override
-    protected boolean canImproveToIncreaseProduction() {
+    public boolean canImproveToIncreaseProduction() {
         return true;
     }
 

@@ -7,11 +7,11 @@ import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
 import java.awt.*;
 
-public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
+public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_DefaltInstanceIndustry {
     public MarketRetrofit_HeavyIndustryInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -28,7 +28,7 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
 
         int size = market.getSize();
 
-        boolean works = Industries.ORBITALWORKS.equals(getId());
+        boolean works = Industries.ORBITALWORKS.equals(CurrentIndustry.getId());
         int shipBonus = 0;
         float qualityBonus = 0;
         if (works) {
@@ -47,11 +47,11 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
             supply(1, Commodities.SHIPS, shipBonus, "Orbital works");
         }
 
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.METALS, Commodities.RARE_METALS);
+        Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.METALS, Commodities.RARE_METALS);
         int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
         if (deficit.two > maxDeficit) deficit.two = maxDeficit;
 
-        applyDeficitToProduction(2, deficit,
+        CurrentIndustry.applyDeficitToProduction(2, deficit,
                 Commodities.HEAVY_MACHINERY,
                 Commodities.SUPPLIES,
                 Commodities.HAND_WEAPONS,
@@ -62,7 +62,7 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
 //		}
 
         if (qualityBonus > 0) {
-            market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(getModId(1), qualityBonus, "Orbital works");
+            market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(CurrentIndustry.getModId(1), qualityBonus, "Orbital works");
         }
 
         float stability = market.getPrevStability();
@@ -70,7 +70,7 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
             float stabilityMod = (stability - 5f) / 5f;
             stabilityMod *= 0.5f;
             //market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(getModId(0), stabilityMod, "Low stability at production source");
-            market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(getModId(0), stabilityMod, getNameForModifier() + " - low stability");
+            market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(CurrentIndustry.getModId(0), stabilityMod, getNameForModifier() + " - low stability");
         }
 
         if (!isFunctional()) {
@@ -83,16 +83,16 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
     public void unapply() {
         super.unapply();
 
-        market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).unmodifyFlat(getModId(0));
-        market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).unmodifyFlat(getModId(1));
+        market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).unmodifyFlat(CurrentIndustry.getModId(0));
+        market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).unmodifyFlat(CurrentIndustry.getModId(1));
     }
 
 
     @Override
-    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+    public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         //if (mode == IndustryTooltipMode.NORMAL && isFunctional()) {
         if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
-            boolean works = Industries.ORBITALWORKS.equals(getId());
+            boolean works = Industries.ORBITALWORKS.equals(CurrentIndustry.getId());
             if (works) {
                 float total = ORBITAL_WORKS_QUALITY_BONUS;
                 String totalStr = "+" + (int)Math.round(total * 100f) + "%";
@@ -120,7 +120,7 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
     }
 
     @Override
-    protected boolean canImproveToIncreaseProduction() {
+    public boolean canImproveToIncreaseProduction() {
         return true;
     }
 
@@ -133,9 +133,9 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
         return super.wantsToUseSpecialItem(data);
     }
 
-    protected boolean permaPollution = false;
-    protected boolean addedPollution = false;
-    protected float daysWithNanoforge = 0f;
+    public boolean permaPollution = false;
+    public boolean addedPollution = false;
+    public float daysWithNanoforge = 0f;
 
     @Override
     public void advance(float amount) {
@@ -149,7 +149,7 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
         }
     }
 
-    protected void updatePollutionStatus() {
+    public void updatePollutionStatus() {
         if (!market.hasCondition(Conditions.HABITABLE)) return;
 
         if (special != null) {

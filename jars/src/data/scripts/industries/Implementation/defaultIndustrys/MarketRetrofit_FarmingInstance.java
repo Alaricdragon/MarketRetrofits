@@ -1,6 +1,7 @@
 package data.scripts.industries.Implementation.defaultIndustrys;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.MarketConditionAPI;
 import com.fs.starfarer.api.impl.campaign.econ.ResourceDepositsCondition;
@@ -12,12 +13,12 @@ import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class MarketRetrofit_FarmingInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
+public class MarketRetrofit_FarmingInstance extends MarketRetrofits_DefaltInstanceIndustry {
     public MarketRetrofit_FarmingInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -32,7 +33,7 @@ public class MarketRetrofit_FarmingInstance extends MarketRetrofits_DefaltInstan
         super.apply(true);
 
         int size = market.getSize();
-        boolean aquaculture = Industries.AQUACULTURE.equals(getId());
+        boolean aquaculture = Industries.AQUACULTURE.equals(CurrentIndustry.getId());
 
         if (aquaculture) {
             demand(0, Commodities.HEAVY_MACHINERY, size, BASE_VALUE_TEXT);
@@ -49,9 +50,9 @@ public class MarketRetrofit_FarmingInstance extends MarketRetrofits_DefaltInstan
 //		supply(1, Commodities.FOOD, -deficit, getDeficitText(Commodities.HEAVY_MACHINERY));
 //		supply(1, Commodities.ORGANICS, -deficit, getDeficitText(Commodities.HEAVY_MACHINERY));
 
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY);
+        Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.HEAVY_MACHINERY);
         //applyDeficitToProduction(0, deficit, Commodities.FOOD, Commodities.ORGANICS);
-        applyDeficitToProduction(0, deficit, Commodities.FOOD);
+        CurrentIndustry.applyDeficitToProduction(0, deficit, Commodities.FOOD);
 
 
         if (!isFunctional()) {
@@ -69,7 +70,7 @@ public class MarketRetrofit_FarmingInstance extends MarketRetrofits_DefaltInstan
     @Override
     public boolean isAvailableToBuild() {
         if (!super.isAvailableToBuild()) return false;
-        boolean aquaculture = Industries.AQUACULTURE.equals(getId());
+        boolean aquaculture = Industries.AQUACULTURE.equals(CurrentIndustry.getId());
         boolean canAquaculture = market.getPlanetEntity() != null &&
                 AQUA_PLANETS.contains(market.getPlanetEntity().getTypeId());
         if (aquaculture != canAquaculture) return false;
@@ -87,7 +88,7 @@ public class MarketRetrofit_FarmingInstance extends MarketRetrofits_DefaltInstan
 
     @Override
     public boolean showWhenUnavailable() {
-        boolean aquaculture = Industries.AQUACULTURE.equals(getId());
+        boolean aquaculture = Industries.AQUACULTURE.equals(CurrentIndustry.getId());
         boolean canAquaculture = market.getPlanetEntity() != null &&
                 AQUA_PLANETS.contains(market.getPlanetEntity().getTypeId());
         if (aquaculture != canAquaculture) return false;
@@ -104,7 +105,7 @@ public class MarketRetrofit_FarmingInstance extends MarketRetrofits_DefaltInstan
 
 
     @Override
-    public void createTooltip(IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded) {
+    public void createTooltip(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded) {
         super.createTooltip(mode, tooltip, expanded);
 //
 //		int size = market.getSize();
@@ -155,7 +156,7 @@ public class MarketRetrofit_FarmingInstance extends MarketRetrofits_DefaltInstan
 
     @Override
     public String getCurrentImage() {
-        boolean aquaculture = Industries.AQUACULTURE.equals(getId());
+        boolean aquaculture = Industries.AQUACULTURE.equals(CurrentIndustry.getId());
         if (aquaculture) {
             return super.getCurrentImage();
         }
@@ -172,21 +173,21 @@ public class MarketRetrofit_FarmingInstance extends MarketRetrofits_DefaltInstan
     }
 
     @Override
-    protected boolean canImproveToIncreaseProduction() {
+    public boolean canImproveToIncreaseProduction() {
         return true;
     }
 
 
     @Override
     public MarketCMD.RaidDangerLevel adjustCommodityDangerLevel(String commodityId, MarketCMD.RaidDangerLevel level) {
-        boolean aquaculture = Industries.AQUACULTURE.equals(getId());
+        boolean aquaculture = Industries.AQUACULTURE.equals(CurrentIndustry.getId());
         if (aquaculture) return level;
         return level.prev();
     }
 
     @Override
     public MarketCMD.RaidDangerLevel adjustItemDangerLevel(String itemId, String data, MarketCMD.RaidDangerLevel level) {
-        boolean aquaculture = Industries.AQUACULTURE.equals(getId());
+        boolean aquaculture = Industries.AQUACULTURE.equals(CurrentIndustry.getId());
         if (aquaculture) return level;
         return level.prev();
     }

@@ -17,7 +17,7 @@ import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
 import java.util.Random;
 
@@ -35,7 +35,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Ranks;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 
 
-public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {//implements RouteFleetSpawner, FleetEventListener {
+public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltInstanceIndustry {//implements RouteFleetSpawner, FleetEventListener {
     public MarketRetrofit_LionsGuardHQInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -64,14 +64,14 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
         demand(Commodities.HAND_WEAPONS, size);
         supply(Commodities.MARINES, size);
 
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.HAND_WEAPONS);
-        applyDeficitToProduction(1, deficit, Commodities.MARINES);
+        Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.HAND_WEAPONS);
+        CurrentIndustry.applyDeficitToProduction(1, deficit, Commodities.MARINES);
 
         modifyStabilityWithBaseMod();
 
         MemoryAPI memory = market.getMemoryWithoutUpdate();
-        Misc.setFlagWithReason(memory, MemFlags.MARKET_PATROL, getModId(), true, -1);
-        Misc.setFlagWithReason(memory, MemFlags.MARKET_MILITARY, getModId(), true, -1);
+        Misc.setFlagWithReason(memory, MemFlags.MARKET_PATROL, CurrentIndustry.getModId(), true, -1);
+        Misc.setFlagWithReason(memory, MemFlags.MARKET_MILITARY, CurrentIndustry.getModId(), true, -1);
 
         if (!isFunctional()) {
             supply.clear();
@@ -85,25 +85,25 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
         super.unapply();
 
         MemoryAPI memory = market.getMemoryWithoutUpdate();
-        Misc.setFlagWithReason(memory, MemFlags.MARKET_PATROL, getModId(), false, -1);
-        Misc.setFlagWithReason(memory, MemFlags.MARKET_MILITARY, getModId(), false, -1);
+        Misc.setFlagWithReason(memory, MemFlags.MARKET_PATROL, CurrentIndustry.getModId(), false, -1);
+        Misc.setFlagWithReason(memory, MemFlags.MARKET_MILITARY, CurrentIndustry.getModId(), false, -1);
 
         unmodifyStabilityWithBaseMod();
     }
     @Override
-    protected boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
+    public boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
         return mode != IndustryTooltipMode.NORMAL || isFunctional();
     }
 
     @Override
-    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+    public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
-            addStabilityPostDemandSection(tooltip, hasDemand, mode);
+            CurrentIndustry.addStabilityPostDemandSection(tooltip, hasDemand, mode);
         }
     }
 
     @Override
-    protected int getBaseStabilityMod() {
+    public int getBaseStabilityMod() {
         return 2;
     }
     @Override
@@ -115,8 +115,8 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
     }
 
     @Override
-    protected Pair<String, Integer> getStabilityAffectingDeficit() {
-        return getMaxDeficit(Commodities.SUPPLIES, Commodities.FUEL, Commodities.SHIPS, Commodities.HAND_WEAPONS);
+    public Pair<String, Integer> getStabilityAffectingDeficit() {
+        return CurrentIndustry.getMaxDeficit(Commodities.SUPPLIES, Commodities.FUEL, Commodities.SHIPS, Commodities.HAND_WEAPONS);
     }
 
     @Override
@@ -133,20 +133,20 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
         return true;
     }
 
-    protected IntervalUtil tracker = new IntervalUtil(Global.getSettings().getFloat("averagePatrolSpawnInterval") * 0.7f,
+    public IntervalUtil tracker = new IntervalUtil(Global.getSettings().getFloat("averagePatrolSpawnInterval") * 0.7f,
             Global.getSettings().getFloat("averagePatrolSpawnInterval") * 1.3f);
 
-    protected float returningPatrolValue = 0f;
+    public float returningPatrolValue = 0f;
 
     @Override
-    protected void buildingFinished() {
+    public void buildingFinished() {
         super.buildingFinished();
 
         tracker.forceIntervalElapsed();
     }
 
     @Override
-    protected void upgradeFinished(Industry previous) {
+    public void upgradeFinished(Industry previous) {
         super.upgradeFinished(previous);
 
         tracker.forceIntervalElapsed();
@@ -368,7 +368,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
     }
 
     public String getRouteSourceId() {
-        return getMarket().getId() + "_" + "lionsguard";
+        return CurrentIndustry.getMarket().getId() + "_" + "lionsguard";
     }
 
     @Override

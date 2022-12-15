@@ -55,10 +55,26 @@ status of default industry and base industry:
             3) in default instance, make it so i collect all data form MarketRetrofit_BaseIndustry.
             4) in MarketRetrofit_BaseIndustry, make it so i recompile all data from default instance
             5) in default instance, every time i call a baseIndustry function, do so from the industry that is being emulated right now.
-            (im here)6) in instance industry, apply 5 and 3.
+            (NO. not worth it. let the peple have a slightly harder time with conversion, for a better time without)6) in MarketRetrofit_BaseIndustry, readd all removed functions. they can be handled, i think.
+            (I am here)7) in instance industry, apply 5 and 3.
+            -currently adding setting instance industrys to get the function getNameForModifier to be from industry.
         issues:
-            1)  i set all functions in default instance to public. im going to try and set the ones that were protected back, and
+            1)(canceled. being public is the lesser of evils. very easy to adapt to)  i set all functions in default instance to public. im going to try and set the ones that were protected back, and
                 see if that makes it easier to connect to the old instance industry.
+            2) regarding .super:
+                its completely fine on default industry.
+                it is not find on instance industry.
+                instance industry super returns whatever active defalt industry is in use.
+                this is a issue because it dose not return what the super should, and in fact just runs a difrent instance.
+
+        solutions:
+            2)
+                2.0: remove instance industry
+                2.1: change default industry to have a bool value, telling it if its a default industry or not.
+                2.2: add 2 sets of functions to default instance. one for defaults, the other for instances.
+                result: .super on instance industry will run the super value it is suppose to...?
+                no wait a issue: how will i tell the defence between a super and a non super...?
+                need to find out how to do that.
 
         incomplete:
             1) for 2 of the current plan, i cant store or set custom data yet. only existing data can be set right now.

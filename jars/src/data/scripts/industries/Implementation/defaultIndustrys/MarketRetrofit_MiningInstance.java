@@ -12,11 +12,11 @@ import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
 import java.awt.*;
 
-public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
+public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanceIndustry {
     public MarketRetrofit_MiningInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -29,8 +29,8 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
         demand(Commodities.HEAVY_MACHINERY, size - 3);
         demand(Commodities.DRUGS, size);
 
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY);
-        applyDeficitToProduction(0, deficit,
+        Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.HEAVY_MACHINERY);
+        CurrentIndustry.applyDeficitToProduction(0, deficit,
                 Commodities.ORE,
                 Commodities.RARE_ORE,
                 Commodities.ORGANICS,
@@ -47,22 +47,22 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
         super.unapply();
     }
     @Override
-    protected boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.DRUGS);
+    public boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
+        Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.DRUGS);
         if (deficit.two <= 0) return false;
         //return mode == IndustryTooltipMode.NORMAL && isFunctional();
         return mode != IndustryTooltipMode.NORMAL || isFunctional();
     }
 
     @Override
-    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+    public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         //if (mode == IndustryTooltipMode.NORMAL && isFunctional()) {
         if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
             Color h = Misc.getHighlightColor();
             float opad = 10f;
             float pad = 3f;
 
-            Pair<String, Integer> deficit = getMaxDeficit(Commodities.DRUGS);
+            Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.DRUGS);
             if (deficit.two > 0) {
                 tooltip.addPara(getDeficitText(Commodities.DRUGS) + ": %s units. Reduced colony growth.", pad, h, "" + deficit.two);
             }
@@ -78,7 +78,7 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
             String commodity = ResourceDepositsCondition.COMMODITY.get(mc.getId());
             if (commodity != null) {
                 String industry = ResourceDepositsCondition.INDUSTRY.get(commodity);
-                if (getId().equals(industry)) return true;
+                if (CurrentIndustry.getId().equals(industry)) return true;
             }
         }
         return false;
@@ -92,7 +92,7 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
     }
     @Override
     public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.DRUGS);
+        Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.DRUGS);
         if (deficit.two > 0) {
             incoming.getWeight().modifyFlat(getModId(), -deficit.two, "Mining: drug shortage");
         }
@@ -113,7 +113,7 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
     }
 
     @Override
-    protected boolean canImproveToIncreaseProduction() {
+    public boolean canImproveToIncreaseProduction() {
         return true;
     }
 
@@ -135,7 +135,7 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
         planet.applySpecChanges();
         shownPlasmaNetVisuals = false;
     }
-    protected boolean shownPlasmaNetVisuals = false;
+    public boolean shownPlasmaNetVisuals = false;
 
     @Override
     public void setSpecialItem(SpecialItemData special) {

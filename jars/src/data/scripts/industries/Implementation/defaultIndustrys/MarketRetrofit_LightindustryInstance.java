@@ -4,9 +4,9 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
-public class MarketRetrofit_LightindustryInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
+public class MarketRetrofit_LightindustryInstance extends MarketRetrofits_DefaltInstanceIndustry {
     public MarketRetrofit_LightindustryInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -35,9 +35,9 @@ public class MarketRetrofit_LightindustryInstance extends MarketRetrofits_Defalt
             supply(Commodities.DRUGS, 0);
         }
 
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORGANICS);
+        Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.ORGANICS);
 
-        applyDeficitToProduction(1, deficit,
+        CurrentIndustry.applyDeficitToProduction(1, deficit,
                 Commodities.DOMESTIC_GOODS,
                 Commodities.LUXURY_GOODS,
                 //Commodities.SUPPLIES,
@@ -81,7 +81,7 @@ public class MarketRetrofit_LightindustryInstance extends MarketRetrofits_Defalt
     }
 
     @Override
-    protected boolean canImproveToIncreaseProduction() {
+    public boolean canImproveToIncreaseProduction() {
         return true;
     }
 
