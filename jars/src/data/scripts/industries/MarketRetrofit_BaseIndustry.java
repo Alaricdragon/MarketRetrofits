@@ -24,7 +24,7 @@ public class MarketRetrofit_BaseIndustry extends BaseIndustry implements MarketI
     /* this is the industry base for all instance industry.
     * this is what an user would extend if they wanted to there industry to support this mod*/
     //public String Industry = "";
-
+    public MarketRetorfits_ExstraData exstraData = new MarketRetorfits_ExstraData();
     public String MarketRetrofits_IndustryID(){
         return "";
     }
@@ -108,7 +108,7 @@ public class MarketRetrofit_BaseIndustry extends BaseIndustry implements MarketI
             case "wasDisrupted":
                 return wasDisrupted;
             default:
-                return getDataOther(dataName);
+                return exstraData.getData(dataName);
         }
     }
     public void setData(String dataName,Object data){
@@ -162,15 +162,16 @@ public class MarketRetrofit_BaseIndustry extends BaseIndustry implements MarketI
             case "wasDisrupted":
                 wasDisrupted = (boolean) data;
             default:
-                setDataOther(dataName,data);
+                exstraData.addData(dataName,data);
         }
     }
-    private Object getDataOther(String dataName){
-        return null;
+    /*
+    public Object getDataOther(String dataName){
+        return HeldData.getData(dataName);
     }
-    private void setDataOther(String dataName,Object data){
-
-    }
+    public void setDataOther(String dataName,Object data){
+        HeldData.addData(dataName,data);
+    }*/
 
 
     @Override
@@ -469,33 +470,37 @@ public class MarketRetrofit_BaseIndustry extends BaseIndustry implements MarketI
         //APPLY SUPER FROM CLASS AS DEFAULT
         MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).clearUnmodified();
         MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).setBaseDataToIndustry(this);
-    }/*//HERE
+    }/*///HERE
     @Override
     public BaseIndustry	clone(){
         return MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).clone();
-    }*/
+    }/**/
     @Override
     public void	createTooltip(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded){
         //description
         MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).createTooltip(mode,tooltip,expanded);
         MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).setBaseDataToIndustry(this);
-    }/*//HERE what the hell do i even make of this?
+    }/**///HERE what the hell do i even make of this?
     @Override
     public void	demand(int index, java.lang.String commodityId, int quantity, java.lang.String desc){
         MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).demand(index,commodityId,quantity,desc);
+        MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).setBaseDataToIndustry(this);
     }
     @Override
     public void	demand(java.lang.String commodityId, int quantity){
         MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).demand(commodityId,quantity);
+        MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).setBaseDataToIndustry(this);
     }
     @Override
     public void	demand(java.lang.String commodityId, int quantity, java.lang.String desc){
         MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).demand(commodityId,quantity,desc);
+        MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).setBaseDataToIndustry(this);
     }
     @Override
     public void	demand(java.lang.String modId, java.lang.String commodityId, int quantity, java.lang.String desc){
         MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).demand(modId,commodityId,quantity,desc);
-    }*/
+        MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).setBaseDataToIndustry(this);
+    }/**/
     @Override
     public void	disruptionFinished(){
         //empty
@@ -1132,6 +1137,8 @@ public class MarketRetrofit_BaseIndustry extends BaseIndustry implements MarketI
     @Override
     public void	unmodifyStabilityWithBaseMod(){
         MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).unmodifyStabilityWithBaseMod();
+        MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(getMarket(),getId(),this).setBaseDataToIndustry(this);
+
     }/**/
     @Override
     public void	updateAICoreToSupplyAndDemandModifiers(){

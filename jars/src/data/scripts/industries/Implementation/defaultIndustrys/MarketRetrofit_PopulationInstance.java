@@ -21,6 +21,7 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import data.scripts.industries.MarketRetrofit_BaseIndustry;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,24 +60,24 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
 
         int size = market.getSize();
 
-        demand(Commodities.FOOD, size);
+        CurrentIndustry.demand(Commodities.FOOD, size);
 
         if (!market.hasCondition(Conditions.HABITABLE)) {
-            demand(Commodities.ORGANICS, size - 1);
+            CurrentIndustry.demand(Commodities.ORGANICS, size - 1);
         }
 
         int luxuryThreshold = 3;
 
-        demand(Commodities.DOMESTIC_GOODS, size - 1);
-        demand(Commodities.LUXURY_GOODS, size - luxuryThreshold);
-        demand(Commodities.DRUGS, size - 2);
-        demand(Commodities.ORGANS, size - 3);
+        CurrentIndustry.demand(Commodities.DOMESTIC_GOODS, size - 1);
+        CurrentIndustry.demand(Commodities.LUXURY_GOODS, size - luxuryThreshold);
+        CurrentIndustry.demand(Commodities.DRUGS, size - 2);
+        CurrentIndustry.demand(Commodities.ORGANS, size - 3);
 
-        demand(Commodities.SUPPLIES, Math.min(size, 3));
+        CurrentIndustry.demand(Commodities.SUPPLIES, Math.min(size, 3));
 
-        supply(Commodities.CREW, size - 3);
-        supply(Commodities.DRUGS, size - 4);
-        supply(Commodities.ORGANS, size - 5);
+        CurrentIndustry.supply(Commodities.CREW, size - 3);
+        CurrentIndustry.supply(Commodities.DRUGS, size - 4);
+        CurrentIndustry.supply(Commodities.ORGANS, size - 5);
 
 
         Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.DOMESTIC_GOODS);
@@ -288,7 +289,7 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
 
     @Override
     public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
-        if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
+        if (mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional()) {
 
             MutableStat stabilityMods = new MutableStat(0);
 
@@ -561,7 +562,7 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
     public String getBuildOrUpgradeProgressText() {
 //		float f = buildProgress / spec.getBuildTime();
 //		return "" + (int) Math.round(f * 100f) + "%";
-        if (isUpgrading()) {
+        if (CurrentIndustry.isUpgrading()) {
             //return "" + (int) Math.round(Misc.getMarketSizeProgress(market) * 100f) + "%";
             return "total growth: " + Misc.getRoundedValue(Misc.getMarketSizeProgress(market) * 100f) + "%";
         }
@@ -693,9 +694,9 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
     }
     @Override
     public void applyImproveModifiers() {
-        if (isImproved()) {
+        if (CurrentIndustry.isImproved()) {
             market.getStability().modifyFlat("PAI_improve", IMPROVE_STABILITY_BONUS,
-                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
+                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + CurrentIndustry.getNameForModifier() + ")");
         } else {
             market.getStability().unmodifyFlat("PAI_improve");
         }
@@ -720,9 +721,9 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
     public static class LampRemover implements EveryFrameScript {
         public SectorEntityToken lamp;
         public MarketAPI market;
-        public MarketRetrofit_PopulationInstance industry;
+        public MarketRetrofit_BaseIndustry industry;
 
-        public LampRemover(SectorEntityToken lamp, MarketAPI market, MarketRetrofit_PopulationInstance industry) {
+        public LampRemover(SectorEntityToken lamp, MarketAPI market, MarketRetrofit_BaseIndustry industry) {
             this.lamp = lamp;
             this.market = market;
             this.industry = industry;
@@ -733,7 +734,8 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
             SpecialItemData item = ind == null ? null : ind.getSpecialItem();
             if (item == null || !item.getId().equals(Items.ORBITAL_FUSION_LAMP)) {
                 Misc.fadeAndExpire(lamp);
-                industry.lamp = null;
+                industry.exstraData.addData(lampName,null);//HERE data changed.
+                //industry.lamp = null;
                 lamp = null;
             }
         }
@@ -751,10 +753,16 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
     public String removedHeatCondition = null;
     public SectorEntityToken lamp;
 
+    static private String addedHeatConditionName = "addedHeatCondition";
+    static private String removedHeatConditionName = "removedHeatCondition";
+    static private String lampName = "lamp";
+
     @Override
     public void setSpecialItem(SpecialItemData special) {
         super.setSpecialItem(special);
-
+        lamp = (SectorEntityToken) CurrentIndustry.exstraData.getData(lampName);
+        removedHeatCondition = (String) CurrentIndustry.exstraData.getData(removedHeatConditionName);
+        addedHeatCondition = (String) CurrentIndustry.exstraData.getData(addedHeatConditionName);
         if (addedHeatCondition != null && (special == null || !special.getId().equals(Items.ORBITAL_FUSION_LAMP))) {
             market.removeCondition(addedHeatCondition);
             addedHeatCondition = null;
@@ -777,7 +785,7 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
                             market.getContainingLocation(), loc, Entities.FUSION_LAMP, CurrentIndustry.getMarket().getFactionId());//Factions.NEUTRAL);
                     if (added != null) {
                         lamp = added.entity;
-                        market.getContainingLocation().addScript(new MarketRetrofit_PopulationInstance.LampRemover(lamp, market, this));//HERE
+                        market.getContainingLocation().addScript(new MarketRetrofit_PopulationInstance.LampRemover(lamp, market, CurrentIndustry));//HERE
                     }
                 }
             }
@@ -795,6 +803,9 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
                 if (addedHeatCondition != null) market.addCondition(addedHeatCondition);
             }
         }
+        CurrentIndustry.setData(lampName,lamp);
+        CurrentIndustry.setData(addedHeatConditionName,addedHeatCondition);
+        CurrentIndustry.setData(removedHeatConditionName,removedHeatCondition);
     }
 
 

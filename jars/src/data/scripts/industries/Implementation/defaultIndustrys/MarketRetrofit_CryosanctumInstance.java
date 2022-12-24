@@ -18,10 +18,10 @@ public class MarketRetrofit_CryosanctumInstance extends MarketRetrofits_DefaltIn
 
         CurrentIndustry.applyIncomeAndUpkeep(size);
 
-        demand(Commodities.SUPPLIES, size - 3);
-        demand(Commodities.ORGANICS, size - 3);
+        CurrentIndustry.demand(Commodities.SUPPLIES, size - 3);
+        CurrentIndustry.demand(Commodities.ORGANICS, size - 3);
 
-        supply(Commodities.ORGANS, size);
+        CurrentIndustry.supply(Commodities.ORGANS, size);
 
 
         Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.ORGANICS, Commodities.SUPPLIES);
@@ -30,7 +30,7 @@ public class MarketRetrofit_CryosanctumInstance extends MarketRetrofits_DefaltIn
 
         CurrentIndustry.applyDeficitToProduction(1, deficit, Commodities.ORGANS);
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
         }
     }

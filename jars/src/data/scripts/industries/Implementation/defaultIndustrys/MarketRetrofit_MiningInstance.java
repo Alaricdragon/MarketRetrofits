@@ -26,8 +26,8 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
 
         int size = market.getSize();
 
-        demand(Commodities.HEAVY_MACHINERY, size - 3);
-        demand(Commodities.DRUGS, size);
+        CurrentIndustry.demand(Commodities.HEAVY_MACHINERY, size - 3);
+        CurrentIndustry.demand(Commodities.DRUGS, size);
 
         Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.HEAVY_MACHINERY);
         CurrentIndustry.applyDeficitToProduction(0, deficit,
@@ -36,7 +36,7 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
                 Commodities.ORGANICS,
                 Commodities.VOLATILES);
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
         }
     }
@@ -51,13 +51,13 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
         Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.DRUGS);
         if (deficit.two <= 0) return false;
         //return mode == IndustryTooltipMode.NORMAL && isFunctional();
-        return mode != IndustryTooltipMode.NORMAL || isFunctional();
+        return mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional();
     }
 
     @Override
     public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         //if (mode == IndustryTooltipMode.NORMAL && isFunctional()) {
-        if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
+        if (mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional()) {
             Color h = Misc.getHighlightColor();
             float opad = 10f;
             float pad = 3f;
@@ -94,7 +94,7 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
     public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
         Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.DRUGS);
         if (deficit.two > 0) {
-            incoming.getWeight().modifyFlat(getModId(), -deficit.two, "Mining: drug shortage");
+            incoming.getWeight().modifyFlat(CurrentIndustry.getModId(), -deficit.two, "Mining: drug shortage");
         }
     }
 
@@ -125,7 +125,8 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
         //planet.getSpec().setShieldColor2(new Color(255,255,255,175));
         planet.getSpec().setShieldColor2(new Color(255,255,255,255));
         planet.applySpecChanges();
-        shownPlasmaNetVisuals = true;
+        //shownPlasmaNetVisuals = true;
+        CurrentIndustry.exstraData.addData(shownPlasmaNetVisualsName,true);
     }
     public void unapplyVisuals(PlanetAPI planet) {
         if (planet == null) return;
@@ -133,14 +134,16 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
         planet.getSpec().setShieldThickness2(0f);
         planet.getSpec().setShieldColor2(null);
         planet.applySpecChanges();
-        shownPlasmaNetVisuals = false;
+        //shownPlasmaNetVisuals = false;
+        CurrentIndustry.exstraData.addData(shownPlasmaNetVisualsName,false);
     }
     public boolean shownPlasmaNetVisuals = false;
+    private static String shownPlasmaNetVisualsName = "shownPlasmaNetVisuals";
 
     @Override
     public void setSpecialItem(SpecialItemData special) {
         super.setSpecialItem(special);
-
+        shownPlasmaNetVisuals = (boolean) CurrentIndustry.exstraData.getBoolean(shownPlasmaNetVisualsName);
         if (shownPlasmaNetVisuals && (special == null || !special.getId().equals(Items.PLASMA_DYNAMO))) {
             unapplyVisuals(market.getPlanetEntity());
         }
@@ -148,6 +151,8 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
         if (special != null && special.getId().equals(Items.PLASMA_DYNAMO)) {
             applyVisuals(market.getPlanetEntity());
         }
+        CurrentIndustry.exstraData.addData(shownPlasmaNetVisualsName,shownPlasmaNetVisuals);
+
     }
 
 

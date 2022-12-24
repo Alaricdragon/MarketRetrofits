@@ -36,15 +36,15 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
             qualityBonus = ORBITAL_WORKS_QUALITY_BONUS;
         }
 
-        demand(Commodities.METALS, size);
-        demand(Commodities.RARE_METALS, size - 2);
+        CurrentIndustry.demand(Commodities.METALS, size);
+        CurrentIndustry.demand(Commodities.RARE_METALS, size - 2);
 
-        supply(Commodities.HEAVY_MACHINERY, size - 2);
-        supply(Commodities.SUPPLIES, size - 2);
-        supply(Commodities.HAND_WEAPONS, size - 2);
-        supply(Commodities.SHIPS, size - 2);
+        CurrentIndustry.supply(Commodities.HEAVY_MACHINERY, size - 2);
+        CurrentIndustry.supply(Commodities.SUPPLIES, size - 2);
+        CurrentIndustry.supply(Commodities.HAND_WEAPONS, size - 2);
+        CurrentIndustry.supply(Commodities.SHIPS, size - 2);
         if (shipBonus > 0) {
-            supply(1, Commodities.SHIPS, shipBonus, "Orbital works");
+            CurrentIndustry.supply(1, Commodities.SHIPS, shipBonus, "Orbital works");
         }
 
         Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.METALS, Commodities.RARE_METALS);
@@ -70,12 +70,12 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
             float stabilityMod = (stability - 5f) / 5f;
             stabilityMod *= 0.5f;
             //market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(getModId(0), stabilityMod, "Low stability at production source");
-            market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(CurrentIndustry.getModId(0), stabilityMod, getNameForModifier() + " - low stability");
+            market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(CurrentIndustry.getModId(0), stabilityMod, CurrentIndustry.getNameForModifier() + " - low stability");
         }
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
-            unapply();
+            CurrentIndustry.unapply();
         }
     }
 
@@ -91,7 +91,7 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
     @Override
     public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         //if (mode == IndustryTooltipMode.NORMAL && isFunctional()) {
-        if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
+        if (mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional()) {
             boolean works = Industries.ORBITALWORKS.equals(CurrentIndustry.getId());
             if (works) {
                 float total = ORBITAL_WORKS_QUALITY_BONUS;
@@ -137,21 +137,27 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
     public boolean addedPollution = false;
     public float daysWithNanoforge = 0f;
 
+    private static String permaPollutionName = "permaPollution";
+    private static String addedPollutionName = "addedPollution";
+    private static String daysWithNanoforgeName = "daysWithNanoforge";
+
     @Override
     public void advance(float amount) {
         super.advance(amount);
-
         if (special != null) {
             float days = Global.getSector().getClock().convertToDays(amount);
+            daysWithNanoforge = (float) CurrentIndustry.exstraData.getFloat(daysWithNanoforgeName);
             daysWithNanoforge += days;
-
+            CurrentIndustry.exstraData.addData(daysWithNanoforgeName,daysWithNanoforge);
             updatePollutionStatus();
         }
     }
 
     public void updatePollutionStatus() {
         if (!market.hasCondition(Conditions.HABITABLE)) return;
-
+        permaPollution = (boolean) CurrentIndustry.exstraData.getBoolean(permaPollutionName);
+        addedPollution = (boolean) CurrentIndustry.exstraData.getBoolean(addedPollutionName);
+        daysWithNanoforge = (float) CurrentIndustry.exstraData.getFloat(daysWithNanoforgeName);
         if (special != null) {
             if (!addedPollution && daysWithNanoforge >= DAYS_BEFORE_POLLUTION) {
                 if (market.hasCondition(POLLUTION_ID)) {
@@ -170,6 +176,8 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
             market.removeCondition(POLLUTION_ID);
             addedPollution = false;
         }
+        CurrentIndustry.exstraData.addData(permaPollutionName,permaPollution);
+        CurrentIndustry.exstraData.addData(addedPollutionName,addedPollution);
     }
 
     @Override

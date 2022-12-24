@@ -55,27 +55,27 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
 
         int size = market.getSize();
 
-        demand(Commodities.SUPPLIES, size - 1);
-        demand(Commodities.FUEL, size - 1);
-        demand(Commodities.SHIPS, size - 1);
+        CurrentIndustry.demand(Commodities.SUPPLIES, size - 1);
+        CurrentIndustry.demand(Commodities.FUEL, size - 1);
+        CurrentIndustry.demand(Commodities.SHIPS, size - 1);
 
-        supply(Commodities.CREW, size);
+        CurrentIndustry.supply(Commodities.CREW, size);
 
-        demand(Commodities.HAND_WEAPONS, size);
-        supply(Commodities.MARINES, size);
+        CurrentIndustry.demand(Commodities.HAND_WEAPONS, size);
+        CurrentIndustry.supply(Commodities.MARINES, size);
 
         Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.HAND_WEAPONS);
         CurrentIndustry.applyDeficitToProduction(1, deficit, Commodities.MARINES);
 
-        modifyStabilityWithBaseMod();
+        CurrentIndustry.modifyStabilityWithBaseMod();
 
         MemoryAPI memory = market.getMemoryWithoutUpdate();
         Misc.setFlagWithReason(memory, MemFlags.MARKET_PATROL, CurrentIndustry.getModId(), true, -1);
         Misc.setFlagWithReason(memory, MemFlags.MARKET_MILITARY, CurrentIndustry.getModId(), true, -1);
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
-            unapply();
+            CurrentIndustry.unapply();
         }
 
     }
@@ -88,16 +88,16 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
         Misc.setFlagWithReason(memory, MemFlags.MARKET_PATROL, CurrentIndustry.getModId(), false, -1);
         Misc.setFlagWithReason(memory, MemFlags.MARKET_MILITARY, CurrentIndustry.getModId(), false, -1);
 
-        unmodifyStabilityWithBaseMod();
+        CurrentIndustry.unmodifyStabilityWithBaseMod();
     }
     @Override
     public boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
-        return mode != IndustryTooltipMode.NORMAL || isFunctional();
+        return mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional();
     }
 
     @Override
     public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
-        if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
+        if (mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional()) {
             CurrentIndustry.addStabilityPostDemandSection(tooltip, hasDemand, mode);
         }
     }
@@ -108,10 +108,10 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
     }
     @Override
     public String getNameForModifier() {
-        if (getSpec().getName().contains("HQ")) {
-            return getSpec().getName();
+        if (CurrentIndustry.getSpec().getName().contains("HQ")) {
+            return CurrentIndustry.getSpec().getName();
         }
-        return Misc.ucFirst(getSpec().getName());
+        return Misc.ucFirst(CurrentIndustry.getSpec().getName());
     }
 
     @Override
@@ -137,19 +137,23 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
             Global.getSettings().getFloat("averagePatrolSpawnInterval") * 1.3f);
 
     public float returningPatrolValue = 0f;
+    private static String trackerName = "tracker";
+    private static String returningPatrolValueName = "returningPatrolValue";
 
     @Override
     public void buildingFinished() {
         super.buildingFinished();
-
+        tracker = getOrSetTraker();//(IntervalUtil) CurrentIndustry.getDataOther(trackerName);
         tracker.forceIntervalElapsed();
+        CurrentIndustry.exstraData.addData(trackerName,tracker);
     }
 
     @Override
     public void upgradeFinished(Industry previous) {
         super.upgradeFinished(previous);
-
+        tracker = getOrSetTraker();//(IntervalUtil) CurrentIndustry.getDataOther(trackerName);
         tracker.forceIntervalElapsed();
+        CurrentIndustry.exstraData.addData(trackerName,tracker);
     }
 
     @Override
@@ -158,8 +162,13 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
 
         if (Global.getSector().getEconomy().isSimMode()) return;
 
-        if (!isFunctional()) return;
+        if (!CurrentIndustry.isFunctional()) return;
 
+        returningPatrolValue = (float) CurrentIndustry.exstraData.getFloat(returningPatrolValueName);
+        tracker = getOrSetTraker();//(IntervalUtil) CurrentIndustry.getDataOther(trackerName);
+        if(returningPatrolValue == 0){
+            returningPatrolValue = 0f;
+        }
         float days = Global.getSector().getClock().convertToDays(amount);
 
         float spawnRate = 1f;
@@ -174,6 +183,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
             extraTime = interval * days;
             returningPatrolValue -= days;
             if (returningPatrolValue < 0) returningPatrolValue = 0;
+            CurrentIndustry.exstraData.addData("returningPatrolValue",returningPatrolValue);
         }
         tracker.advance(days * spawnRate + extraTime);
 
@@ -195,7 +205,9 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
             picker.add(FleetFactory.PatrolType.COMBAT, maxMedium - medium);
             picker.add(FleetFactory.PatrolType.FAST, maxLight - light);
 
-            if (picker.isEmpty()) return;
+            if (picker.isEmpty()) {
+                CurrentIndustry.exstraData.addData(trackerName,tracker);
+                return;}
 
             FleetFactory.PatrolType type = picker.pick();
             PatrolFleetData custom = new PatrolFleetData(type);
@@ -208,6 +220,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
 
             route.addSegment(new RouteManager.RouteSegment(patrolDays, market.getPrimaryEntity()));
         }
+        CurrentIndustry.exstraData.addData(trackerName,tracker);
     }
     @Override
     public void reportAboutToBeDespawnedByRouteManager(RouteData route) {
@@ -255,7 +268,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
     }
     @Override
     public void reportFleetDespawnedToListener(CampaignFleetAPI fleet, CampaignEventListener.FleetDespawnReason reason, Object param) {
-        if (!isFunctional()) return;
+        if (!CurrentIndustry.isFunctional()) return;
 
         if (reason == CampaignEventListener.FleetDespawnReason.REACHED_DESTINATION) {
             RouteData route = RouteManager.getInstance().getRoute(getRouteSourceId(), fleet);
@@ -264,7 +277,9 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
                 PatrolFleetData custom = (PatrolFleetData) route.getCustom();
                 if (custom.spawnFP > 0) {
                     float fraction  = fleet.getFleetPoints() / custom.spawnFP;
+                    returningPatrolValue = (float) CurrentIndustry.exstraData.getFloat(returningPatrolValueName);
                     returningPatrolValue += fraction;
+                    CurrentIndustry.exstraData.addData(returningPatrolValueName,returningPatrolValue);
                 }
             }
         }
@@ -393,5 +408,14 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
     @Override
     public MarketCMD.RaidDangerLevel adjustItemDangerLevel(String itemId, String data, MarketCMD.RaidDangerLevel level) {
         return level.next();
+    }
+
+    private IntervalUtil getOrSetTraker(){
+        IntervalUtil temp = (IntervalUtil) CurrentIndustry.exstraData.getData(trackerName);
+        if(temp == null){
+            return new IntervalUtil(Global.getSettings().getFloat("averagePatrolSpawnInterval") * 0.7f,
+                    Global.getSettings().getFloat("averagePatrolSpawnInterval") * 1.3f);
+        }
+        return temp;
     }
 }

@@ -36,9 +36,9 @@ public class MarketRetrofit_FarmingInstance extends MarketRetrofits_DefaltInstan
         boolean aquaculture = Industries.AQUACULTURE.equals(CurrentIndustry.getId());
 
         if (aquaculture) {
-            demand(0, Commodities.HEAVY_MACHINERY, size, BASE_VALUE_TEXT);
+            CurrentIndustry.demand(0, Commodities.HEAVY_MACHINERY, size, BASE_VALUE_TEXT);
         } else {
-            demand(0, Commodities.HEAVY_MACHINERY, size - 3, BASE_VALUE_TEXT);
+            CurrentIndustry.demand(0, Commodities.HEAVY_MACHINERY, size - 3, BASE_VALUE_TEXT);
         }
 
         //supply(3, Commodities.LOBSTER, 5, "Hack");
@@ -55,7 +55,7 @@ public class MarketRetrofit_FarmingInstance extends MarketRetrofits_DefaltInstan
         CurrentIndustry.applyDeficitToProduction(0, deficit, Commodities.FOOD);
 
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
         }
     }

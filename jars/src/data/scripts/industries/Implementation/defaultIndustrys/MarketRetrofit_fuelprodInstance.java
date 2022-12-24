@@ -15,20 +15,20 @@ public class MarketRetrofit_fuelprodInstance extends MarketRetrofits_DefaltInsta
     @Override
     public void apply() {
         super.apply(true);
-        supplyBonus.modifyFlat(getModId(2), market.getAdmin().getStats().getDynamic().getValue(Stats.FUEL_SUPPLY_BONUS_MOD, 0), "Administrator");
+        supplyBonus.modifyFlat(CurrentIndustry.getModId(2), market.getAdmin().getStats().getDynamic().getValue(Stats.FUEL_SUPPLY_BONUS_MOD, 0), "Administrator");
 
         int size = market.getSize();
 
-        demand(Commodities.VOLATILES, size);
-        demand(Commodities.HEAVY_MACHINERY, size - 2);
+        CurrentIndustry.demand(Commodities.VOLATILES, size);
+        CurrentIndustry.demand(Commodities.HEAVY_MACHINERY, size - 2);
 
-        supply(Commodities.FUEL, size - 2);
+        CurrentIndustry.supply(Commodities.FUEL, size - 2);
 
         Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.VOLATILES);
 
         CurrentIndustry.applyDeficitToProduction(1, deficit, Commodities.FUEL);
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
         }
     }
@@ -42,7 +42,7 @@ public class MarketRetrofit_fuelprodInstance extends MarketRetrofits_DefaltInsta
 
     @Override
     public String getCurrentImage() {
-        if (getSpecialItem() != null) {
+        if (CurrentIndustry.getSpecialItem() != null) {
             return Global.getSettings().getSpriteName("industry", "advanced_fuel_prod");
         }
         return super.getCurrentImage();

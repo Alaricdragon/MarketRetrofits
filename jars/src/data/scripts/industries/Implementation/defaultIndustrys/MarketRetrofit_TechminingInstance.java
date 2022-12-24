@@ -69,7 +69,7 @@ public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltIns
 //		supply(Commodities.RARE_METALS, size - 2);
 //		supply(Commodities.VOLATILES, size - 2);
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
         }
 
@@ -201,7 +201,7 @@ public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltIns
 
     @Override
     public CargoAPI generateCargoForGatheringPoint(Random random) {
-        if (!isFunctional()) return null;
+        if (!CurrentIndustry.isFunctional()) return null;
 
         float mult = getTechMiningMult();
         float decay = Global.getSettings().getFloat("techMiningDecay");
@@ -357,7 +357,7 @@ public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltIns
     }
     @Override
     public void applyImproveModifiers() {
-        if (isImproved()) {
+        if (CurrentIndustry.isImproved()) {
             market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).modifyMult(CurrentIndustry.getModId(1), 1f + IMPROVE_FINDS_BONUS);
         } else {
             market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).unmodifyMult(CurrentIndustry.getModId(1));

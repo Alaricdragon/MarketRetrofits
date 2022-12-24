@@ -30,10 +30,11 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
 
     //public transient CargoAPI savedCargo = null;
     public transient SubmarketAPI saved = null;
+    private static String savedName = "saved";
     @Override
     public void apply() {
         super.apply(true);
-
+        saved = (SubmarketAPI) CurrentIndustry.exstraData.getData(savedName);
         if (CurrentIndustry.isFunctional() && market.isPlayerOwned()) {
             SubmarketAPI open = market.getSubmarket(Submarkets.SUBMARKET_OPEN);
             if (open == null) {
@@ -64,9 +65,9 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
         }
 
         //modifyStabilityWithBaseMod();
-        market.getStability().modifyFlat(getModId(), -STABILITY_PELANTY, getNameForModifier());
+        market.getStability().modifyFlat(CurrentIndustry.getModId(), -STABILITY_PELANTY, CurrentIndustry.getNameForModifier());
 
-        market.getIncomeMult().modifyPercent(getModId(0), BASE_BONUS, getNameForModifier());
+        market.getIncomeMult().modifyPercent(CurrentIndustry.getModId(0), BASE_BONUS, CurrentIndustry.getNameForModifier());
 
         if (!CurrentIndustry.isFunctional()) {
             CurrentIndustry.unapply();
@@ -80,7 +81,8 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
 
         if (market.isPlayerOwned()) {
             SubmarketAPI open = market.getSubmarket(Submarkets.SUBMARKET_OPEN);
-            saved = open;
+            CurrentIndustry.exstraData.addData(savedName,open);
+            //saved = open;
 //			if (open.getPlugin() instanceof BaseSubmarketPlugin) {
 //				BaseSubmarketPlugin base = (BaseSubmarketPlugin) open.getPlugin();
 //				if (base.getSinceLastCargoUpdate() < 30) {
@@ -151,17 +153,17 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
     //market.getIncomeMult().modifyMult(id, INCOME_MULT, "Industrial planning");
     @Override
     public void applyAlphaCoreModifiers() {
-        market.getIncomeMult().modifyPercent(getModId(1), ALPHA_CORE_BONUS, "Alpha core (" + getNameForModifier() + ")");
+        market.getIncomeMult().modifyPercent(CurrentIndustry.getModId(1), ALPHA_CORE_BONUS, "Alpha core (" + CurrentIndustry.getNameForModifier() + ")");
     }
 
     @Override
     public void applyNoAICoreModifiers() {
-        market.getIncomeMult().unmodifyPercent(getModId(1));
+        market.getIncomeMult().unmodifyPercent(CurrentIndustry.getModId(1));
     }
 
     @Override
     public void applyAlphaCoreSupplyAndDemandModifiers() {
-        demandReduction.modifyFlat(getModId(0), DEMAND_REDUCTION, "Alpha core");
+        demandReduction.modifyFlat(CurrentIndustry.getModId(0), DEMAND_REDUCTION, "Alpha core");
     }
     @Override
     public void addAlphaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode) {
@@ -200,11 +202,11 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
     }
     @Override
     public void applyImproveModifiers() {
-        if (isImproved()) {
-            market.getIncomeMult().modifyPercent(getModId(2), IMPROVE_BONUS,
-                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
+        if (CurrentIndustry.isImproved()) {
+            market.getIncomeMult().modifyPercent(CurrentIndustry.getModId(2), IMPROVE_BONUS,
+                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + CurrentIndustry.getNameForModifier() + ")");
         } else {
-            market.getIncomeMult().unmodifyPercent(getModId(2));
+            market.getIncomeMult().unmodifyPercent(CurrentIndustry.getModId(2));
         }
     }
     @Override

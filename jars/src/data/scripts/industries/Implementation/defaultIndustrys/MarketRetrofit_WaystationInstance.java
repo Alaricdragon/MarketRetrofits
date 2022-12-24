@@ -34,11 +34,11 @@ public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltIns
 
         int size = market.getSize();
 
-        demand(Commodities.FUEL, size);
-        demand(Commodities.SUPPLIES, size);
-        demand(Commodities.CREW, size);
+        CurrentIndustry.demand(Commodities.FUEL, size);
+        CurrentIndustry.demand(Commodities.SUPPLIES, size);
+        CurrentIndustry.demand(Commodities.CREW, size);
 
-        String desc = getNameForModifier();
+        String desc = CurrentIndustry.getNameForModifier();
 
 //		Pair<String, Integer> deficit = getUpkeepAffectingDeficit();
 //		if (deficit.two > 0) {
@@ -67,9 +67,9 @@ public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltIns
         }
 
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
-            unapply();
+            CurrentIndustry.unapply();
         }
     }
 
@@ -116,15 +116,15 @@ public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltIns
     }
     @Override
     public boolean hasPostDemandSection(boolean hasDemand, Industry.IndustryTooltipMode mode) {
-        return mode != Industry.IndustryTooltipMode.NORMAL || isFunctional();
+        return mode != Industry.IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional();
     }
 
     @Override
     public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode) {
-        if (mode != Industry.IndustryTooltipMode.NORMAL || isFunctional()) {
+        if (mode != Industry.IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional()) {
             MutableStat fake = new MutableStat(0);
 
-            String desc = getNameForModifier();
+            String desc = CurrentIndustry.getNameForModifier();
             float a = BASE_ACCESSIBILITY;
             if (a > 0) {
                 fake.modifyFlat(CurrentIndustry.getModId(0), a, desc);
@@ -226,9 +226,9 @@ public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltIns
     }
     @Override
     public void applyImproveModifiers() {
-        if (isImproved()) {
+        if (CurrentIndustry.isImproved()) {
             market.getAccessibilityMod().modifyFlat(CurrentIndustry.getModId(3), IMPROVE_ACCESSIBILITY,
-                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
+                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + CurrentIndustry.getNameForModifier() + ")");
         } else {
             market.getAccessibilityMod().unmodifyFlat(CurrentIndustry.getModId(3));
         }

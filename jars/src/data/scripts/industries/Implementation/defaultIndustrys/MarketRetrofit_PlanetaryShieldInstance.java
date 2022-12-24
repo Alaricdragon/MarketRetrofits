@@ -31,12 +31,12 @@ public class MarketRetrofit_PlanetaryShieldInstance extends MarketRetrofits_Defa
 
         float bonus = DEFENSE_BONUS;
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD)
-                .modifyMult(CurrentIndustry.getModId(), 1f + bonus, getNameForModifier());
+                .modifyMult(CurrentIndustry.getModId(), 1f + bonus, CurrentIndustry.getNameForModifier());
 
-        if (isFunctional()) {
+        if (CurrentIndustry.isFunctional()) {
             applyVisuals(market.getPlanetEntity());
         } else {
-            unapply();
+            CurrentIndustry.unapply();
         }
     }
 
@@ -87,12 +87,12 @@ public class MarketRetrofit_PlanetaryShieldInstance extends MarketRetrofits_Defa
     }
     @Override
     public boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
-        return mode != IndustryTooltipMode.NORMAL || isFunctional();
+        return mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional();
     }
 
     @Override
     public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
-        if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
+        if (mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional()) {
 
             float bonus = DEFENSE_BONUS;
             CurrentIndustry.addGroundDefensesImpactSection(tooltip, bonus, (String[])null);
@@ -103,7 +103,7 @@ public class MarketRetrofit_PlanetaryShieldInstance extends MarketRetrofits_Defa
     @Override
     public void applyAlphaCoreModifiers() {
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult(
-                CurrentIndustry.getModId(1), 1f + ALPHA_CORE_BONUS, "Alpha core (" + getNameForModifier() + ")");
+                CurrentIndustry.getModId(1), 1f + ALPHA_CORE_BONUS, "Alpha core (" + CurrentIndustry.getNameForModifier() + ")");
     }
 
     @Override
@@ -153,10 +153,10 @@ public class MarketRetrofit_PlanetaryShieldInstance extends MarketRetrofits_Defa
     }
     @Override
     public void applyImproveModifiers() {
-        if (isImproved()) {
+        if (CurrentIndustry.isImproved()) {
             market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult(CurrentIndustry.getModId(2),
                     1f + IMPROVE_DEFENSE_BONUS,
-                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
+                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + CurrentIndustry.getNameForModifier() + ")");
         } else {
             market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(CurrentIndustry.getModId(2));
         }

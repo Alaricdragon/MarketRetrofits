@@ -22,7 +22,14 @@ for people looking to add an conditional instances to an industry:
     how to do it:
         1st: create a class that exstends MarketRetrofits_InstanceIndustry
         2nd: (optional) @Override the function public boolean canImply(MarketAPI market) and make it return weather or not your instance should trigger for an given market.
-        3rd: modify the class like you would if you were to replace the industry normaly.
+        3rd: modify the class like you would if you were to replace the industry normally with the following exceptions:
+            1) any function you run that is a BaseIndustry function, must be ran through CurrentIndustry
+                -example: 'CurrentIndustry.isFunctional();', as apposed to 'isFunctional();'.
+            2) any time you would normaly run a super.functionname();, you should instead:
+                -find a way to get the super of the baseIndustry, for the love of god please do so....
+            3) if you want to run a function from the formed defalt industry, run a super.functionname(). this will get the defalt industry.
+            4) if you want to have custom varubles not act like static variables
+                -find a way to do the thing here please.
         4th: in onApplicationLoad(), run the following code:
             1) intilize your new class. (order is what order the code will check. lower order values will ha e there functions ran over instances with a higher order. name is what your instances name is. set it to something uneek)
             2) run the function yourClass.applyToIndustry(industryId) were industryId is the Id of the industry you want to add this instance to.
@@ -36,7 +43,9 @@ for people looking to add an conditional instances to an industry:
 for people looking to change the default instance of an industry:
     how to do it:
         1st: create a class that extends 'MarketRetrofits_DefaltInstanceIndustry'
-        2nd modify the class like you would if you were to replace the industry normaly
+        2nd modify the class like you would if you were to replace the industry normally with the following exceptions:
+            1) any function you run that is a BaseIndustry function, must be ran through CurrentIndustry
+                -example: 'CurrentIndustry.isFunctional();', as apposed to 'isFunctional();'.
         3rd: in onApplicationLoad(), run the following code:
              1) intilize your new class. (order dose nothing here. name is what your instances name is. set it to something uneek)
              2) run the function yourClass.applyToIndustry(industryId) were industryId is the Id of the industry you want to add this instance to.

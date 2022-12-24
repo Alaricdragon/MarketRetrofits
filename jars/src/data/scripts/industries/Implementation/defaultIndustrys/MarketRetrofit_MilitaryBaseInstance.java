@@ -62,9 +62,9 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
 
         int size = market.getSize();
 
-        boolean patrol = getSpec().hasTag(Industries.TAG_PATROL);
-        boolean militaryBase = getSpec().hasTag(Industries.TAG_MILITARY);
-        boolean command = getSpec().hasTag(Industries.TAG_COMMAND);
+        boolean patrol = CurrentIndustry.getSpec().hasTag(Industries.TAG_PATROL);
+        boolean militaryBase = CurrentIndustry.getSpec().hasTag(Industries.TAG_MILITARY);
+        boolean command = CurrentIndustry.getSpec().hasTag(Industries.TAG_COMMAND);
 
         super.apply(!patrol);
         if (patrol) {
@@ -146,27 +146,27 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
 //		}
 
 
-        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_LIGHT_MOD).modifyFlat(getModId(), light);
-        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_MEDIUM_MOD).modifyFlat(getModId(), medium);
-        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_HEAVY_MOD).modifyFlat(getModId(), heavy);
+        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_LIGHT_MOD).modifyFlat(CurrentIndustry.getModId(), light);
+        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_MEDIUM_MOD).modifyFlat(CurrentIndustry.getModId(), medium);
+        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_HEAVY_MOD).modifyFlat(CurrentIndustry.getModId(), heavy);
 
 
-        demand(Commodities.SUPPLIES, size - 1 + extraDemand);
-        demand(Commodities.FUEL, size - 1 + extraDemand);
-        demand(Commodities.SHIPS, size - 1 + extraDemand);
+        CurrentIndustry.demand(Commodities.SUPPLIES, size - 1 + extraDemand);
+        CurrentIndustry.demand(Commodities.FUEL, size - 1 + extraDemand);
+        CurrentIndustry.demand(Commodities.SHIPS, size - 1 + extraDemand);
 
-        supply(Commodities.CREW, size);
+        CurrentIndustry.supply(Commodities.CREW, size);
 
         if (!patrol) {
             //demand(Commodities.HAND_WEAPONS, size);
-            supply(Commodities.MARINES, size);
+            CurrentIndustry.supply(Commodities.MARINES, size);
 
 //			Pair<String, Integer> deficit = getMaxDeficit(Commodities.HAND_WEAPONS);
 //			applyDeficitToProduction(1, deficit, Commodities.MARINES);
         }
 
 
-        modifyStabilityWithBaseMod();
+        CurrentIndustry.modifyStabilityWithBaseMod();
 
         float mult = getDeficitMult(Commodities.SUPPLIES);
         String extra = "";
@@ -178,25 +178,25 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
         if (patrol) bonus = DEFENSE_BONUS_PATROL;
         else if (command) bonus = DEFENSE_BONUS_COMMAND;
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD)
-                .modifyMult(getModId(), 1f + bonus * mult, getNameForModifier() + extra);
+                .modifyMult(CurrentIndustry.getModId(), 1f + bonus * mult, CurrentIndustry.getNameForModifier() + extra);
 
 
         MemoryAPI memory = market.getMemoryWithoutUpdate();
-        Misc.setFlagWithReason(memory, MemFlags.MARKET_PATROL, getModId(), true, -1);
+        Misc.setFlagWithReason(memory, MemFlags.MARKET_PATROL, CurrentIndustry.getModId(), true, -1);
 
         if (militaryBase || command) {
-            Misc.setFlagWithReason(memory, MemFlags.MARKET_MILITARY, getModId(), true, -1);
+            Misc.setFlagWithReason(memory, MemFlags.MARKET_MILITARY, CurrentIndustry.getModId(), true, -1);
         }
 
         float officerProb = OFFICER_PROB_MOD_PATROL_HQ;
         if (militaryBase) officerProb = OFFICER_PROB_MOD_MILITARY_BASE;
         else if (command) officerProb = OFFICER_PROB_MOD_HIGH_COMMAND;
-        market.getStats().getDynamic().getMod(Stats.OFFICER_PROB_MOD).modifyFlat(getModId(0), officerProb);
+        market.getStats().getDynamic().getMod(Stats.OFFICER_PROB_MOD).modifyFlat(CurrentIndustry.getModId(0), officerProb);
 
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
-            unapply();
+            CurrentIndustry.unapply();
         }
 
     }
@@ -206,34 +206,34 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
         super.unapply();
 
         MemoryAPI memory = market.getMemoryWithoutUpdate();
-        Misc.setFlagWithReason(memory, MemFlags.MARKET_PATROL, getModId(), false, -1);
-        Misc.setFlagWithReason(memory, MemFlags.MARKET_MILITARY, getModId(), false, -1);
+        Misc.setFlagWithReason(memory, MemFlags.MARKET_PATROL, CurrentIndustry.getModId(), false, -1);
+        Misc.setFlagWithReason(memory, MemFlags.MARKET_MILITARY, CurrentIndustry.getModId(), false, -1);
 
-        unmodifyStabilityWithBaseMod();
+        CurrentIndustry.unmodifyStabilityWithBaseMod();
 
         //market.getStats().getDynamic().getStat(Stats.COMBAT_FLEET_SPAWN_RATE_MULT).unmodifyMult(getModId());
         //market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MULT).unmodifyFlat(getModId());
 
-        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_LIGHT_MOD).unmodifyFlat(getModId());
-        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_MEDIUM_MOD).unmodifyFlat(getModId());
-        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_HEAVY_MOD).unmodifyFlat(getModId());
+        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_LIGHT_MOD).unmodifyFlat(CurrentIndustry.getModId());
+        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_MEDIUM_MOD).unmodifyFlat(CurrentIndustry.getModId());
+        market.getStats().getDynamic().getMod(Stats.PATROL_NUM_HEAVY_MOD).unmodifyFlat(CurrentIndustry.getModId());
 
-        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(getModId());
+        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(CurrentIndustry.getModId());
 
-        market.getStats().getDynamic().getMod(Stats.OFFICER_PROB_MOD).unmodifyFlat(getModId(0));
+        market.getStats().getDynamic().getMod(Stats.OFFICER_PROB_MOD).unmodifyFlat(CurrentIndustry.getModId(0));
     }
     @Override
     public boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
-        return mode != IndustryTooltipMode.NORMAL || isFunctional();
+        return mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional();
     }
 
     @Override
     public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
-        if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
+        if (mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional()) {
             CurrentIndustry.addStabilityPostDemandSection(tooltip, hasDemand, mode);
 
-            boolean patrol = getSpec().hasTag(Industries.TAG_PATROL);
-            boolean command = getSpec().hasTag(Industries.TAG_COMMAND);
+            boolean patrol = CurrentIndustry.getSpec().hasTag(Industries.TAG_PATROL);
+            boolean command = CurrentIndustry.getSpec().hasTag(Industries.TAG_COMMAND);
             float bonus = DEFENSE_BONUS_MILITARY;
             if (patrol) bonus = DEFENSE_BONUS_PATROL;
             if (command) bonus = DEFENSE_BONUS_COMMAND;
@@ -243,9 +243,9 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
 
     @Override
     public int getBaseStabilityMod() {
-        boolean patrol = getSpec().hasTag(Industries.TAG_PATROL);
-        boolean militaryBase = getSpec().hasTag(Industries.TAG_MILITARY);
-        boolean command = getSpec().hasTag(Industries.TAG_COMMAND);
+        boolean patrol = CurrentIndustry.getSpec().hasTag(Industries.TAG_PATROL);
+        boolean militaryBase = CurrentIndustry.getSpec().hasTag(Industries.TAG_MILITARY);
+        boolean command = CurrentIndustry.getSpec().hasTag(Industries.TAG_COMMAND);
         int stabilityMod = 1;
         if (patrol) {
             stabilityMod = 1;
@@ -260,11 +260,11 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
     public String getNameForModifier() {
 //		boolean patrol = Industries.PATROLHQ.equals(getId());
 //		if (patrol) return getSpec().getName();
-        if (getSpec().getName().contains("HQ")) {
-            return getSpec().getName();
+        if (CurrentIndustry.getSpec().getName().contains("HQ")) {
+            return CurrentIndustry.getSpec().getName();
         }
 
-        return Misc.ucFirst(getSpec().getName().toLowerCase());
+        return Misc.ucFirst(CurrentIndustry.getSpec().getName().toLowerCase());
     }
 
 
@@ -274,7 +274,7 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
 
     @Override
     public Pair<String, Integer> getStabilityAffectingDeficit() {
-        boolean patrol = getSpec().hasTag(Industries.TAG_PATROL);
+        boolean patrol = CurrentIndustry.getSpec().hasTag(Industries.TAG_PATROL);
         if (patrol) {
             return CurrentIndustry.getMaxDeficit(Commodities.SUPPLIES, Commodities.FUEL, Commodities.SHIPS);
         }
@@ -325,21 +325,24 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
     //public IntervalUtil tracker = new IntervalUtil(5f, 9f);
     public IntervalUtil tracker = new IntervalUtil(Global.getSettings().getFloat("averagePatrolSpawnInterval") * 0.7f,
             Global.getSettings().getFloat("averagePatrolSpawnInterval") * 1.3f);
-
+    private static String trackerName = "tracker";
     public float returningPatrolValue = 0f;
+    private static String returningPatrolValueName = "returningPatrolValue";
 
     @Override
     public void buildingFinished() {
         super.buildingFinished();
-
+        tracker = getSetTrackerForInstance();
         tracker.forceIntervalElapsed();
+        CurrentIndustry.exstraData.addData(trackerName,tracker);
     }
 
     @Override
     public void upgradeFinished(Industry previous) {
         super.upgradeFinished(previous);
-
+        tracker = getSetTrackerForInstance();
         tracker.forceIntervalElapsed();
+        CurrentIndustry.exstraData.addData(trackerName,tracker);
     }
 
     @Override
@@ -348,7 +351,7 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
 
         if (Global.getSector().getEconomy().isSimMode()) return;
 
-        if (!isFunctional()) return;
+        if (!CurrentIndustry.isFunctional()) return;
 
         float days = Global.getSector().getClock().convertToDays(amount);
 
@@ -363,7 +366,8 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
         if (Global.getSector().isInNewGameAdvance()) {
             spawnRate *= 3f;
         }
-
+        returningPatrolValue = (float) CurrentIndustry.exstraData.getFloat(returningPatrolValueName);
+        tracker = getSetTrackerForInstance();
         float extraTime = 0f;
         if (returningPatrolValue > 0) {
             // apply "returned patrols" to spawn rate, at a maximum rate of 1 interval per day
@@ -372,6 +376,7 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
             returningPatrolValue -= days;
             if (returningPatrolValue < 0) returningPatrolValue = 0;
         }
+        CurrentIndustry.exstraData.addData(returningPatrolValueName,returningPatrolValue);
         tracker.advance(days * spawnRate + extraTime);
 
         //DebugFlags.FAST_PATROL_SPAWN = true;
@@ -400,6 +405,8 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
             picker.add(FleetFactory.PatrolType.HEAVY, maxHeavy - heavy);
             picker.add(FleetFactory.PatrolType.COMBAT, maxMedium - medium);
             picker.add(FleetFactory.PatrolType.FAST, maxLight - light);
+
+            CurrentIndustry.exstraData.addData(trackerName,tracker);
 
             if (picker.isEmpty()) return;
 
@@ -486,7 +493,7 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
     }
     @Override
     public void reportFleetDespawnedToListener(CampaignFleetAPI fleet, CampaignEventListener.FleetDespawnReason reason, Object param) {
-        if (!isFunctional()) return;
+        if (!CurrentIndustry.isFunctional()) return;
 
         if (reason == CampaignEventListener.FleetDespawnReason.REACHED_DESTINATION) {
             RouteData route = RouteManager.getInstance().getRoute(getRouteSourceId(), fleet);
@@ -498,7 +505,9 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
                 PatrolFleetData custom = (PatrolFleetData) route.getCustom();
                 if (custom.spawnFP > 0) {
                     float fraction  = fleet.getFleetPoints() / custom.spawnFP;
+                    returningPatrolValue = (float) CurrentIndustry.exstraData.getFloat(returningPatrolValueName);
                     returningPatrolValue += fraction;
+                    CurrentIndustry.exstraData.addData(returningPatrolValueName,returningPatrolValue);
                 }
             }
         }
@@ -635,17 +644,17 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
     @Override
     public void applyAlphaCoreModifiers() {
         market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyMult(
-                getModId(), 1f + ALPHA_CORE_BONUS, "Alpha core (" + getNameForModifier() + ")");
+                CurrentIndustry.getModId(), 1f + ALPHA_CORE_BONUS, "Alpha core (" + CurrentIndustry.getNameForModifier() + ")");
     }
 
     @Override
     public void applyNoAICoreModifiers() {
-        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodifyMult(getModId());
+        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodifyMult(CurrentIndustry.getModId());
     }
 
     @Override
     public void applyAlphaCoreSupplyAndDemandModifiers() {
-        demandReduction.modifyFlat(getModId(0), DEMAND_REDUCTION, "Alpha core");
+        demandReduction.modifyFlat(CurrentIndustry.getModId(0), DEMAND_REDUCTION, "Alpha core");
     }
     @Override
     public void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
@@ -687,8 +696,8 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
     public void applyImproveModifiers() {
 
         String key = "mil_base_improve";
-        if (isImproved()) {
-            boolean patrol = getSpec().hasTag(Industries.TAG_PATROL);
+        if (CurrentIndustry.isImproved()) {
+            boolean patrol = CurrentIndustry.getSpec().hasTag(Industries.TAG_PATROL);
 //			boolean militaryBase = getSpec().hasTag(Industries.TAG_MILITARY);
 //			boolean command = getSpec().hasTag(Industries.TAG_COMMAND);
 
@@ -709,7 +718,7 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
 
         String str = "" + (int) IMPROVE_NUM_PATROLS_BONUS;
 
-        boolean patrol = getSpec().hasTag(Industries.TAG_PATROL);
+        boolean patrol = CurrentIndustry.getSpec().hasTag(Industries.TAG_PATROL);
         String type = "medium patrols";
         if (!patrol) type = "heavy patrols";
 
@@ -738,5 +747,17 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
     private void loging(String output){
         //final Logger LOG = Global.getLogger(this.getClass());
         //LOG.info(output);
+    }
+
+    /*my functions, just in case.*/
+    private IntervalUtil getSetTrackerForInstance(){
+        IntervalUtil out = (IntervalUtil) CurrentIndustry.exstraData.getData(trackerName);
+        if(out != null){ return out;}
+        out = new IntervalUtil(Global.getSettings().getFloat("averagePatrolSpawnInterval") * 0.7f,
+                Global.getSettings().getFloat("averagePatrolSpawnInterval") * 1.3f);
+        return out;
+    }
+    private float getSetReturningPatrolValue(){
+        return (float) CurrentIndustry.exstraData.getData(returningPatrolValueName);
     }
 }

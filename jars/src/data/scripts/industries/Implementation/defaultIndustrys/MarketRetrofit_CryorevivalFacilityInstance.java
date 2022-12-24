@@ -39,7 +39,7 @@ public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_
 
         //int size = market.getSize();
         //demand(Commodities.HEAVY_MACHINERY, size);
-        demand(Commodities.ORGANICS, 10);
+        CurrentIndustry.demand(Commodities.ORGANICS, 10);
     }
 
 
@@ -49,12 +49,12 @@ public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_
     }
     @Override
     public boolean hasPostDemandSection(boolean hasDemand, Industry.IndustryTooltipMode mode) {
-        return mode != Industry.IndustryTooltipMode.NORMAL || isFunctional();
+        return mode != Industry.IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional();
     }
 
     @Override
     public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode) {
-        if (mode != Industry.IndustryTooltipMode.NORMAL || isFunctional()) {
+        if (mode != Industry.IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional()) {
             Color h = Misc.getHighlightColor();
             float opad = 10f;
 
@@ -122,17 +122,17 @@ public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_
     }
     @Override
     public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
-        if (isFunctional()) {
+        if (CurrentIndustry.isFunctional()) {
             incoming.add(Factions.SLEEPER, getImmigrationBonus() * 2f);
-            incoming.getWeight().modifyFlat(getModId(), getImmigrationBonus(), getNameForModifier());
+            incoming.getWeight().modifyFlat(CurrentIndustry.getModId(), getImmigrationBonus(), CurrentIndustry.getNameForModifier());
 
             if (Commodities.ALPHA_CORE.equals(CurrentIndustry.getAICoreId())) {
-                incoming.getWeight().modifyFlat(getModId(1), (int)(getImmigrationBonus() * ALPHA_CORE_BONUS),
-                        "Alpha core (" + getNameForModifier() + ")");
+                incoming.getWeight().modifyFlat(CurrentIndustry.getModId(1), (int)(getImmigrationBonus() * ALPHA_CORE_BONUS),
+                        "Alpha core (" + CurrentIndustry.getNameForModifier() + ")");
             }
-            if (isImproved()) {
-                incoming.getWeight().modifyFlat(getModId(2), (int)(getImmigrationBonus() * IMPROVE_BONUS),
-                        CurrentIndustry.getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
+            if (CurrentIndustry.isImproved()) {
+                incoming.getWeight().modifyFlat(CurrentIndustry.getModId(2), (int)(getImmigrationBonus() * IMPROVE_BONUS),
+                        CurrentIndustry.getImprovementsDescForModifiers() + " (" + CurrentIndustry.getNameForModifier() + ")");
             }
         }
     }
@@ -148,7 +148,7 @@ public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_
 
     @Override
     public void applyAlphaCoreSupplyAndDemandModifiers() {
-        demandReduction.modifyFlat(getModId(0), DEMAND_REDUCTION, "Alpha core");
+        demandReduction.modifyFlat(CurrentIndustry.getModId(0), DEMAND_REDUCTION, "Alpha core");
     }
     @Override
     public void addAlphaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode) {
@@ -261,7 +261,7 @@ public class MarketRetrofit_CryorevivalFacilityInstance extends MarketRetrofits_
     }
 
     public float getMaxImmigrationBonus() {
-        return getSizeMult() * 10f;
+        return CurrentIndustry.getSizeMult() * 10f;
     }
 
 

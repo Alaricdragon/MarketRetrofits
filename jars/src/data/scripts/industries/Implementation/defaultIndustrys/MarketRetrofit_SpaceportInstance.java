@@ -45,22 +45,22 @@ public class MarketRetrofit_SpaceportInstance extends MarketRetrofits_DefaltInst
         int extraSize = 0;
         if (megaport) extraSize = 2;
 
-        demand(Commodities.FUEL, size - 2 + extraSize);
-        demand(Commodities.SUPPLIES, size - 2 + extraSize);
-        demand(Commodities.SHIPS, size - 2 + extraSize);
+        CurrentIndustry.demand(Commodities.FUEL, size - 2 + extraSize);
+        CurrentIndustry.demand(Commodities.SUPPLIES, size - 2 + extraSize);
+        CurrentIndustry.demand(Commodities.SHIPS, size - 2 + extraSize);
 
-        supply(Commodities.CREW, size - 1 + extraSize);
+        CurrentIndustry.supply(Commodities.CREW, size - 1 + extraSize);
 
 
-        String desc = getNameForModifier();
+        String desc = CurrentIndustry.getNameForModifier();
 
         Pair<String, Integer> deficit = getUpkeepAffectingDeficit();
 
         if (deficit.two > 0) {
             float loss = getUpkeepPenalty(deficit);
-            getUpkeep().modifyMult("deficit", 1f + loss, getDeficitText(deficit.one));
+            CurrentIndustry.getUpkeep().modifyMult("deficit", 1f + loss, getDeficitText(deficit.one));
         } else {
-            getUpkeep().unmodifyMult("deficit");
+            CurrentIndustry.getUpkeep().unmodifyMult("deficit");
         }
 
         market.setHasSpaceport(true);
@@ -78,13 +78,13 @@ public class MarketRetrofit_SpaceportInstance extends MarketRetrofits_DefaltInst
         market.getStats().getDynamic().getMod(Stats.OFFICER_PROB_MOD).modifyFlat(CurrentIndustry.getModId(0), officerProb);
         //market.getStats().getDynamic().getMod(Stats.OFFICER_IS_MERC_PROB_MOD).modifyFlat(getModId(0), officerProb);
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
 //			if (isDisrupted() && !isBuilding()) {
 //				market.getAccessibilityMod().modifyFlat(getModId(2), -1f, "Spaceport operations disrupted");
 //				supply(Commodities.CREW, size - 1 + extraSize);
 //			} else {
             supply.clear();
-            unapply();
+            CurrentIndustry.unapply();
             market.setHasSpaceport(true);
 //			}
         }
@@ -115,17 +115,17 @@ public class MarketRetrofit_SpaceportInstance extends MarketRetrofits_DefaltInst
     @Override
     public boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
         //return mode == IndustryTooltipMode.NORMAL && isFunctional();
-        return mode != IndustryTooltipMode.NORMAL || isFunctional();
+        return mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional();
     }
 
     @Override
     public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         //if (mode == IndustryTooltipMode.NORMAL && isFunctional()) {
-        if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
+        if (mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional()) {
             MutableStat fake = new MutableStat(0);
 
             boolean megaport = Industries.MEGAPORT.equals(CurrentIndustry.getId());
-            String desc = getNameForModifier();
+            String desc = CurrentIndustry.getNameForModifier();
             float a = BASE_ACCESSIBILITY;
             if (megaport) {
                 a = MEGAPORT_ACCESSIBILITY;
@@ -189,13 +189,13 @@ public class MarketRetrofit_SpaceportInstance extends MarketRetrofits_DefaltInst
     public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
         float bonus = getPopulationGrowthBonus();
 
-        incoming.getWeight().modifyFlat(CurrentIndustry.getModId(), bonus, getNameForModifier());
+        incoming.getWeight().modifyFlat(CurrentIndustry.getModId(), bonus, CurrentIndustry.getNameForModifier());
     }
 
 
     @Override
     public void applyAlphaCoreModifiers() {
-        market.getAccessibilityMod().modifyFlat(CurrentIndustry.getModId(2), ALPHA_CORE_ACCESSIBILITY, "Alpha core (" + getNameForModifier() + ")");
+        market.getAccessibilityMod().modifyFlat(CurrentIndustry.getModId(2), ALPHA_CORE_ACCESSIBILITY, "Alpha core (" + CurrentIndustry.getNameForModifier() + ")");
     }
 
     @Override
@@ -244,9 +244,9 @@ public class MarketRetrofit_SpaceportInstance extends MarketRetrofits_DefaltInst
 
     public void applyImproveModifiers() {
         // have to use a custom id - "spaceport_improve" - so that it's the same modifier when upgraded to megaport
-        if (isImproved()) {
+        if (CurrentIndustry.isImproved()) {
             market.getAccessibilityMod().modifyFlat("spaceport_improve", IMPROVE_ACCESSIBILITY,
-                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
+                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + CurrentIndustry.getNameForModifier() + ")");
         } else {
             market.getAccessibilityMod().unmodifyFlat("spaceport_improve");
         }

@@ -2,6 +2,7 @@ package data.scripts.industries.Lists;
 
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import data.scripts.industries.MarketRetrofit_BaseIndustry;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;

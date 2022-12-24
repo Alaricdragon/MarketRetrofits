@@ -15,12 +15,12 @@ public class MarketRetrofit_RefiningInstance extends MarketRetrofits_DefaltInsta
         int size = market.getSize();
 
 
-        demand(Commodities.HEAVY_MACHINERY, size - 2); // have to keep it low since it can be circular
-        demand(Commodities.ORE, size + 2);
-        demand(Commodities.RARE_ORE, size);
+        CurrentIndustry.demand(Commodities.HEAVY_MACHINERY, size - 2); // have to keep it low since it can be circular
+        CurrentIndustry.demand(Commodities.ORE, size + 2);
+        CurrentIndustry.demand(Commodities.RARE_ORE, size);
 
-        supply(Commodities.METALS, size);
-        supply(Commodities.RARE_METALS, size - 2);
+        CurrentIndustry.supply(Commodities.METALS, size);
+        CurrentIndustry.supply(Commodities.RARE_METALS, size - 2);
 
         Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.HEAVY_MACHINERY, Commodities.ORE);
         CurrentIndustry.applyDeficitToProduction(1, deficit, Commodities.METALS);
@@ -28,7 +28,7 @@ public class MarketRetrofit_RefiningInstance extends MarketRetrofits_DefaltInsta
         deficit = CurrentIndustry.getMaxDeficit(Commodities.HEAVY_MACHINERY, Commodities.RARE_ORE);
         CurrentIndustry.applyDeficitToProduction(1, deficit, Commodities.RARE_METALS);
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
         }
     }

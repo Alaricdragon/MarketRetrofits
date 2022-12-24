@@ -56,16 +56,19 @@ status of default industry and base industry:
             4) in MarketRetrofit_BaseIndustry, make it so i recompile all data from default instance
             5) in default instance, every time i call a baseIndustry function, do so from the industry that is being emulated right now.
             (NO. not worth it. let the peple have a slightly harder time with conversion, for a better time without)6) in MarketRetrofit_BaseIndustry, readd all removed functions. they can be handled, i think.
-            (I am here)7) in instance industry, apply 5 and 3.
-            -currently adding setting instance industrys to get the function getNameForModifier to be from industry.
+            7) in instance industry, apply 5 and 3.
+            8)(HERE. see bottom of document for status) get all custom data storged in the primary industry
         issues:
             1)(canceled. being public is the lesser of evils. very easy to adapt to)  i set all functions in default instance to public. im going to try and set the ones that were protected back, and
                 see if that makes it easier to connect to the old instance industry.
             2) regarding .super:
                 its completely fine on default industry.
                 it is not find on instance industry.
-                instance industry super returns whatever active defalt industry is in use.
-                this is a issue because it dose not return what the super should, and in fact just runs a difrent instance.
+                instance industry super returns whatever active default industry is in use.
+                this is a issue because it dose not return what the super should, and in fact just runs a different instance.
+            3) population and infrastructure:
+                -this industry has some confusing custom data. i need to complete the custom data set before i can upgrade it
+                -(see "industrys with custom data that needs a way to be saved")
 
         solutions:
             2)
@@ -79,3 +82,57 @@ status of default industry and base industry:
         incomplete:
             1) for 2 of the current plan, i cant store or set custom data yet. only existing data can be set right now.
             2) right now i have no way to automatically get and set any extra data that i create
+
+
+        ISSUE:
+            different data types might require a different way to get them from null.
+            if a null data type is inputted, it cannot be set to any primitive data type. like at all.
+            solution: have different functions to get data from different primitive types.
+
+            solution(failed): data and infermation can be set from null this way.
+                      but only if its null. any other value will fail.
+                boolean a = Boolean.parseBoolean(null);
+                int b = Integer.parseInt(null);
+                float c = Float.parseFloat(null);
+                double d = Double.parseDouble(null);
+                MarketRetorfits_ExstraData e = null;
+                String f = null;
+                char g = null;//char cannot get from null.
+
+                a = 0;//cant
+                b = 0;
+                c = 0;
+                d = 0;
+                e = 0;//cant
+                f = 0;//cant
+                g = 0;
+            final solution: have get data have a the ability to get a 'type' of data.
+            make Exstra data public, so it can be the way one gets and sets data
+
+            new issue:
+            sometimes a defalt industry will call functions that will change exstra data.
+            i must call set and get exstra data before and after said function, to avoid issues...
+            have not added this yet. will do so soon
+        industrys with custom data that needs a way to be saved:
+            1) (done. not tested)population and infrastructure
+                -lamp
+                -removedHeatCondition
+                -addedHeatCondition
+            2) (done. not tested)MarketRetrofit_CommerceInstance
+                -saved
+            3)(done. not tested)MarketRetrofit_LionsGuardHQInstance
+                -returningPatrolValue
+                -tracker
+            4)(done. not tested)MarketRetrofit_MilitaryBaseInstance
+                -returningPatrolValue
+                -tracker
+            5)(done. not tested)MarketRetrofit_MiningInstance
+                -shownPlasmaNetVisuals
+            6)(done. not tested)MarketRetrofit_HeavyIndustryInstance
+                -permaPollution
+                -daysWithNanoforge
+                -addedPollution
+            7)(started)MarketRetrofit_OrbitalStationInstance
+                -(started)stationEntity
+                -usingExistingStation
+                -stationFleet

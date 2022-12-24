@@ -1,5 +1,4 @@
 package data.scripts;
-import com.fs.starfarer.String.M;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import data.scripts.industries.Implementation.defaultIndustrys.*;
