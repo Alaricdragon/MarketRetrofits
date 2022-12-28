@@ -21,6 +21,7 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.industries.MarketRetrofit_BaseIndustry;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 import org.json.JSONArray;
@@ -35,7 +36,25 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
     public MarketRetrofit_PopulationInstance(String name, float orderT) {
         super(name, orderT);
     }
+    public String addedHeatCondition = null;
+    public String removedHeatCondition = null;
+    public SectorEntityToken lamp;
 
+    static private String addedHeatConditionName = "addedHeatCondition";
+    static private String removedHeatConditionName = "removedHeatCondition";
+    static private String lampName = "lamp";
+    @Override
+    public void getExtraDataFromIndustry(MarketRetorfits_ExstraData extraData){
+        addedHeatCondition = (String) extraData.getData(addedHeatConditionName);
+        removedHeatConditionName = (String) extraData.getData(removedHeatConditionName);
+        lamp = (SectorEntityToken) extraData.getData(lampName);
+    }
+    @Override
+    public void setExtraDataToIndustry(MarketRetorfits_ExstraData extraData){
+        extraData.addData(addedHeatConditionName,addedHeatCondition);
+        extraData.addData(removedHeatConditionName,removedHeatCondition);
+        extraData.addData(lampName,lamp);
+    }
     public static float OFFICER_BASE_PROB = Global.getSettings().getFloat("officerBaseProb");
     public static float OFFICER_PROB_PER_SIZE = Global.getSettings().getFloat("officerProbPerColonySize");
     public static float OFFICER_ADDITIONAL_BASE_PROB = Global.getSettings().getFloat("officerAdditionalBaseProb");
@@ -749,20 +768,9 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
         }
     }
 
-    public String addedHeatCondition = null;
-    public String removedHeatCondition = null;
-    public SectorEntityToken lamp;
-
-    static private String addedHeatConditionName = "addedHeatCondition";
-    static private String removedHeatConditionName = "removedHeatCondition";
-    static private String lampName = "lamp";
-
     @Override
     public void setSpecialItem(SpecialItemData special) {
         super.setSpecialItem(special);
-        lamp = (SectorEntityToken) CurrentIndustry.exstraData.getData(lampName);
-        removedHeatCondition = (String) CurrentIndustry.exstraData.getData(removedHeatConditionName);
-        addedHeatCondition = (String) CurrentIndustry.exstraData.getData(addedHeatConditionName);
         if (addedHeatCondition != null && (special == null || !special.getId().equals(Items.ORBITAL_FUSION_LAMP))) {
             market.removeCondition(addedHeatCondition);
             addedHeatCondition = null;
@@ -803,9 +811,6 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
                 if (addedHeatCondition != null) market.addCondition(addedHeatCondition);
             }
         }
-        CurrentIndustry.setData(lampName,lamp);
-        CurrentIndustry.setData(addedHeatConditionName,addedHeatCondition);
-        CurrentIndustry.setData(removedHeatConditionName,removedHeatCondition);
     }
 
 

@@ -1,6 +1,7 @@
 package data.scripts.industries.Implementation.defaultIndustrys;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
@@ -10,6 +11,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
 
@@ -19,7 +21,14 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
     public MarketRetrofit_CommerceInstance(String name, float orderT) {
         super(name, orderT);
     }
-
+    @Override
+    public void getExtraDataFromIndustry(MarketRetorfits_ExstraData extraData){
+        saved = (SubmarketAPI) extraData.getData(savedName);
+    }
+    @Override
+    public void setExtraDataToIndustry(MarketRetorfits_ExstraData extraData){
+        extraData.addData(savedName,saved);
+    }
 
 
     public static float BASE_BONUS = 25f;
@@ -34,7 +43,6 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
     @Override
     public void apply() {
         super.apply(true);
-        saved = (SubmarketAPI) CurrentIndustry.exstraData.getData(savedName);
         if (CurrentIndustry.isFunctional() && market.isPlayerOwned()) {
             SubmarketAPI open = market.getSubmarket(Submarkets.SUBMARKET_OPEN);
             if (open == null) {
@@ -81,7 +89,6 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
 
         if (market.isPlayerOwned()) {
             SubmarketAPI open = market.getSubmarket(Submarkets.SUBMARKET_OPEN);
-            CurrentIndustry.exstraData.addData(savedName,open);
             //saved = open;
 //			if (open.getPlugin() instanceof BaseSubmarketPlugin) {
 //				BaseSubmarketPlugin base = (BaseSubmarketPlugin) open.getPlugin();

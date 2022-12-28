@@ -7,6 +7,7 @@ import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
 import java.awt.*;
@@ -15,7 +16,29 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
     public MarketRetrofit_HeavyIndustryInstance(String name, float orderT) {
         super(name, orderT);
     }
+    public boolean permaPollution = false;
+    public boolean addedPollution = false;
+    public float daysWithNanoforge = 0f;
 
+    private static String permaPollutionName = "permaPollution";
+    private static String addedPollutionName = "addedPollution";
+    private static String daysWithNanoforgeName = "daysWithNanoforge";
+    @Override
+    public void getExtraDataFromIndustry(MarketRetorfits_ExstraData extraData){
+        permaPollution = extraData.getBoolean(permaPollutionName);
+        addedPollution = extraData.getBoolean(addedPollutionName);
+        daysWithNanoforge = extraData.getFloat(daysWithNanoforgeName);
+
+
+    }
+    @Override
+    public void setExtraDataToIndustry(MarketRetorfits_ExstraData extraData){
+        extraData.addData(permaPollutionName,permaPollution);
+        extraData.addData(addedPollutionName,addedPollution);
+        extraData.addData(daysWithNanoforgeName,daysWithNanoforge);
+
+
+    }
     public static float ORBITAL_WORKS_QUALITY_BONUS = 0.2f;
 
     public static String POLLUTION_ID = Conditions.POLLUTION;
@@ -133,31 +156,20 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
         return super.wantsToUseSpecialItem(data);
     }
 
-    public boolean permaPollution = false;
-    public boolean addedPollution = false;
-    public float daysWithNanoforge = 0f;
 
-    private static String permaPollutionName = "permaPollution";
-    private static String addedPollutionName = "addedPollution";
-    private static String daysWithNanoforgeName = "daysWithNanoforge";
 
     @Override
     public void advance(float amount) {
         super.advance(amount);
         if (special != null) {
             float days = Global.getSector().getClock().convertToDays(amount);
-            daysWithNanoforge = (float) CurrentIndustry.exstraData.getFloat(daysWithNanoforgeName);
             daysWithNanoforge += days;
-            CurrentIndustry.exstraData.addData(daysWithNanoforgeName,daysWithNanoforge);
             updatePollutionStatus();
         }
     }
 
     public void updatePollutionStatus() {
         if (!market.hasCondition(Conditions.HABITABLE)) return;
-        permaPollution = (boolean) CurrentIndustry.exstraData.getBoolean(permaPollutionName);
-        addedPollution = (boolean) CurrentIndustry.exstraData.getBoolean(addedPollutionName);
-        daysWithNanoforge = (float) CurrentIndustry.exstraData.getFloat(daysWithNanoforgeName);
         if (special != null) {
             if (!addedPollution && daysWithNanoforge >= DAYS_BEFORE_POLLUTION) {
                 if (market.hasCondition(POLLUTION_ID)) {
@@ -176,8 +188,6 @@ public class MarketRetrofit_HeavyIndustryInstance extends MarketRetrofits_Defalt
             market.removeCondition(POLLUTION_ID);
             addedPollution = false;
         }
-        CurrentIndustry.exstraData.addData(permaPollutionName,permaPollution);
-        CurrentIndustry.exstraData.addData(addedPollutionName,addedPollution);
     }
 
     @Override

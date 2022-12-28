@@ -5,10 +5,7 @@ import com.fs.starfarer.api.campaign.BattleAPI;
 import com.fs.starfarer.api.campaign.CampaignEventListener;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.PlanetAPI;
-import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
-import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
-import com.fs.starfarer.api.campaign.econ.Industry;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.econ.*;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.impl.campaign.DebugFlags;
 import com.fs.starfarer.api.impl.campaign.econ.impl.MilitaryBase.PatrolFleetData;
@@ -19,6 +16,7 @@ import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
+import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -45,7 +43,27 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
     public MarketRetrofit_MilitaryBaseInstance(String name, float orderT) {
         super(name, orderT);
     }
-
+    public IntervalUtil tracker = new IntervalUtil(Global.getSettings().getFloat("averagePatrolSpawnInterval") * 0.7f,
+            Global.getSettings().getFloat("averagePatrolSpawnInterval") * 1.3f);
+    private static String trackerName = "tracker";
+    public float returningPatrolValue = 0f;
+    private static String returningPatrolValueName = "returningPatrolValue";
+    @Override
+    public void getExtraDataFromIndustry(MarketRetorfits_ExstraData extraData){
+        returningPatrolValue = (float) extraData.getFloat(returningPatrolValueName);
+        Object temp = extraData.getData(trackerName);
+        if(temp == null){
+            tracker = new IntervalUtil(Global.getSettings().getFloat("averagePatrolSpawnInterval") * 0.7f,
+                    Global.getSettings().getFloat("averagePatrolSpawnInterval") * 1.3f);
+            return;
+        }
+        tracker = (IntervalUtil) temp;
+    }
+    @Override
+    public void setExtraDataToIndustry(MarketRetorfits_ExstraData extraData){
+        extraData.addData(trackerName,tracker);
+        extraData.addData(returningPatrolValueName,returningPatrolValue);
+    }
 
     public static float OFFICER_PROB_MOD_PATROL_HQ = 0.1f;
     public static float OFFICER_PROB_MOD_MILITARY_BASE = 0.2f;
@@ -323,26 +341,17 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
 
 
     //public IntervalUtil tracker = new IntervalUtil(5f, 9f);
-    public IntervalUtil tracker = new IntervalUtil(Global.getSettings().getFloat("averagePatrolSpawnInterval") * 0.7f,
-            Global.getSettings().getFloat("averagePatrolSpawnInterval") * 1.3f);
-    private static String trackerName = "tracker";
-    public float returningPatrolValue = 0f;
-    private static String returningPatrolValueName = "returningPatrolValue";
 
     @Override
     public void buildingFinished() {
         super.buildingFinished();
-        tracker = getSetTrackerForInstance();
         tracker.forceIntervalElapsed();
-        CurrentIndustry.exstraData.addData(trackerName,tracker);
     }
 
     @Override
     public void upgradeFinished(Industry previous) {
         super.upgradeFinished(previous);
-        tracker = getSetTrackerForInstance();
         tracker.forceIntervalElapsed();
-        CurrentIndustry.exstraData.addData(trackerName,tracker);
     }
 
     @Override
@@ -366,8 +375,6 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
         if (Global.getSector().isInNewGameAdvance()) {
             spawnRate *= 3f;
         }
-        returningPatrolValue = (float) CurrentIndustry.exstraData.getFloat(returningPatrolValueName);
-        tracker = getSetTrackerForInstance();
         float extraTime = 0f;
         if (returningPatrolValue > 0) {
             // apply "returned patrols" to spawn rate, at a maximum rate of 1 interval per day
@@ -376,7 +383,6 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
             returningPatrolValue -= days;
             if (returningPatrolValue < 0) returningPatrolValue = 0;
         }
-        CurrentIndustry.exstraData.addData(returningPatrolValueName,returningPatrolValue);
         tracker.advance(days * spawnRate + extraTime);
 
         //DebugFlags.FAST_PATROL_SPAWN = true;
@@ -406,7 +412,6 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
             picker.add(FleetFactory.PatrolType.COMBAT, maxMedium - medium);
             picker.add(FleetFactory.PatrolType.FAST, maxLight - light);
 
-            CurrentIndustry.exstraData.addData(trackerName,tracker);
 
             if (picker.isEmpty()) return;
 
@@ -505,9 +510,7 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
                 PatrolFleetData custom = (PatrolFleetData) route.getCustom();
                 if (custom.spawnFP > 0) {
                     float fraction  = fleet.getFleetPoints() / custom.spawnFP;
-                    returningPatrolValue = (float) CurrentIndustry.exstraData.getFloat(returningPatrolValueName);
                     returningPatrolValue += fraction;
-                    CurrentIndustry.exstraData.addData(returningPatrolValueName,returningPatrolValue);
                 }
             }
         }
@@ -747,17 +750,5 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
     private void loging(String output){
         //final Logger LOG = Global.getLogger(this.getClass());
         //LOG.info(output);
-    }
-
-    /*my functions, just in case.*/
-    private IntervalUtil getSetTrackerForInstance(){
-        IntervalUtil out = (IntervalUtil) CurrentIndustry.exstraData.getData(trackerName);
-        if(out != null){ return out;}
-        out = new IntervalUtil(Global.getSettings().getFloat("averagePatrolSpawnInterval") * 0.7f,
-                Global.getSettings().getFloat("averagePatrolSpawnInterval") * 1.3f);
-        return out;
-    }
-    private float getSetReturningPatrolValue(){
-        return (float) CurrentIndustry.exstraData.getData(returningPatrolValueName);
     }
 }

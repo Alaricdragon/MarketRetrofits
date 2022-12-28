@@ -1,54 +1,11 @@
 industry are extremely complicated. there is a lot of interaction going back and forwards here. this creates issues.
-current to do list:
-    1) build way to accuses and storage data in 'base industry'
-instance industry
-    issues:
-        1)  something i forgot at first is that a 'instance industry' dose not hold all the values and data that it is trying to get
-            from its 'base industry'. it also dose not have the functions of the 'base industry'
-        2)  default data from the 'games base industry' is not what i want to run in my 'instance industry' by default
-            as a result i -cannot use .super for anything-, as it would try to run with the default instances code and cause issues
-    solutions:
-        1)  get all data and functions from 'base industry'
-        2)  store all data in 'base industry'
-             -requires a way tog et and store data. ill get to this.
-        3)  replace all functions in 'default industry' with copy's of functions from 'games base industry', well calling its
-            functions and variables from its 'base industry'
 
-(MarketRetrofit) base industry:
-    issues:
-        1)  getting data to and from this class.
-    solutions:
-        1)  give 'instance industry' a reference to this class every time a function is called.
-        2)  create a set of functions for storing and receiving data
-            every function would correspond to a data type, and would let the me send and receive data as i please
-
-
+currently working on issue 6.
 
 status of default industry and base industry:
-    (old)
-        some functions require different things to run. some functions require different amount of work to get right.
-        i have been looking at my functions and seeing what i required to do, for both 'instance industry' and 'default industry'.
-        i want to have the option to override all the classes, even if it is silly, because someone might need one someday.
-
-        i have created some lists to what i thought i needed to do, but they are insufficient. so, new lists:
-        2 sets of lists. one for 'base industry' and one for 'default industry'
-        the 'base industry' one is for what i need to do in 'base industry' to get it working there.
-        the 'default industry' one is for what i need to do there.
-
-        Base Industry:
-            run super -> instance:
-
-            run instance -> super:
-
-            run instance:
-
-            run 'set data from instance' before end loop
-        default instance:
-
-
     (current)
-        current plan:
-            1) in default instance, replace everything with a copy from baseIndustry
+        current plan(complete):
+            1)( in default instance, replace everything with a copy from baseIndustry
             2) in MarketRetrofit_BaseIndustry create 2 functions:
                 2.a) one to call any data from itself
                 2.b) one to set any data in itself
@@ -57,7 +14,7 @@ status of default industry and base industry:
             5) in default instance, every time i call a baseIndustry function, do so from the industry that is being emulated right now.
             (NO. not worth it. let the peple have a slightly harder time with conversion, for a better time without)6) in MarketRetrofit_BaseIndustry, readd all removed functions. they can be handled, i think.
             7) in instance industry, apply 5 and 3.
-            8)(HERE. see bottom of document for status) get all custom data storged in the primary industry
+            8)get all custom data storged in the primary industry
         issues:
             1)(canceled. being public is the lesser of evils. very easy to adapt to)  i set all functions in default instance to public. im going to try and set the ones that were protected back, and
                 see if that makes it easier to connect to the old instance industry.
@@ -66,19 +23,26 @@ status of default industry and base industry:
                 it is not find on instance industry.
                 instance industry super returns whatever active default industry is in use.
                 this is a issue because it dose not return what the super should, and in fact just runs a different instance.
-            3) population and infrastructure:
+            3)(solved. not tested) population and infrastructure:
                 -this industry has some confusing custom data. i need to complete the custom data set before i can upgrade it
                 -(see "industrys with custom data that needs a way to be saved")
+            4) init and init with parms in baseIndustry:
+                issue is this causes issues. my current theory is that i should just run a super there, then run exstra data from active instance.
+            5) i change active instance every function. this can cause issues when things are not unaplyed right.
+            6) IMPORTANT: MarketRetrofits_DefaultInstanceIndustry does not call all its functions from CurrentIndustry.
 
         solutions:
             2)
-                2.0: remove instance industry
-                2.1: change default industry to have a bool value, telling it if its a default industry or not.
-                2.2: add 2 sets of functions to default instance. one for defaults, the other for instances.
-                result: .super on instance industry will run the super value it is suppose to...?
-                no wait a issue: how will i tell the defence between a super and a non super...?
-                need to find out how to do that.
-
+                create a set of functions in MarketRetrofitBaseIndustry that call the super of that class?
+                or create them in default industry. testing required.
+                ...
+                or create said functions in instance industry, there super would call defalt industry, then classes that
+                exstend instance industry would beable to accses said functions.
+            5) make it so i only change my 'active industry' only after i run apply / init with parms.
+                whatever one comes first, really.
+            6) make it call all its functions from Current industry.
+                im surching by each functions right now. im on:
+                demand: line 394
         incomplete:
             1) for 2 of the current plan, i cant store or set custom data yet. only existing data can be set right now.
             2) right now i have no way to automatically get and set any extra data that i create
@@ -113,12 +77,15 @@ status of default industry and base industry:
             sometimes a defalt industry will call functions that will change exstra data.
             i must call set and get exstra data before and after said function, to avoid issues...
             have not added this yet. will do so soon
+
+            HERE new solution:
+            give every instance industry its own 'extra data' class. set and get the extra data after and before running data. its maddeningly simple.
         industrys with custom data that needs a way to be saved:
             1) (done. not tested)population and infrastructure
                 -lamp
                 -removedHeatCondition
                 -addedHeatCondition
-            2) (done. not tested)MarketRetrofit_CommerceInstance
+            2) (done.not tested)MarketRetrofit_CommerceInstance
                 -saved
             3)(done. not tested)MarketRetrofit_LionsGuardHQInstance
                 -returningPatrolValue
@@ -132,7 +99,7 @@ status of default industry and base industry:
                 -permaPollution
                 -daysWithNanoforge
                 -addedPollution
-            7)(started)MarketRetrofit_OrbitalStationInstance
-                -(started)stationEntity
-                -usingExistingStation
-                -stationFleet
+            7)(done. not tested)MarketRetrofit_OrbitalStationInstance
+                -(done)stationEntity
+                -(done)usingExistingStation
+                -(done)stationFleet

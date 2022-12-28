@@ -92,6 +92,10 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         this.upgradeId;
         this.upkeep;
         this.wasDisrupted;*/
+    public void IndustryDataCleanup(MarketRetrofit_BaseIndustry industryT){
+        setBaseDataToIndustry(industryT);
+        setExtraDataToIndustry(industryT.exstraData);
+    }
     public void getBaseDataFromIndustry(MarketRetrofit_BaseIndustry industryT) {
         CurrentIndustry = industryT;
         //a = industry.getData("a");
@@ -152,6 +156,12 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         CurrentIndustry.setData("upkeep",this.upkeep);
         CurrentIndustry.setData("wasDisrupted",this.wasDisrupted);
         //get data from industry
+    }
+    public void getExtraDataFromIndustry(MarketRetorfits_ExstraData extraData){
+
+    }
+    public void setExtraDataToIndustry(MarketRetorfits_ExstraData extraData){
+
     }
 
     public MarketRetrofit_BaseIndustry getIndustry() {
@@ -255,7 +265,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         this.id = id;
         //industry.setData("market",market);
         this.market = market;
-        readResolve();
+        CurrentIndustry.readResolve();
     }
 
     private transient String modId;
@@ -308,8 +318,8 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
             updateIncomeAndUpkeep();
         }
 
-        applyAICoreModifiers();
-        applyImproveModifiers();
+        CurrentIndustry.applyAICoreModifiers();
+        CurrentIndustry.applyImproveModifiers();
 
         if (CurrentIndustry instanceof MarketImmigrationModifier) {
             market.addTransientImmigrationModifier((MarketImmigrationModifier) CurrentIndustry);
@@ -329,7 +339,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     }
     @Override
     public void unapply() {
-        applyNoAICoreModifiers();
+        CurrentIndustry.applyNoAICoreModifiers();
 
         Boolean wasImproved = improved;
         improved = null;
@@ -350,15 +360,15 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     @Override
     public void applyAICoreModifiers() {
         if (aiCoreId == null) {
-            applyNoAICoreModifiers();
+            CurrentIndustry.applyNoAICoreModifiers();
             return;
         }
         boolean alpha = aiCoreId.equals(Commodities.ALPHA_CORE);
         boolean beta = aiCoreId.equals(Commodities.BETA_CORE);
         boolean gamma = aiCoreId.equals(Commodities.GAMMA_CORE);
-        if (alpha) applyAlphaCoreModifiers();
-        else if (beta) applyBetaCoreModifiers();
-        else if (gamma) applyGammaCoreModifiers();
+        if (alpha) CurrentIndustry.applyAlphaCoreModifiers();
+        else if (beta) CurrentIndustry.applyBetaCoreModifiers();
+        else if (gamma) CurrentIndustry.applyGammaCoreModifiers();
     }
     @Override
     public void applyAlphaCoreModifiers() {}
@@ -390,7 +400,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     }
     @Override
     public void demand(int index, String commodityId, int quantity, String desc) {
-        demand(getModId(index), commodityId, quantity, desc);
+        demand(CurrentIndustry.getModId(index), commodityId, quantity, desc);
     }
     @Override
     public void demand(String modId, String commodityId, int quantity, String desc) {
@@ -423,7 +433,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     }
     @Override
     public void supply(int index, String commodityId, int quantity, String desc) {
-        supply(getModId(index), commodityId, quantity, desc);
+        supply(CurrentIndustry.getModId(index), commodityId, quantity, desc);
     }
     @Override
     public void supply(String modId, String commodityId, int quantity, String desc) {
@@ -457,7 +467,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
 //				System.out.println("efwefwe");
 //			}
             if (getSupply(commodity).getQuantity().isUnmodified()) continue;
-            supply(index, commodity, -deficit.two, getDeficitText(deficit.one));
+            supply(index, commodity, -deficit.two, CurrentIndustry.getDeficitText(deficit.one));
         }
     }
 
@@ -663,7 +673,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         upgradeId = null;
 
         buildTime = spec.getBuildTime();
-        unapply();
+        CurrentIndustry.unapply();
     }
     @Override
     public void finishBuildingOrUpgrading() {
@@ -1659,16 +1669,16 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     }
     @Override
     public void applyAlphaCoreSupplyAndDemandModifiers() {
-        supplyBonus.modifyFlat(getModId(0), SUPPLY_BONUS, "Alpha core");
-        demandReduction.modifyFlat(getModId(0), DEMAND_REDUCTION, "Alpha core");
+        supplyBonus.modifyFlat(CurrentIndustry.getModId(0), SUPPLY_BONUS, "Alpha core");
+        demandReduction.modifyFlat(CurrentIndustry.getModId(0), DEMAND_REDUCTION, "Alpha core");
     }
     @Override
     public void applyBetaCoreSupplyAndDemandModifiers() {
-        demandReduction.modifyFlat(getModId(0), DEMAND_REDUCTION, "Beta core");
+        demandReduction.modifyFlat(CurrentIndustry.getModId(0), DEMAND_REDUCTION, "Beta core");
     }
     @Override
     public void applyGammaCoreSupplyAndDemandModifiers() {
-        demandReduction.modifyFlat(getModId(0), DEMAND_REDUCTION, "Gamma core");
+        demandReduction.modifyFlat(CurrentIndustry.getModId(0), DEMAND_REDUCTION, "Gamma core");
     }
     @Override
     public void updateSupplyAndDemandModifiers() {
@@ -1687,8 +1697,8 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
 
 //		supplyBonus += market.getAdmin().getStats().getDynamic().getValue(Stats.SUPPLY_BONUS_MOD, 0);
 //		demandReduction += market.getAdmin().getStats().getDynamic().getValue(Stats.DEMAND_REDUCTION_MOD, 0);
-        supplyBonus.modifyFlat(getModId(1), market.getAdmin().getStats().getDynamic().getValue(Stats.SUPPLY_BONUS_MOD, 0), "Administrator");
-        demandReduction.modifyFlat(getModId(1), market.getAdmin().getStats().getDynamic().getValue(Stats.DEMAND_REDUCTION_MOD, 0), "Administrator");
+        supplyBonus.modifyFlat(CurrentIndustry.getModId(1), market.getAdmin().getStats().getDynamic().getValue(Stats.SUPPLY_BONUS_MOD, 0), "Administrator");
+        demandReduction.modifyFlat(CurrentIndustry.getModId(1), market.getAdmin().getStats().getDynamic().getValue(Stats.DEMAND_REDUCTION_MOD, 0), "Administrator");
 
         if (supplyBonusFromOther != null) {
             supplyBonus.applyMods(supplyBonusFromOther);
@@ -1792,7 +1802,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         }
         stabilityMod -= stabilityPenalty;
         if (stabilityMod > 0) {
-            market.getStability().modifyFlat(getModId(), stabilityMod, getNameForModifier());
+            market.getStability().modifyFlat(CurrentIndustry.getModId(), stabilityMod, getNameForModifier());
         }
 //		else if (stabilityMod < 0) {
 //			String str = getDeficitText(getStabilityAffectingDeficit().one);
@@ -1801,7 +1811,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     }
     @Override
     public void unmodifyStabilityWithBaseMod() {
-        market.getStability().unmodifyFlat(getModId());
+        market.getStability().unmodifyFlat(CurrentIndustry.getModId());
     }
     @Override
     public Pair<String, Integer> getStabilityAffectingDeficit() {
@@ -2010,7 +2020,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
             //mult = 0.89f;
             if (mult != 1) {
                 String com = CurrentIndustry.getMaxDeficit(commodities).one;
-                fake.modifyFlat("2", -(1f - mult) * bonus, getDeficitText(com));
+                fake.modifyFlat("2", -(1f - mult) * bonus, CurrentIndustry.getDeficitText(com));
             }
         }
 
@@ -2167,7 +2177,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         int bonus = CurrentIndustry.getImproveProductionBonus();
         if (bonus <= 0) return;
 
-        supplyBonus.modifyFlat(getModId(3), bonus, CurrentIndustry.getImprovementsDescForModifiers());
+        supplyBonus.modifyFlat(CurrentIndustry.getModId(3), bonus, CurrentIndustry.getImprovementsDescForModifiers());
     }
     @Override
     public void addImprovedSection(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded) {

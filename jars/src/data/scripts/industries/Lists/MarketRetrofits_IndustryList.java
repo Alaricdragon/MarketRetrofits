@@ -1,11 +1,8 @@
 package data.scripts.industries.Lists;
 
-import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import data.scripts.industries.MarketRetrofit_BaseIndustry;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
 import data.scripts.industries.MarketRetrofits_InstanceIndustry;
 
 import java.util.ArrayList;
@@ -45,11 +42,13 @@ public class MarketRetrofits_IndustryList {
             if(a.canImply(market)){
                 //a.init(IDT,market);
                 a.getBaseDataFromIndustry(industry);
+                a.getExtraDataFromIndustry(industry.exstraData);
                 return a;
             }
         }
         //defaultInstance.init(IDT,market);
         defaultInstance.getBaseDataFromIndustry(industry);
+        defaultInstance.getExtraDataFromIndustry(industry.exstraData);
         return defaultInstance;
     }
 }

@@ -10,8 +10,10 @@ import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
 import java.awt.*;
@@ -19,6 +21,16 @@ import java.awt.*;
 public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanceIndustry {
     public MarketRetrofit_MiningInstance(String name, float orderT) {
         super(name, orderT);
+    }
+    public boolean shownPlasmaNetVisuals = false;
+    private static String shownPlasmaNetVisualsName = "shownPlasmaNetVisuals";
+    @Override
+    public void getExtraDataFromIndustry(MarketRetorfits_ExstraData extraData){
+        shownPlasmaNetVisuals = extraData.getBoolean(shownPlasmaNetVisualsName);
+    }
+    @Override
+    public void setExtraDataToIndustry(MarketRetorfits_ExstraData extraData){
+        extraData.addData(shownPlasmaNetVisualsName,shownPlasmaNetVisuals);
     }
     @Override
     public void apply() {
@@ -125,8 +137,7 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
         //planet.getSpec().setShieldColor2(new Color(255,255,255,175));
         planet.getSpec().setShieldColor2(new Color(255,255,255,255));
         planet.applySpecChanges();
-        //shownPlasmaNetVisuals = true;
-        CurrentIndustry.exstraData.addData(shownPlasmaNetVisualsName,true);
+        shownPlasmaNetVisuals = true;
     }
     public void unapplyVisuals(PlanetAPI planet) {
         if (planet == null) return;
@@ -134,16 +145,11 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
         planet.getSpec().setShieldThickness2(0f);
         planet.getSpec().setShieldColor2(null);
         planet.applySpecChanges();
-        //shownPlasmaNetVisuals = false;
-        CurrentIndustry.exstraData.addData(shownPlasmaNetVisualsName,false);
+        shownPlasmaNetVisuals = false;
     }
-    public boolean shownPlasmaNetVisuals = false;
-    private static String shownPlasmaNetVisualsName = "shownPlasmaNetVisuals";
-
     @Override
     public void setSpecialItem(SpecialItemData special) {
         super.setSpecialItem(special);
-        shownPlasmaNetVisuals = (boolean) CurrentIndustry.exstraData.getBoolean(shownPlasmaNetVisualsName);
         if (shownPlasmaNetVisuals && (special == null || !special.getId().equals(Items.PLASMA_DYNAMO))) {
             unapplyVisuals(market.getPlanetEntity());
         }
@@ -151,7 +157,6 @@ public class MarketRetrofit_MiningInstance extends MarketRetrofits_DefaltInstanc
         if (special != null && special.getId().equals(Items.PLASMA_DYNAMO)) {
             applyVisuals(market.getPlanetEntity());
         }
-        CurrentIndustry.exstraData.addData(shownPlasmaNetVisualsName,shownPlasmaNetVisuals);
 
     }
 

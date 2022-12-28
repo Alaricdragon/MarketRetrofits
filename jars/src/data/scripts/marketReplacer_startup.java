@@ -17,7 +17,7 @@ import data.scripts.supplyDemandLibary.sets.MarketRetrofit_CCSetIndustry;
 public class marketReplacer_startup extends BaseModPlugin {
     @Override
     public void onApplicationLoad() {
-        //applyDefaultIndustryInstances();
+        applyDefaultIndustryInstances();
     }
 
     @Override
