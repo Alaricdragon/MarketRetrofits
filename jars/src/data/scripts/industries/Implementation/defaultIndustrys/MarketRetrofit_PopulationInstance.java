@@ -753,7 +753,7 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
             SpecialItemData item = ind == null ? null : ind.getSpecialItem();
             if (item == null || !item.getId().equals(Items.ORBITAL_FUSION_LAMP)) {
                 Misc.fadeAndExpire(lamp);
-                industry.exstraData.addData(lampName,null);//HERE data changed.
+                industry.getExstraData().addData(lampName,null);//HERE data changed.
                 //industry.lamp = null;
                 lamp = null;
             }

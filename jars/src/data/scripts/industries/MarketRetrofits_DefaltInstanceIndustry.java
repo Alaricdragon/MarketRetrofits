@@ -92,9 +92,123 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         this.upgradeId;
         this.upkeep;
         this.wasDisrupted;*/
+    /*/
+    public Object getData(String dataName){
+        switch (dataName){
+            case "market":
+                return market;
+            case "aiCoreId":
+                return aiCoreId;
+            case "buildCostOverride":
+                return buildCostOverride;
+            case "building":
+                return building;
+            case "buildProgress":
+                return buildProgress;
+            case "buildTime":
+                return buildTime;
+            case "currTooltipMode":
+                return currTooltipMode;
+            case "demand":
+                return demand;
+            case "demandReduction":
+                return demandReduction;
+            case "demandReductionFromOther":
+                return demandReductionFromOther;
+            case "dKey":
+                return dKey;
+            case "hasInstallableItems":
+                return hasInstallableItems;
+            case "hiddenOverride":
+                return hiddenOverride;
+            case "id":
+                return id;
+            case "improved":
+                return improved;
+            case "income":
+                return income;
+            case "spec":
+                return spec;
+            case "special":
+                return special;
+            case "supply":
+                return supply;
+            case "supplyBonus":
+                return supplyBonus;
+            case "supplyBonusFromOther":
+                return supplyBonusFromOther;
+            case "upgradeId":
+                return upgradeId;
+            case "upkeep":
+                return upkeep;
+            case "wasDisrupted":
+                return wasDisrupted;
+            default:
+                return CurrentIndustry.getExstraData().getData(dataName);
+        }
+    }
+    public void setData(String dataName,Object data){
+        switch (dataName){
+            case "market":
+                market = (MarketAPI) data;
+            case "aiCoreId":
+                aiCoreId = (String) data;
+            case "buildCostOverride":
+                buildCostOverride = (Float) data;
+            case "building":
+                building = (boolean) data;
+            case "buildProgress":
+                buildProgress = (float) data;
+            case "buildTime":
+                buildTime = (float) data;
+            case "currTooltipMode":
+                currTooltipMode = (IndustryTooltipMode) data;
+            case "demand":
+                demand = (Map<String, MutableCommodityQuantity>) data;
+            case "demandReduction":
+                demandReduction = (MutableStat) data;
+            case "demandReductionFromOther":
+                demandReductionFromOther = (MutableStat) data;
+            case "dKey":
+                dKey = (String) data;
+            case "hasInstallableItems":
+                hasInstallableItems = (Boolean) data;
+            case "hiddenOverride":
+                hiddenOverride = (Boolean) data;
+            case "id":
+                id = (String) data;
+            case "improved":
+                improved = (Boolean) data;
+            case "income":
+                income = (MutableStat) data;
+            case "spec":
+                spec = (IndustrySpecAPI) data;
+            case "special":
+                special = (SpecialItemData) data;
+            case "supply":
+                supply = (Map<String, MutableCommodityQuantity>) data;
+            case "supplyBonus":
+                supplyBonus = (MutableStat) data;
+            case "supplyBonusFromOther":
+                supplyBonusFromOther = (MutableStat) data;
+            case "upgradeId":
+                upgradeId = (String) data;
+            case "upkeep":
+                upkeep = (MutableStat) data;
+            case "wasDisrupted":
+                wasDisrupted = (boolean) data;
+            default:
+                CurrentIndustry.getExstraData().addData(dataName,data);
+        }
+    }
+    /**/
     public void IndustryDataCleanup(MarketRetrofit_BaseIndustry industryT){
         setBaseDataToIndustry(industryT);
-        setExtraDataToIndustry(industryT.exstraData);
+        setExtraDataToIndustry(industryT.getExstraData());
+    }
+    public void IndustryDataGet(MarketRetrofit_BaseIndustry industryT){
+        getBaseDataFromIndustry(industryT);
+        getExtraDataFromIndustry(industryT.getExstraData());
     }
     public void getBaseDataFromIndustry(MarketRetrofit_BaseIndustry industryT) {
         CurrentIndustry = industryT;
@@ -306,16 +420,16 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
 //		copy.supply = null;
 //		copy.demand = null;
 //		return copy;
-        clearUnmodified();
+        CurrentIndustry.clearUnmodified();
         setBaseDataToIndustry(CurrentIndustry);
         return CurrentIndustry;    }
 
     @Override
     public void apply(boolean withIncomeUpdate) {
-        updateSupplyAndDemandModifiers();
+        CurrentIndustry.updateSupplyAndDemandModifiers();
 
         if (withIncomeUpdate) {
-            updateIncomeAndUpkeep();
+            CurrentIndustry.updateIncomeAndUpkeep();
         }
 
         CurrentIndustry.applyAICoreModifiers();
@@ -343,7 +457,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
 
         Boolean wasImproved = improved;
         improved = null;
-        applyImproveModifiers(); // to unapply them
+        CurrentIndustry.applyImproveModifiers(); // to unapply them
         improved = wasImproved;
 
         if (CurrentIndustry instanceof MarketImmigrationModifier) {
@@ -392,15 +506,15 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     }
     @Override
     public void demand(String commodityId, int quantity) {
-        demand(0, commodityId, quantity, BASE_VALUE_TEXT);
+        CurrentIndustry.demand(0, commodityId, quantity, BASE_VALUE_TEXT);
     }
     @Override
     public void demand(String commodityId, int quantity, String desc) {
-        demand(0, commodityId, quantity, desc);
+        CurrentIndustry.demand(0, commodityId, quantity, desc);
     }
     @Override
     public void demand(int index, String commodityId, int quantity, String desc) {
-        demand(CurrentIndustry.getModId(index), commodityId, quantity, desc);
+        CurrentIndustry.demand(CurrentIndustry.getModId(index), commodityId, quantity, desc);
     }
     @Override
     public void demand(String modId, String commodityId, int quantity, String desc) {
@@ -410,30 +524,30 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         //quantity -= demandReduction;
         // want to apply negative numbers here so they add up with anything coming in from market conditions
         if (quantity == 0) {
-            getDemand(commodityId).getQuantity().unmodifyFlat(modId);
+            CurrentIndustry.getDemand(commodityId).getQuantity().unmodifyFlat(modId);
         } else {
-            getDemand(commodityId).getQuantity().modifyFlat(modId, quantity, desc);
+            CurrentIndustry.getDemand(commodityId).getQuantity().modifyFlat(modId, quantity, desc);
         }
 
         if (quantity > 0) {
             if (!demandReduction.isUnmodified()) {
-                getDemand(commodityId).getQuantity().modifyFlat("ind_dr", -demandReduction.getModifiedInt());
+                CurrentIndustry.getDemand(commodityId).getQuantity().modifyFlat("ind_dr", -demandReduction.getModifiedInt());
             } else {
-                getDemand(commodityId).getQuantity().unmodifyFlat("ind_dr");
+                CurrentIndustry.getDemand(commodityId).getQuantity().unmodifyFlat("ind_dr");
             }
         }
     }
     @Override
     public void supply(String commodityId, int quantity) {
-        supply(0, commodityId, quantity, BASE_VALUE_TEXT);
+        CurrentIndustry.supply(0, commodityId, quantity, BASE_VALUE_TEXT);
     }
     @Override
     public void supply(String commodityId, int quantity, String desc) {
-        supply(0, commodityId, quantity, desc);
+        CurrentIndustry.supply(0, commodityId, quantity, desc);
     }
     @Override
     public void supply(int index, String commodityId, int quantity, String desc) {
-        supply(CurrentIndustry.getModId(index), commodityId, quantity, desc);
+        CurrentIndustry.supply(CurrentIndustry.getModId(index), commodityId, quantity, desc);
     }
     @Override
     public void supply(String modId, String commodityId, int quantity, String desc) {
@@ -445,17 +559,17 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         //quantity += supplyBonus; doesn't work gets applied multiple times potentially
         // want to apply negative numbers here so they add up with anything coming in from market conditions
         if (quantity == 0) {
-            getSupply(commodityId).getQuantity().unmodifyFlat(modId);
+            CurrentIndustry.getSupply(commodityId).getQuantity().unmodifyFlat(modId);
         } else {
-            getSupply(commodityId).getQuantity().modifyFlat(modId, quantity, desc);
+            CurrentIndustry.getSupply(commodityId).getQuantity().modifyFlat(modId, quantity, desc);
         }
 
         if (quantity > 0) {
             //if (!getSupply(commodityId).getQuantity().isUnmodified()) {
             if (!supplyBonus.isUnmodified()) {
-                getSupply(commodityId).getQuantity().modifyFlat("ind_sb", supplyBonus.getModifiedInt());
+                CurrentIndustry.getSupply(commodityId).getQuantity().modifyFlat("ind_sb", supplyBonus.getModifiedInt());
             } else {
-                getSupply(commodityId).getQuantity().unmodifyFlat("ind_sb");
+                CurrentIndustry.getSupply(commodityId).getQuantity().unmodifyFlat("ind_sb");
             }
         }
         //getSupply(commodityId).getQuantity().unmodifyFlat("ind_sb");
@@ -466,8 +580,8 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
 //			if (this instanceof Mining && market.getName().equals("Louise")) {
 //				System.out.println("efwefwe");
 //			}
-            if (getSupply(commodity).getQuantity().isUnmodified()) continue;
-            supply(index, commodity, -deficit.two, CurrentIndustry.getDeficitText(deficit.one));
+            if (CurrentIndustry.getSupply(commodity).getQuantity().isUnmodified()) continue;
+            CurrentIndustry.supply(index, commodity, -deficit.two, CurrentIndustry.getDeficitText(deficit.one));
         }
     }
 
@@ -479,13 +593,13 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
 //	}
 @Override
     public void updateIncomeAndUpkeep() {
-        applyIncomeAndUpkeep(-1);
+        CurrentIndustry.applyIncomeAndUpkeep(-1);
     }
     @Override
     public void applyIncomeAndUpkeep(float sizeOverride) {
         float size = market.getSize();
         if (sizeOverride >= 0) size = sizeOverride;
-        float sizeMult = getSizeMult(size);
+        float sizeMult = CurrentIndustry.getSizeMult(size);
         sizeMult = Math.max(1, sizeMult - 2);
 
         float stabilityMult = market.getIncomeMult().getModifiedValue();
@@ -552,9 +666,9 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     @Override
     public float getBaseUpkeep() {
         float size = market.getSize();
-        float sizeMult = getSizeMult(size);
+        float sizeMult = CurrentIndustry.getSizeMult(size);
         sizeMult = Math.max(1, sizeMult - 2);
-        return getSpec().getUpkeep() * sizeMult;
+        return CurrentIndustry.getSpec().getUpkeep() * sizeMult;
     }
 
 //	public float getActualUpkeep() {
@@ -564,9 +678,9 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     public boolean wasDisrupted = false;
     @Override
     public void advance(float amount) {
-        boolean disrupted = isDisrupted();
+        boolean disrupted = CurrentIndustry.isDisrupted();
         if (!disrupted && wasDisrupted) {
-            disruptionFinished();
+            CurrentIndustry.disruptionFinished();
         }
         wasDisrupted = disrupted;
 
@@ -586,7 +700,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
             buildProgress += days;
 
             if (buildProgress >= buildTime) {
-                finishBuildingOrUpgrading();
+                CurrentIndustry.finishBuildingOrUpgrading();
             }
         }
 
@@ -605,8 +719,8 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     }
     @Override
     public boolean isFunctional() {
-        if (isDisrupted()) return false;
-        return !(isBuilding() && !isUpgrading());
+        if (CurrentIndustry.isDisrupted()) return false;
+        return !(CurrentIndustry.isBuilding() && !CurrentIndustry.isUpgrading());
     }
     @Override
     public boolean isUpgrading() {
@@ -614,17 +728,17 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     }
     @Override
     public float getBuildOrUpgradeProgress() {
-        if (isDisrupted()) {
+        if (CurrentIndustry.isDisrupted()) {
             return 0f;
         }
-        if (!isBuilding()) return 0f;
+        if (!CurrentIndustry.isBuilding()) return 0f;
 
         return Math.min(1f, buildProgress / buildTime);
     }
     @Override
     public String getBuildOrUpgradeDaysText() {
-        if (isDisrupted()) {
-            int left = (int) getDisruptedDays();
+        if (CurrentIndustry.isDisrupted()) {
+            int left = (int) CurrentIndustry.getDisruptedDays();
             if (left < 1) left = 1;
             String days = "days";
             if (left == 1) days = "day";
@@ -641,8 +755,8 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     }
     @Override
     public String getBuildOrUpgradeProgressText() {
-        if (isDisrupted()) {
-            int left = (int) getDisruptedDays();
+        if (CurrentIndustry.isDisrupted()) {
+            int left = (int) CurrentIndustry.getDisruptedDays();
             if (left < 1) left = 1;
             String days = "days";
             if (left == 1) days = "day";
@@ -660,7 +774,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
 //			return "building: " + (int)Math.round(buildProgress / buildTime * 100f) + "%";
 //		}
 
-        if (isUpgrading()) {
+        if (CurrentIndustry.isUpgrading()) {
             return "Upgrading: " + left + " " + days + " left";
         } else {
             return "Building: " + left + " " + days + " left";
@@ -685,7 +799,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
             market.addIndustry(upgradeId);
             MarketRetrofit_BaseIndustry industryTemp = (MarketRetrofit_BaseIndustry) market.getIndustry(upgradeId);//HERE. this was BaseIndustry
             industryTemp.setAICoreId(getAICoreId());
-            industryTemp.setImproved(isImproved());
+            industryTemp.setImproved(CurrentIndustry.isImproved());
             industryTemp.upgradeFinished(CurrentIndustry);
             industryTemp.reapply();
         } else {
@@ -784,7 +898,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     @Override
     public void sendBuildOrUpgradeMessage() {
         if (market.isPlayerOwned()) {
-            MessageIntel intel = new MessageIntel(getCurrentName() + " at " + market.getName(), Misc.getBasePlayerColor());
+            MessageIntel intel = new MessageIntel(CurrentIndustry.getCurrentName() + " at " + market.getName(), Misc.getBasePlayerColor());
             intel.addLine(BaseIntelPlugin.BULLET + "Construction completed");
             intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
             intel.setSound(BaseIntelPlugin.getSoundStandardUpdate());
@@ -794,14 +908,14 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     @Override
     public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
         if (aiCoreId != null && !forUpgrade) {
-            CargoAPI cargo = getCargoForInteractionMode(mode);
+            CargoAPI cargo = CurrentIndustry.getCargoForInteractionMode(mode);
             if (cargo != null) {
                 cargo.addCommodity(aiCoreId, 1);
             }
         }
 
         if (special != null && !forUpgrade) {
-            CargoAPI cargo = getCargoForInteractionMode(mode);
+            CargoAPI cargo = CurrentIndustry.getCargoForInteractionMode(mode);
             if (cargo != null) {
                 cargo.addSpecial(special, 1);
             }
@@ -937,7 +1051,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         Pair<String, Integer> result = new Pair<String, Integer>();
         result.two = 0;
         for (String id : commodityIds) {
-            int demand = (int) getDemand(id).getQuantity().getModifiedValue();
+            int demand = (int) CurrentIndustry.getDemand(id).getQuantity().getModifiedValue();
             CommodityOnMarketAPI com = market.getCommodityData(id);
             int available = com.getAvailable();
 
@@ -961,7 +1075,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     public List<Pair<String, Integer>> getAllDeficit(String ... commodityIds) {
         List<Pair<String, Integer>> result = new ArrayList<Pair<String,Integer>>();
         for (String id : commodityIds) {
-            int demand = (int) getDemand(id).getQuantity().getModifiedValue();
+            int demand = (int) CurrentIndustry.getDemand(id).getQuantity().getModifiedValue();
             CommodityOnMarketAPI com = market.getCommodityData(id);
             int available = com.getAvailable();
 
@@ -977,7 +1091,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     }
     @Override
     public float getSizeMult() {
-        return getSizeMult(market.getSize());
+        return CurrentIndustry.getSizeMult(market.getSize());
     }
 
     public static float getCommodityEconUnitMult(float size) {
@@ -1037,7 +1151,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     @Override
     public boolean isAvailableToBuild() {
         if (market.hasTag(Tags.MARKET_NO_INDUSTRIES_ALLOWED)) return false;
-        return market.hasIndustry(Industries.POPULATION) && !getId().equals(Industries.POPULATION);
+        return market.hasIndustry(Industries.POPULATION) && !CurrentIndustry.getId().equals(Industries.POPULATION);
     }
     @Override
     public boolean showWhenUnavailable() {
@@ -1107,8 +1221,8 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         CurrentIndustry.reapply();
 
         String type = "";
-        if (isIndustry()) type = " - Industry";
-        if (isStructure()) type = " - Structure";
+        if (CurrentIndustry.isIndustry()) type = " - Industry";
+        if (CurrentIndustry.isStructure()) type = " - Structure";
 
         tooltip.addTitle(CurrentIndustry.getCurrentName() + type, color);
 
@@ -1142,7 +1256,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
             // during the creation of the tooltip, the market has both the current industry
             // and the upgrade/downgrade. So if this upgrade/downgrade counts as an industry, it'd count double if
             // the current one is also an industry. Thus reduce num by 1 if that's the case.
-            if (isIndustry()) {
+            if (CurrentIndustry.isIndustry()) {
                 if (mode == Industry.IndustryTooltipMode.UPGRADE) {
                     for (Industry curr : market.getIndustries()) {
                         if (CurrentIndustry.getSpec().getId().equals(curr.getSpec().getUpgrade())) {
@@ -1197,7 +1311,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
 
         if (DebugFlags.COLONY_DEBUG || market.isPlayerOwned()) {
             if (mode == Industry.IndustryTooltipMode.NORMAL) {
-                if (CurrentIndustry.getSpec().getUpgrade() != null && !isBuilding()) {
+                if (CurrentIndustry.getSpec().getUpgrade() != null && !CurrentIndustry.isBuilding()) {
                     tooltip.addPara("Click to manage or upgrade", Misc.getPositiveHighlightColor(), opad);
                 } else {
                     tooltip.addPara("Click to manage", Misc.getPositiveHighlightColor(), opad);
@@ -1232,7 +1346,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
                 (mode == Industry.IndustryTooltipMode.ADD_INDUSTRY ||
                         mode == Industry.IndustryTooltipMode.UPGRADE ||
                         mode == Industry.IndustryTooltipMode.DOWNGRADE)) {
-            String reason = getUnavailableReason();
+            String reason = CurrentIndustry.getUnavailableReason();
             if (reason != null) {
                 tooltip.addPara(reason, bad, opad);
             }
@@ -1266,7 +1380,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
                     label.setHighlightColors(bad, highlight, highlight);
                 }
             } else if (mode == Industry.IndustryTooltipMode.DOWNGRADE) {
-                if (getSpec().getUpgrade() != null) {
+                if (CurrentIndustry.getSpec().getUpgrade() != null) {
                     float refundFraction = Global.getSettings().getFloat("industryRefundFraction");
 
                     //int cost = (int) (getBuildCost() * refundFraction);
@@ -1481,7 +1595,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         String [] industries = spec.getParams().split(",");
         Set<String> all = new HashSet<String>();
         for (String ind: industries) all.add(ind.trim());
-        return all.contains(getId());
+        return all.contains(CurrentIndustry.getId());
     }
 
 //	public boolean wantsToUseSpecialItem(SpecialItemData data) {
@@ -1742,7 +1856,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     }
     @Override
     public String getNameForModifier() {
-        return Misc.ucFirst(getCurrentName().toLowerCase());
+        return Misc.ucFirst(CurrentIndustry.getCurrentName().toLowerCase());
     }
     @Override
     public boolean isDemandLegal(CommodityOnMarketAPI com) {
@@ -1763,8 +1877,8 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     @Override
     public void initWithParams(List<String> params) {
         for (String str : params) {
-            if (isAICoreId(str)) {
-                setAICoreId(str);
+            if (CurrentIndustry.isAICoreId(str)) {
+                CurrentIndustry.setAICoreId(str);
                 break;
             }
         }
@@ -1779,7 +1893,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
             String [] industries = spec.getParams().split(",");
             Set<String> all = new HashSet<String>();
             for (String ind : industries) all.add(ind.trim());
-            if (all.contains(getId())) {
+            if (all.contains(CurrentIndustry.getId())) {
                 CurrentIndustry.setSpecialItem(new SpecialItemData(str, null));
             }
         }
@@ -1795,14 +1909,14 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     }
     @Override
     public void modifyStabilityWithBaseMod() {
-        int stabilityMod = getBaseStabilityMod();
-        int stabilityPenalty = getStabilityPenalty();
+        int stabilityMod = CurrentIndustry.getBaseStabilityMod();
+        int stabilityPenalty = CurrentIndustry.getStabilityPenalty();
         if (stabilityPenalty > stabilityMod) {
             stabilityPenalty = stabilityMod;
         }
         stabilityMod -= stabilityPenalty;
         if (stabilityMod > 0) {
-            market.getStability().modifyFlat(CurrentIndustry.getModId(), stabilityMod, getNameForModifier());
+            market.getStability().modifyFlat(CurrentIndustry.getModId(), stabilityMod, CurrentIndustry.getNameForModifier());
         }
 //		else if (stabilityMod < 0) {
 //			String str = getDeficitText(getStabilityAffectingDeficit().one);
@@ -1837,8 +1951,8 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
             stabilityPenalty = stabilityMod;
         }
 
-        String str = CurrentIndustry.getDeficitText(getStabilityAffectingDeficit().one);
-        fake.modifyFlat("1", stabilityMod, getNameForModifier());
+        String str = CurrentIndustry.getDeficitText(CurrentIndustry.getStabilityAffectingDeficit().one);
+        fake.modifyFlat("1", stabilityMod, CurrentIndustry.getNameForModifier());
         if (stabilityPenalty != 0) {
             fake.modifyFlat("2", -stabilityPenalty, str);
         }
@@ -1915,7 +2029,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         }
 
         if (!was) {
-            notifyDisrupted();
+            CurrentIndustry.notifyDisrupted();
         }
     }
     @Override
@@ -2060,7 +2174,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     }
     @Override
     public boolean isOther() {
-        return !CurrentIndustry.isIndustry() && !isStructure();
+        return !CurrentIndustry.isIndustry() && !CurrentIndustry.isStructure();
     }
     @Override
     public void notifyColonyRenamed() {
@@ -2191,7 +2305,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
                 Misc.getStoryDarkColor(), Alignment.MID, opad);
 
         tooltip.addSpacer(opad);
-        addImproveDesc(tooltip, Industry.ImprovementDescriptionMode.INDUSTRY_TOOLTIP);
+        CurrentIndustry.addImproveDesc(tooltip, Industry.ImprovementDescriptionMode.INDUSTRY_TOOLTIP);
 
 //		String noun = "industry";
 //		if (isStructure()) noun = "structure";
@@ -2234,7 +2348,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
                 if (spec.getNewPluginInstance(null) instanceof GenericSpecialItemPlugin) {
                     for (String id : spec.getParams().split(",")) {
                         id = id.trim();
-                        if (id.equals(getId())) {
+                        if (id.equals(CurrentIndustry.getId())) {
                             found = true;
                             break OUTER;
                         }

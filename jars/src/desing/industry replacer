@@ -1,6 +1,6 @@
 industry are extremely complicated. there is a lot of interaction going back and forwards here. this creates issues.
 
-currently working on issue 6.
+currently working on issue 7.
 
 status of default industry and base industry:
     (current)
@@ -30,6 +30,33 @@ status of default industry and base industry:
                 issue is this causes issues. my current theory is that i should just run a super there, then run exstra data from active instance.
             5) i change active instance every function. this can cause issues when things are not unaplyed right.
             6) IMPORTANT: MarketRetrofits_DefaultInstanceIndustry does not call all its functions from CurrentIndustry.
+            7) IMPORTANT: data handling error:
+                data is gotten at the start of every function and set at the end of every function.
+                issue: 2 functions. one that you call first, then calls a second function.
+                second function changes data, then sets it.
+                first function finishes running, overwrites data, and sets it.
+            7.a) what instance industry / default instance industry is active again?
+                i need to get what industry is active before i can set and get data.
+                should be simple:
+            7.b) i was using the wrong functions for getting / sending data.
+                i should use / replace:
+                    IndustryDataCleanup(this);
+                    IndustryDataGet(industry);
+
+            8) IMPORTANT: industry get data error
+                right now all MarketRetrofitBaseIndustry function are ran through getActiveInstance.
+                getActiveInstance sets a instance data to current industry.
+                get data from instance runs through this...
+                AAAAAAA
+                -NOTE: data passing between instance industry and default industry:
+                    so i don't know when i get data from a default industry or a active one, simply because
+                    i need to comunacate that somehow.
+                    theory:
+                        create a function in instance industry that sends, then gets data from default industry.
+                        this would mean that any data gotten would be instantly sent no no n on o n on no no no no
+                        issue:
+                            function can run from default industry, calling the data ladder, then trying to set data to
+                            default instance.
 
         solutions:
             2)
@@ -41,12 +68,40 @@ status of default industry and base industry:
             5) make it so i only change my 'active industry' only after i run apply / init with parms.
                 whatever one comes first, really.
             6) make it call all its functions from Current industry.
-                im surching by each functions right now. im on:
-                demand: line 394
-        incomplete:
-            1) for 2 of the current plan, i cant store or set custom data yet. only existing data can be set right now.
-            2) right now i have no way to automatically get and set any extra data that i create
+                done. all functions added
+            7) this will require a solution to run cleanly..
+                things that help: every function this apply to will run through the CurrentIndustry.
+                theory: have 2 sets of memory, + active instance?
+                theory: a list of 'last instance' to save data to.
+                    1) when a instance is set to run, add instance to list
+                    2) when new instance is gotten, get data from last inputted last instance
+                    3) when a instance stops running, get data from last instance, and apply it to second last instance
+                        -set the first instance to be the memory of the current industry.
+                        -issue: possible memory leak: some functions call from baseIndustry.speck, and not from base industry.
+                                this means that the list will increase in size forever in some cases... this is a issue
+                                can be mitigated by making.....
+            7.a) how to do this?
+                simple, reverse order of getData and getExtraData.
+                have getExtraData and setExtraData return the the the the the the the the issue.
+                this is already available though. it has to be to run the code..
+                not what im looking for.
+                already available data exists. data is attached to different things...
+                the only times i can get confused are when a instance industry calls a default.
+                i will already be running the data through there. save the industry as i increase the ladder.
+                then pass the data on as i reduce the ladder.
 
+            7.b) incorrect functions edited. edits undone.
+                IndustryDataCleanup(this);
+                IndustryDataGet(industry);
+                1) remove all uses of said functions.
+                2) create and run 2 MarketRetrofitBaseIndustry functions, to replace said functions.
+                3) functions should be able to get/set data from/to saved instance industry's, or the baseIndustry itself, if required.
+
+            8) this will require a messy solution:
+                when getting running a default industry from a instance industry, call the data with the function that
+                were made in solutions 7. this will raise the item up the ladder a little, letting data be sent back and forth
+                to and from the default instance to the instance industry.
+        incomplete:
 
         ISSUE:
             different data types might require a different way to get them from null.

@@ -145,7 +145,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
         super.buildingFinished();
         tracker = getOrSetTraker();//(IntervalUtil) CurrentIndustry.getDataOther(trackerName);
         tracker.forceIntervalElapsed();
-        CurrentIndustry.exstraData.addData(trackerName,tracker);
+        CurrentIndustry.getExstraData().addData(trackerName,tracker);
     }
 
     @Override
@@ -153,7 +153,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
         super.upgradeFinished(previous);
         tracker = getOrSetTraker();//(IntervalUtil) CurrentIndustry.getDataOther(trackerName);
         tracker.forceIntervalElapsed();
-        CurrentIndustry.exstraData.addData(trackerName,tracker);
+        CurrentIndustry.getExstraData().addData(trackerName,tracker);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
 
         if (!CurrentIndustry.isFunctional()) return;
 
-        returningPatrolValue = (float) CurrentIndustry.exstraData.getFloat(returningPatrolValueName);
+        returningPatrolValue = (float) CurrentIndustry.getExstraData().getFloat(returningPatrolValueName);
         tracker = getOrSetTraker();//(IntervalUtil) CurrentIndustry.getDataOther(trackerName);
         if(returningPatrolValue == 0){
             returningPatrolValue = 0f;
@@ -183,7 +183,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
             extraTime = interval * days;
             returningPatrolValue -= days;
             if (returningPatrolValue < 0) returningPatrolValue = 0;
-            CurrentIndustry.exstraData.addData("returningPatrolValue",returningPatrolValue);
+            CurrentIndustry.getExstraData().addData("returningPatrolValue",returningPatrolValue);
         }
         tracker.advance(days * spawnRate + extraTime);
 
@@ -206,7 +206,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
             picker.add(FleetFactory.PatrolType.FAST, maxLight - light);
 
             if (picker.isEmpty()) {
-                CurrentIndustry.exstraData.addData(trackerName,tracker);
+                CurrentIndustry.getExstraData().addData(trackerName,tracker);
                 return;}
 
             FleetFactory.PatrolType type = picker.pick();
@@ -220,7 +220,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
 
             route.addSegment(new RouteManager.RouteSegment(patrolDays, market.getPrimaryEntity()));
         }
-        CurrentIndustry.exstraData.addData(trackerName,tracker);
+        CurrentIndustry.getExstraData().addData(trackerName,tracker);
     }
     @Override
     public void reportAboutToBeDespawnedByRouteManager(RouteData route) {
@@ -277,9 +277,9 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
                 PatrolFleetData custom = (PatrolFleetData) route.getCustom();
                 if (custom.spawnFP > 0) {
                     float fraction  = fleet.getFleetPoints() / custom.spawnFP;
-                    returningPatrolValue = (float) CurrentIndustry.exstraData.getFloat(returningPatrolValueName);
+                    returningPatrolValue = (float) CurrentIndustry.getExstraData().getFloat(returningPatrolValueName);
                     returningPatrolValue += fraction;
-                    CurrentIndustry.exstraData.addData(returningPatrolValueName,returningPatrolValue);
+                    CurrentIndustry.getExstraData().addData(returningPatrolValueName,returningPatrolValue);
                 }
             }
         }
@@ -411,7 +411,7 @@ public class MarketRetrofit_LionsGuardHQInstance extends MarketRetrofits_DefaltI
     }
 
     private IntervalUtil getOrSetTraker(){
-        IntervalUtil temp = (IntervalUtil) CurrentIndustry.exstraData.getData(trackerName);
+        IntervalUtil temp = (IntervalUtil) CurrentIndustry.getExstraData().getData(trackerName);
         if(temp == null){
             return new IntervalUtil(Global.getSettings().getFloat("averagePatrolSpawnInterval") * 0.7f,
                     Global.getSettings().getFloat("averagePatrolSpawnInterval") * 1.3f);

@@ -300,12 +300,12 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         super.upgradeFinished(previous);
         if (previous instanceof MarketRetrofit_BaseIndustry) {
             MarketRetrofit_BaseIndustry prev = (MarketRetrofit_BaseIndustry) previous;
-            if(prev.exstraData.getData(stationEntityName) == null && prev.exstraData.getData(stationFleetName) == null){//HERE. this loop is added by me, to 'hopefully' filter out some bad data
+            if(prev.getExstraData().getData(stationEntityName) == null && prev.getExstraData().getData(stationFleetName) == null){//HERE. this loop is added by me, to 'hopefully' filter out some bad data
                 return;
             }
-            stationEntity = (SectorEntityToken) prev.exstraData.getData(stationEntityName);
-            stationFleet = (CampaignFleetAPI) prev.exstraData.getData(stationFleetName);
-            usingExistingStation = (boolean) prev.exstraData.getBoolean(usingExistingStationName);
+            stationEntity = (SectorEntityToken) prev.getExstraData().getData(stationEntityName);
+            stationFleet = (CampaignFleetAPI) prev.getExstraData().getData(stationFleetName);
+            usingExistingStation = (boolean) prev.getExstraData().getBoolean(usingExistingStationName);
 
             if (stationFleet != null) {
                 stationFleet.removeEventListener(prev);

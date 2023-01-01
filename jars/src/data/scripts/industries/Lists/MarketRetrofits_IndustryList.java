@@ -41,14 +41,17 @@ public class MarketRetrofits_IndustryList {
         for(MarketRetrofits_DefaltInstanceIndustry a: sets){
             if(a.canImply(market)){
                 //a.init(IDT,market);
-                a.getBaseDataFromIndustry(industry);
-                a.getExtraDataFromIndustry(industry.exstraData);
+                a.IndustryDataGet(industry);
+                //a.getBaseDataFromIndustry(industry);
+                //a.getExtraDataFromIndustry(industry.getExstraData());
                 return a;
             }
         }
         //defaultInstance.init(IDT,market);
+        defaultInstance.IndustryDataGet(industry);
+        /*
         defaultInstance.getBaseDataFromIndustry(industry);
-        defaultInstance.getExtraDataFromIndustry(industry.exstraData);
+        defaultInstance.getExtraDataFromIndustry(industry.getExstraData());*/
         return defaultInstance;
     }
 }
