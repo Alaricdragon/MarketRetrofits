@@ -7,7 +7,7 @@ public class MarketRetorfits_ExstraData {
 
     private ArrayList<String> extraDataName = new ArrayList<String>();
     private ArrayList<Object> extraData = new ArrayList<Object>();
-    MarketRetorfits_ExstraData(){}
+    public MarketRetorfits_ExstraData(){}
 
     public void addData(String dataName,Object data){
         for(int a = 0; a < extraDataName.size(); a++){

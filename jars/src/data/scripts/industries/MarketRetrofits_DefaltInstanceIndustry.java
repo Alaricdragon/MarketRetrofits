@@ -46,8 +46,9 @@ import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryList;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryMasterList;
+import data.scripts.industries.base.MarketRetrofit_IndustryDataExstange;
 
-public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
+public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_IndustryDataExstange {
 
     public static int SIZE_FOR_SMALL_IMAGE = 3;
     public static int SIZE_FOR_LARGE_IMAGE = 6;
@@ -64,154 +65,16 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     public float order;
     public MarketRetrofits_IndustryList industryGroup = null;
     public MarketRetrofit_BaseIndustry CurrentIndustry;
-    /*
-        this.aiCoreId;
-        this.buildCostOverride;
-        this.building;
-        this.buildProgress;
-        this.buildProgress;
 
-        this.buildTime;
-        this.currTooltipMode;
-        this.demand;
-        this.demandReduction;
-
-        this.demandReductionFromOther;
-        this.dKey;
-        this.hasInstallableItems;
-        this.hiddenOverride;
-        this.id;
-        this.improved;
-
-        this.income;
-        this.spec;
-        this.special;
-        this.supply;
-        this.supplyBonus;
-        this.supplyBonusFromOther;
-        this.upgradeId;
-        this.upkeep;
-        this.wasDisrupted;*/
-    /*/
-    public Object getData(String dataName){
-        switch (dataName){
-            case "market":
-                return market;
-            case "aiCoreId":
-                return aiCoreId;
-            case "buildCostOverride":
-                return buildCostOverride;
-            case "building":
-                return building;
-            case "buildProgress":
-                return buildProgress;
-            case "buildTime":
-                return buildTime;
-            case "currTooltipMode":
-                return currTooltipMode;
-            case "demand":
-                return demand;
-            case "demandReduction":
-                return demandReduction;
-            case "demandReductionFromOther":
-                return demandReductionFromOther;
-            case "dKey":
-                return dKey;
-            case "hasInstallableItems":
-                return hasInstallableItems;
-            case "hiddenOverride":
-                return hiddenOverride;
-            case "id":
-                return id;
-            case "improved":
-                return improved;
-            case "income":
-                return income;
-            case "spec":
-                return spec;
-            case "special":
-                return special;
-            case "supply":
-                return supply;
-            case "supplyBonus":
-                return supplyBonus;
-            case "supplyBonusFromOther":
-                return supplyBonusFromOther;
-            case "upgradeId":
-                return upgradeId;
-            case "upkeep":
-                return upkeep;
-            case "wasDisrupted":
-                return wasDisrupted;
-            default:
-                return CurrentIndustry.getExstraData().getData(dataName);
-        }
-    }
-    public void setData(String dataName,Object data){
-        switch (dataName){
-            case "market":
-                market = (MarketAPI) data;
-            case "aiCoreId":
-                aiCoreId = (String) data;
-            case "buildCostOverride":
-                buildCostOverride = (Float) data;
-            case "building":
-                building = (boolean) data;
-            case "buildProgress":
-                buildProgress = (float) data;
-            case "buildTime":
-                buildTime = (float) data;
-            case "currTooltipMode":
-                currTooltipMode = (IndustryTooltipMode) data;
-            case "demand":
-                demand = (Map<String, MutableCommodityQuantity>) data;
-            case "demandReduction":
-                demandReduction = (MutableStat) data;
-            case "demandReductionFromOther":
-                demandReductionFromOther = (MutableStat) data;
-            case "dKey":
-                dKey = (String) data;
-            case "hasInstallableItems":
-                hasInstallableItems = (Boolean) data;
-            case "hiddenOverride":
-                hiddenOverride = (Boolean) data;
-            case "id":
-                id = (String) data;
-            case "improved":
-                improved = (Boolean) data;
-            case "income":
-                income = (MutableStat) data;
-            case "spec":
-                spec = (IndustrySpecAPI) data;
-            case "special":
-                special = (SpecialItemData) data;
-            case "supply":
-                supply = (Map<String, MutableCommodityQuantity>) data;
-            case "supplyBonus":
-                supplyBonus = (MutableStat) data;
-            case "supplyBonusFromOther":
-                supplyBonusFromOther = (MutableStat) data;
-            case "upgradeId":
-                upgradeId = (String) data;
-            case "upkeep":
-                upkeep = (MutableStat) data;
-            case "wasDisrupted":
-                wasDisrupted = (boolean) data;
-            default:
-                CurrentIndustry.getExstraData().addData(dataName,data);
-        }
-    }
-    /**/
-    public void IndustryDataCleanup(MarketRetrofit_BaseIndustry industryT){
+    public void IndustryDataCleanup(MarketRetrofit_IndustryDataExstange industryT){
         setBaseDataToIndustry(industryT);
         setExtraDataToIndustry(industryT.getExstraData());
     }
-    public void IndustryDataGet(MarketRetrofit_BaseIndustry industryT){
+    public void IndustryDataGet(MarketRetrofit_IndustryDataExstange industryT){
         getBaseDataFromIndustry(industryT);
         getExtraDataFromIndustry(industryT.getExstraData());
     }
-    public void getBaseDataFromIndustry(MarketRetrofit_BaseIndustry industryT) {
-        CurrentIndustry = industryT;
+    public void getBaseDataFromIndustry(MarketRetrofit_IndustryDataExstange industryT) {
         //a = industry.getData("a");
         this.aiCoreId = (String) CurrentIndustry.getData("aiCoreId");
         this.buildCostOverride = (Float) CurrentIndustry.getData("buildCostOverride");
@@ -241,8 +104,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         this.wasDisrupted = (boolean) CurrentIndustry.getData("wasDisrupted");
         //get data from industry
     }
-    public void setBaseDataToIndustry(MarketRetrofit_BaseIndustry industryT) {
-        CurrentIndustry = industryT;
+    public void setBaseDataToIndustry(MarketRetrofit_IndustryDataExstange industryT) {
         CurrentIndustry.setData("aiCoreId",this.aiCoreId);
         CurrentIndustry.setData("buildCostOverride",this.buildCostOverride);
         CurrentIndustry.setData("building",this.building);
@@ -299,7 +161,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
     //this class requires every single function held in baseIndustry, as well as an an function to determon if its active or not.
     public boolean Active = true;
 
-    public boolean canImply(MarketAPI market) {
+    public boolean canImply(MarketAPI market,MarketRetrofit_BaseIndustry industry) {
         return Active;
     }
 
@@ -377,7 +239,6 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         //DATA CHANGE
         //industry.setData("id",id);
         this.id = id;
-        //industry.setData("market",market);
         this.market = market;
         CurrentIndustry.readResolve();
     }
@@ -1884,9 +1745,6 @@ public class MarketRetrofits_DefaltInstanceIndustry extends BaseIndustry{
         }
 
         for (String str : params) {
-//			if (Items.PRISTINE_NANOFORGE.equals(str)) {
-//				System.out.println("wefwefew");
-//			}
             SpecialItemSpecAPI spec = Global.getSettings().getSpecialItemSpec(str);
             if (spec == null) continue;
 

@@ -1,6 +1,7 @@
 industry are extremely complicated. there is a lot of interaction going back and forwards here. this creates issues.
 
-currently working on issue 7.
+finished issue 8.
+this required testing.
 
 status of default industry and base industry:
     (current)
@@ -57,6 +58,13 @@ status of default industry and base industry:
                         issue:
                             function can run from default industry, calling the data ladder, then trying to set data to
                             default instance.
+            9) the clone class.
+                what is clone? what does it do? i have no flipping clue
+                current theory, is its were i create more instances of a industry
+            10) currently, there is no way to change what the active instance is in baseIndustry.
+            11) currently, everything in the CSV file is linked to different files. this might be unrequierd.
+            12) currently, its possible to set a instance industry to be a default instance. make the game crash if you try.
+            13) data is trying to set null to MarketRetrofits_baseIndustry
 
         solutions:
             2)
@@ -101,6 +109,11 @@ status of default industry and base industry:
                 when getting running a default industry from a instance industry, call the data with the function that
                 were made in solutions 7. this will raise the item up the ladder a little, letting data be sent back and forth
                 to and from the default instance to the instance industry.
+            9) run tests
+            10) find the ideal spot(s) to change ActiveInstance to null. next time the industry tres to get the instance, it will change it to whatever the currently active instance is.
+            11) link everything to MarketRetrofitsBaseIndustry. see if it works.
+            12) create a error handler.
+            13) don't add data in case of null?
         incomplete:
 
         ISSUE:
