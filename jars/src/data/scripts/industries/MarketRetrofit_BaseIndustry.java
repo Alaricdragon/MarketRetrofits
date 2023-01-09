@@ -11,6 +11,7 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Pair;
+import data.scripts.MarketRetrofits_Logger;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryMasterList;
 import data.scripts.industries.base.MarketRetrofit_IndustryDataExstange;
 
@@ -43,28 +44,42 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
 
     public void applyDataToInstance(MarketRetrofits_DefaltInstanceIndustry a){
-        //MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
+        MarketRetrofits_Logger.logging("running applyDataToInstance in: " + this,this);
+        MarketRetrofits_Logger.logging("    size: " + pastIndustrys.size(),this);
         a.CurrentIndustry = this;
         a.exstraData = this.exstraData;
         if(pastIndustrys.size() == 0){
-            a.IndustryDataGet(this);
+            MarketRetrofits_Logger.logging("    getting data from BaseIndustry",this);
+            a.IndustryDataGet(this,this);
             pastIndustrys.add(a);
             return;
         }
-        a.IndustryDataGet(pastIndustrys.get(pastIndustrys.size() - 1));
+        MarketRetrofits_DefaltInstanceIndustry b = pastIndustrys.get(pastIndustrys.size() - 1);
+        MarketRetrofits_Logger.logging("    getting data from: " + b,this);
+        //if(!b.equals(a)) {
+            a.IndustryDataGet(b);
+        //}
         pastIndustrys.add(a);
     }
     public void getDataFromInstance(MarketRetrofits_DefaltInstanceIndustry a){
-        //MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
+        MarketRetrofits_Logger.logging("running getDataFromInstance in: " + this,this);
+        MarketRetrofits_Logger.logging("    size: " + pastIndustrys.size(),this);
         a.CurrentIndustry = this;
         a.exstraData = this.exstraData;
 
         if(pastIndustrys.size() <= 1){
+            MarketRetrofits_Logger.logging("    setting data to BaseIndustry",this);
             a.IndustryDataCleanup(this);
-            pastIndustrys.remove(pastIndustrys.size() - 1);
+            if(pastIndustrys.size() != 0) {
+                pastIndustrys.remove(pastIndustrys.size() - 1);
+            }
             return;
         }
-        a.IndustryDataCleanup(pastIndustrys.get(pastIndustrys.size() - 1));
+        MarketRetrofits_DefaltInstanceIndustry b = pastIndustrys.get(pastIndustrys.size() - 1);
+        MarketRetrofits_Logger.logging("    setting data to: " + b,this);
+        //if(!b.equals(a)) {
+            a.IndustryDataCleanup(b);
+        //}
         pastIndustrys.remove(pastIndustrys.size() - 1);
     }
     @Override

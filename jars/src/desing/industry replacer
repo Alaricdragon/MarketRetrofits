@@ -2,7 +2,23 @@ industry are extremely complicated. there is a lot of interaction going back and
 
 finished issue 8.
 this required testing.
+testing status:
+    random crash on:
+        MarketRetrofits_DefaltInstanceIndustry: finishBuildingOrUpgrading(): market.addIndustry(upgradeId);
+            issues: upgradeId is null. should be impossable.
 
+        MarketRetrofit_OrbitalStationInstance: matchStationAndCommanderToCurrentIndustry: line: 457;
+            issues: im getting not null from Strings
+            issues: im not setting the data to default on instances i get null.
+
+        MarketRetrofits_DefaltInstanceIndustry.applyIncomeAndUpkeep(MarketRetrofits_DefaltInstanceIndustry.java:474):
+            issues:? Curentindustry.getSpec is returning null maybe?
+            issues: getSpec() is null. id is null. all data is null. need to find the reason why!
+
+    lag on: load game:
+        reason? data transfer. its very slow. might need to gass gass gass
+    understood bugs:
+        1) when running another function from MArketRetrofit_BaseIndustry, there is a chance to get the -wrong data- replayed to itself.
 status of default industry and base industry:
     (current)
         current plan(complete):

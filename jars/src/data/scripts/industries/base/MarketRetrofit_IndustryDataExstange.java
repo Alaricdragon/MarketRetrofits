@@ -14,6 +14,7 @@ import java.util.Map;
 
 public class MarketRetrofit_IndustryDataExstange extends BaseIndustry{
     public MarketRetorfits_ExstraData exstraData = new MarketRetorfits_ExstraData();
+    public MarketRetrofit_BaseIndustry CurrentIndustry;
     public Object getData(String dataName){
         //pastIndustrys.add(CurrentInstance);
         //if(pastIndustrys.size() <= 1){
@@ -115,54 +116,79 @@ public class MarketRetrofit_IndustryDataExstange extends BaseIndustry{
         switch (dataName){
             case "market":
                 this.market = (MarketAPI) data;
+                break;
             case "aiCoreId":
                 this.aiCoreId = (String) data;
+                break;
             case "buildCostOverride":
                 this.buildCostOverride = (Float) data;
+                break;
             case "building":
                 this.building = (boolean) data;
+                break;
             case "buildProgress":
                 this.buildProgress = (float) data;
+                break;
             case "buildTime":
                 this.buildTime = (float) data;
+                break;
             case "currTooltipMode":
                 this.currTooltipMode = (Industry.IndustryTooltipMode) data;
+                break;
             case "demand":
                 this.demand = (Map<String, MutableCommodityQuantity>) data;
+                break;
             case "demandReduction":
                 this.demandReduction = (MutableStat) data;
+                break;
             case "demandReductionFromOther":
                 this.demandReductionFromOther = (MutableStat) data;
+                break;
             case "dKey":
                 this.dKey = (String) data;
+                break;
             case "hasInstallableItems":
                 this.hasInstallableItems = (Boolean) data;
+                break;
             case "hiddenOverride":
                 this.hiddenOverride = (Boolean) data;
+                break;
             case "id":
                 this.id = (String) data;
+                break;
             case "improved":
                 this.improved = (Boolean) data;
+                break;
             case "income":
                 this.income = (MutableStat) data;
+                break;
             case "spec":
                 this.spec = (IndustrySpecAPI) data;
+                break;
             case "special":
                 this.special = (SpecialItemData) data;
+                break;
             case "supply":
                 this.supply = (Map<String, MutableCommodityQuantity>) data;
+                break;
             case "supplyBonus":
                 this.supplyBonus = (MutableStat) data;
+                break;
             case "supplyBonusFromOther":
                 this.supplyBonusFromOther = (MutableStat) data;
+                break;
             case "upgradeId":
                 this.upgradeId = (String) data;
+                break;
             case "upkeep":
                 this.upkeep = (MutableStat) data;
+                break;
             case "wasDisrupted":
                 this.wasDisrupted = (boolean) data;
+                break;
             default:
                 this.exstraData.addData(dataName,data);
+                break;
         }
     }
 

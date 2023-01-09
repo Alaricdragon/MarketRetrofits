@@ -1,7 +1,9 @@
 package data.scripts;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.campaign.econ.Market;
 import data.scripts.industries.Implementation.defaultIndustrys.*;
+import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.listiners.marketRetrofit_marketInteractionListiner;
 import data.scripts.listiners.marketRetrofit_marketListiner;
 import data.scripts.supplyDemandLibary.base.MarketRetrofit_CCSetBase;
@@ -17,6 +19,16 @@ import data.scripts.supplyDemandLibary.sets.MarketRetrofit_CCSetIndustry;
 public class marketReplacer_startup extends BaseModPlugin {
     @Override
     public void onApplicationLoad() {
+        /*MarketRetrofits_Logger.logging("trying to see if object returns null",this);
+        MarketRetorfits_ExstraData a = new MarketRetorfits_ExstraData();
+        String b = null;
+        a.addData("a",b);
+        b = (String) a.getData("a");
+        if(b != null) {
+            MarketRetrofits_Logger.logging("not null",this);
+        }else if(b.equals(null)){
+            MarketRetrofits_Logger.logging("is null",this);
+        }*/
         applyDefaultIndustryInstances();
     }
 
