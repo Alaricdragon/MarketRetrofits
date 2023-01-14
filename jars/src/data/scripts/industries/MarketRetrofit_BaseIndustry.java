@@ -44,31 +44,32 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
 
     public void applyDataToInstance(MarketRetrofits_DefaltInstanceIndustry a){
-        MarketRetrofits_Logger.logging("running applyDataToInstance in: " + this,this);
-        MarketRetrofits_Logger.logging("    size: " + pastIndustrys.size(),this);
+        //MarketRetrofits_Logger.logging("running applyDataToInstance in: " + this,this);
+        //MarketRetrofits_Logger.logging("    size: " + pastIndustrys.size(),this);
         a.CurrentIndustry = this;
         a.exstraData = this.exstraData;
         if(pastIndustrys.size() == 0){
-            MarketRetrofits_Logger.logging("    getting data from BaseIndustry",this);
+            //MarketRetrofits_Logger.logging("    getting data from BaseIndustry",this);
+            //readData("from base industry: ");
             a.IndustryDataGet(this,this);
             pastIndustrys.add(a);
             return;
         }
         MarketRetrofits_DefaltInstanceIndustry b = pastIndustrys.get(pastIndustrys.size() - 1);
-        MarketRetrofits_Logger.logging("    getting data from: " + b,this);
+        //MarketRetrofits_Logger.logging("    getting data from: " + b,this);
         //if(!b.equals(a)) {
             a.IndustryDataGet(b);
         //}
         pastIndustrys.add(a);
     }
     public void getDataFromInstance(MarketRetrofits_DefaltInstanceIndustry a){
-        MarketRetrofits_Logger.logging("running getDataFromInstance in: " + this,this);
-        MarketRetrofits_Logger.logging("    size: " + pastIndustrys.size(),this);
+        //MarketRetrofits_Logger.logging("running getDataFromInstance in: " + this,this);
+        //MarketRetrofits_Logger.logging("    size: " + pastIndustrys.size(),this);
         a.CurrentIndustry = this;
         a.exstraData = this.exstraData;
 
         if(pastIndustrys.size() <= 1){
-            MarketRetrofits_Logger.logging("    setting data to BaseIndustry",this);
+            //MarketRetrofits_Logger.logging("    setting data to BaseIndustry",this);
             a.IndustryDataCleanup(this);
             if(pastIndustrys.size() != 0) {
                 pastIndustrys.remove(pastIndustrys.size() - 1);
@@ -76,7 +77,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
             return;
         }
         MarketRetrofits_DefaltInstanceIndustry b = pastIndustrys.get(pastIndustrys.size() - 1);
-        MarketRetrofits_Logger.logging("    setting data to: " + b,this);
+        //MarketRetrofits_Logger.logging("    setting data to: " + b,this);
         //if(!b.equals(a)) {
             a.IndustryDataCleanup(b);
         //}

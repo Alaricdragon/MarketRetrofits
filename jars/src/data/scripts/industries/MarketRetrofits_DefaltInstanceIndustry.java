@@ -44,6 +44,7 @@ import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import com.fs.starfarer.campaign.econ.Market;
 import data.scripts.MarketRetrofits_Logger;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryList;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryMasterList;
@@ -71,85 +72,33 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
         setBaseDataToIndustry(industryT);
         setExtraDataToIndustry(industryT.getExstraData());
         setOtherDataIternal(industryT);
+
+        //MarketRetrofits_Logger.logging("IndustryDataCleanup: reading data after cleanup",this);
+        //readData("");
     }
     //secondary, so i dont have to set a CurrentIndustry in BaseIndustry
     public void IndustryDataGet(MarketRetrofit_IndustryDataExstange industryT,MarketRetrofit_BaseIndustry CurrentIndustryT){
         getBaseDataFromIndustry(industryT);
         getExtraDataFromIndustry(industryT.getExstraData());
         getOtherDataIternal(industryT.getExstraData(),CurrentIndustryT);
+
+        //MarketRetrofits_Logger.logging("IndustryDataGet: reading data after getting said data",this);
+        //readData("");
     }
     //primary, for other instances.
     public void IndustryDataGet(MarketRetrofit_IndustryDataExstange industryT){
+        IndustryDataGet(industryT,industryT.CurrentIndustry);
+        /*
         getBaseDataFromIndustry(industryT);
         getExtraDataFromIndustry(industryT.getExstraData());
-        getOtherDataIternal(industryT.getExstraData(),industryT.CurrentIndustry);
+        getOtherDataIternal(industryT.getExstraData(),industryT.CurrentIndustry);*/
     }
-    public void getBaseDataFromIndustry(MarketRetrofit_IndustryDataExstange industryT) {
-        /*this.CurrentIndustry = industryT.CurrentIndustry;
-        this.exstraData = industryT.exstraData;*/
-        //a = industry.getData("a");
-        this.aiCoreId = (String) industryT.getData("aiCoreId");
-        this.buildCostOverride = (Float) industryT.getData("buildCostOverride");
-        this.building = (boolean) industryT.getData("building");
-        this.buildProgress = (float) industryT.getData("buildProgress");
 
-        this.buildTime = (float) industryT.getData("buildTime");
-        this.currTooltipMode = (Industry.IndustryTooltipMode) industryT.getData("currTooltipMode");
-        this.demand = (Map<String, MutableCommodityQuantity>) industryT.getData("demand");
-        this.demandReduction = (MutableStat) industryT.getData("demandReduction");
-
-        this.demandReductionFromOther = (MutableStat) industryT.getData("demandReductionFromOther");
-        this.dKey = (String) industryT.getData("dKey");
-        this.hasInstallableItems = (Boolean) industryT.getData("hasInstallableItems");
-        this.hiddenOverride = (Boolean) industryT.getData("hiddenOverride");
-        this.id = (String) industryT.getData("id");
-        this.improved = (Boolean) industryT.getData("improved");
-
-        this.income = (MutableStat) industryT.getData("income");
-        this.spec = (IndustrySpecAPI) industryT.getData("spec");
-        this.special = (SpecialItemData) industryT.getData("special");
-        this.supply = (Map<String, MutableCommodityQuantity>) industryT.getData("supply");
-        this.supplyBonus = (MutableStat) industryT.getData("supplyBonus");
-        this.supplyBonusFromOther = (MutableStat) industryT.getData("supplyBonusFromOther");
-        this.upgradeId = (String) industryT.getData("upgradeId");
-        this.upkeep = (MutableStat) industryT.getData("upkeep");
-        this.wasDisrupted = (boolean) industryT.getData("wasDisrupted");
-        //get data from industry
-    }
-    public void setBaseDataToIndustry(MarketRetrofit_IndustryDataExstange industryT) {
-        industryT.setData("aiCoreId",this.aiCoreId);
-        industryT.setData("buildCostOverride",this.buildCostOverride);
-        industryT.setData("building",this.building);
-        industryT.setData("buildProgress",this.buildProgress);
-
-        industryT.setData("buildTime",this.buildTime);
-        industryT.setData("currTooltipMode",this.currTooltipMode);
-        industryT.setData("demand",this.demand);
-        industryT.setData("demandReduction",this.demandReduction);
-
-        industryT.setData("demandReductionFromOther",this.demandReductionFromOther);
-        industryT.setData("dKey",this.dKey);
-        industryT.setData("hasInstallableItems",this.hasInstallableItems);
-        industryT.setData("hiddenOverride",this.hiddenOverride);
-        industryT.setData("id",this.id);
-        industryT.setData("improved",this.improved);
-
-        industryT.setData("income",this.income);
-        industryT.setData("spec",this.spec);
-        industryT.setData("special",this.special);
-        industryT.setData("supply",this.supply);
-        industryT.setData("supplyBonus",this.supplyBonus);
-        industryT.setData("supplyBonusFromOther",this.supplyBonusFromOther);
-        industryT.setData("upgradeId",this.upgradeId);
-        industryT.setData("upkeep",this.upkeep);
-        industryT.setData("wasDisrupted",this.wasDisrupted);
-        //get data from industry
-    }
     public void getExtraDataFromIndustry(MarketRetorfits_ExstraData extraData){
-
+        //interface thing
     }
     public void setExtraDataToIndustry(MarketRetorfits_ExstraData extraData){
-
+        //interface thing
     }
     private void getOtherDataIternal(MarketRetorfits_ExstraData extraDataT, MarketRetrofit_BaseIndustry CurrentIndustryT){
         exstraData = extraDataT;
@@ -159,7 +108,6 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
         industryT.exstraData = exstraData;
         industryT.CurrentIndustry = CurrentIndustry;
     }
-
     public MarketRetrofit_BaseIndustry getIndustry() {
         return this.CurrentIndustry;
     }
@@ -488,10 +436,11 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
 //		if (hazardMultOverride >= 0) {
 //			upkeepMult = hazardMultOverride;
 //		}
-        MarketRetrofits_Logger.logging("running applyIncomeAndUpkeep...",this);
-        MarketRetrofits_Logger.logging("    CurentIndustry: " + CurrentIndustry,this);
-        MarketRetrofits_Logger.logging("    CurrentIndustry.getSpec(): " + CurrentIndustry.getSpec(),this);
-        MarketRetrofits_Logger.logging("    CurrentIndustry.getSpec().getIncome(): " + CurrentIndustry.getSpec().getIncome(),this);
+        //MarketRetrofits_Logger.logging("running applyIncomeAndUpkeep...",this);
+        //MarketRetrofits_Logger.logging("    CurentIndustry: " + CurrentIndustry,this);
+        //MarketRetrofits_Logger.logging("    CurrentIndustry.getSpec(): " + CurrentIndustry.getSpec(),this);
+        //MarketRetrofits_Logger.logging("    second test CurrentIndustry.getSpec(): " + CurrentIndustry.getSpec(),this);
+        //MarketRetrofits_Logger.logging("    CurrentIndustry.getSpec().getIncome(): " + CurrentIndustry.getSpec().getIncome(),this);
         int income = (int) (CurrentIndustry.getSpec().getIncome() * sizeMult);
         if (income != 0) {
             CurrentIndustry.getIncome().modifyFlatAlways("ind_base", income, "Base value");
@@ -837,12 +786,12 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
     }
     @Override
     public IndustrySpecAPI getSpec() {
-        MarketRetrofits_Logger.logging("getSpec...",this);
-        MarketRetrofits_Logger.logging("id gotting as: " + id,this);
-        MarketRetrofits_Logger.logging("spec scaned as: " + spec,this);
-        MarketRetrofits_Logger.logging("setting gotting as: " + Global.getSettings().getIndustrySpec(id),this);
+        //MarketRetrofits_Logger.logging("getSpec...",this);
+        //MarketRetrofits_Logger.logging("id gotting as: " + id,this);
+        //MarketRetrofits_Logger.logging("spec scaned as: " + spec,this);
+        //MarketRetrofits_Logger.logging("setting gotting as: " + Global.getSettings().getIndustrySpec(id),this);
         if (spec == null) spec = Global.getSettings().getIndustrySpec(id);
-        MarketRetrofits_Logger.logging("spec gotting as: " + spec,this);
+        //MarketRetrofits_Logger.logging("spec gotting as: " + spec,this);
         return spec;
     }
     @Override

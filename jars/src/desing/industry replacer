@@ -4,17 +4,14 @@ finished issue 8.
 this required testing.
 testing status:
     random crash on:
-        MarketRetrofits_DefaltInstanceIndustry: finishBuildingOrUpgrading(): market.addIndustry(upgradeId);
-            issues: upgradeId is null. should be impossable.
-
-        MarketRetrofit_OrbitalStationInstance: matchStationAndCommanderToCurrentIndustry: line: 457;
-            issues: im getting not null from Strings
-            issues: im not setting the data to default on instances i get null.
-
-        MarketRetrofits_DefaltInstanceIndustry.applyIncomeAndUpkeep(MarketRetrofits_DefaltInstanceIndustry.java:474):
-            issues:? Curentindustry.getSpec is returning null maybe?
-            issues: getSpec() is null. id is null. all data is null. need to find the reason why!
-
+        java.lang.NullPointerException
+            at data.scripts.industries.Implementation.defaultIndustrys.MarketRetrofit_OrbitalStationInstance.matchStationAndCommanderToCurrentIndustry(MarketRetrofit_OrbitalStationInstance.java:457)
+            -theory: converting objects over to Object then back into something else seems to make copys, so im not setting to the right
+                     object, but a copy of it, causeing issues.
+             sollution:
+                create a way to store objects without converting said object into a object.
+                how? exapland the exstra data class to hold anything, as apposed to just objects. make it overrideable? maybe?
+                exspand the get / set exstra data thing to be better able to send data around. this will help
     lag on: load game:
         reason? data transfer. its very slow. might need to gass gass gass
     understood bugs:

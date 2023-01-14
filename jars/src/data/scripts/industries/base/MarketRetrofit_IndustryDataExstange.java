@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.econ.MutableCommodityQuantity;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
+import data.scripts.MarketRetrofits_Logger;
 import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.industries.MarketRetrofit_BaseIndustry;
 
@@ -29,7 +30,7 @@ public class MarketRetrofit_IndustryDataExstange extends BaseIndustry{
         //}
         //pastIndustrys.get(pastIndustrys.size() - 1).setData(dataName,data);
     }
-    private Object getDataPrivate(String dataName){
+    protected Object getDataPrivate(String dataName){
         //building a list of data here
         /*
         this.aiCoreId;
@@ -112,7 +113,9 @@ public class MarketRetrofit_IndustryDataExstange extends BaseIndustry{
                 return this.exstraData.getData(dataName);
         }
     }
-    private void setDataPrivate(String dataName,Object data){
+
+
+    protected void setDataPrivate(String dataName,Object data){
         switch (dataName){
             case "market":
                 this.market = (MarketAPI) data;
@@ -196,8 +199,106 @@ public class MarketRetrofit_IndustryDataExstange extends BaseIndustry{
         return exstraData;
     }
 
+    public void getBaseDataFromIndustry(MarketRetrofit_IndustryDataExstange industryT) {
+        /*this.CurrentIndustry = industryT.CurrentIndustry;
+        this.exstraData = industryT.exstraData;*/
+        //a = industry.getData("a");
+        this.aiCoreId = getStringData(industryT,"aiCoreId");
+        this.buildCostOverride = (Float) industryT.getData("buildCostOverride");
+        this.building = (boolean) industryT.getData("building");
+        this.buildProgress = (float) industryT.getData("buildProgress");
+
+        this.buildTime = (float) industryT.getData("buildTime");
+        this.currTooltipMode = (Industry.IndustryTooltipMode) industryT.getData("currTooltipMode");
+        this.demand = (Map<String, MutableCommodityQuantity>) industryT.getData("demand");
+        this.demandReduction = (MutableStat) industryT.getData("demandReduction");
+
+        this.demandReductionFromOther = (MutableStat) industryT.getData("demandReductionFromOther");
+        this.dKey = getStringData(industryT,"dKey");
+        this.hasInstallableItems = (Boolean) industryT.getData("hasInstallableItems");
+        this.hiddenOverride = (Boolean) industryT.getData("hiddenOverride");
+        this.id = getStringData(industryT,"id");
+        this.improved = (Boolean) industryT.getData("improved");
+
+        this.income = (MutableStat) industryT.getData("income");
+        this.spec = (IndustrySpecAPI) industryT.getData("spec");
+        this.special = (SpecialItemData) industryT.getData("special");
+        this.supply = (Map<String, MutableCommodityQuantity>) industryT.getData("supply");
+        this.supplyBonus = (MutableStat) industryT.getData("supplyBonus");
+        this.supplyBonusFromOther = (MutableStat) industryT.getData("supplyBonusFromOther");
+        this.upgradeId = getStringData(industryT,"upgradeId");
+        this.upkeep = (MutableStat) industryT.getData("upkeep");
+        this.wasDisrupted = (boolean) industryT.getData("wasDisrupted");
+        //get data from industry
+    }
+    public void setBaseDataToIndustry(MarketRetrofit_IndustryDataExstange industryT) {
+        industryT.setData("aiCoreId",this.aiCoreId);
+        industryT.setData("buildCostOverride",this.buildCostOverride);
+        industryT.setData("building",this.building);
+        industryT.setData("buildProgress",this.buildProgress);
+
+        industryT.setData("buildTime",this.buildTime);
+        industryT.setData("currTooltipMode",this.currTooltipMode);
+        industryT.setData("demand",this.demand);
+        industryT.setData("demandReduction",this.demandReduction);
+
+        industryT.setData("demandReductionFromOther",this.demandReductionFromOther);
+        industryT.setData("dKey",this.dKey);
+        industryT.setData("hasInstallableItems",this.hasInstallableItems);
+        industryT.setData("hiddenOverride",this.hiddenOverride);
+        industryT.setData("id",this.id);
+        industryT.setData("improved",this.improved);
+
+        industryT.setData("income",this.income);
+        industryT.setData("spec",this.spec);
+        industryT.setData("special",this.special);
+        industryT.setData("supply",this.supply);
+        industryT.setData("supplyBonus",this.supplyBonus);
+        industryT.setData("supplyBonusFromOther",this.supplyBonusFromOther);
+        industryT.setData("upgradeId",this.upgradeId);
+        industryT.setData("upkeep",this.upkeep);
+        industryT.setData("wasDisrupted",this.wasDisrupted);
+        //get data from industry
+    }
+
+    private String getStringData(MarketRetrofit_IndustryDataExstange industryT,String dataname){
+        Object a = industryT.getData(dataname);
+        if(a == null){
+            return null;
+        }
+        return a.toString();
+    }
     @Override
     public void apply() {
 
+    }
+
+    protected void readData(String exstraText){
+        MarketRetrofits_Logger.logging(exstraText + "aiCoreId: " + aiCoreId,this);
+        MarketRetrofits_Logger.logging(exstraText + "buildCostOverride: " + buildCostOverride,this);
+        MarketRetrofits_Logger.logging(exstraText + "building: " + building,this);
+        MarketRetrofits_Logger.logging(exstraText + "buildProgress: " + buildProgress,this);
+
+        MarketRetrofits_Logger.logging(exstraText + "buildTime: " + buildTime,this);
+        MarketRetrofits_Logger.logging(exstraText + "currTooltipMode: " + currTooltipMode,this);
+        MarketRetrofits_Logger.logging(exstraText + "demand: " + demand,this);
+        MarketRetrofits_Logger.logging(exstraText + "demandReduction: " + demandReduction,this);
+
+        MarketRetrofits_Logger.logging(exstraText + "demandReductionFromOther: " + demandReductionFromOther,this);
+        MarketRetrofits_Logger.logging(exstraText + "dKey: " + dKey,this);
+        MarketRetrofits_Logger.logging(exstraText + "hasInstallableItems: " + hasInstallableItems,this);
+        MarketRetrofits_Logger.logging(exstraText + "hiddenOverride: " + hiddenOverride,this);
+        MarketRetrofits_Logger.logging(exstraText + "id: " + id,this);
+        MarketRetrofits_Logger.logging(exstraText + "improved: " + improved,this);
+
+        MarketRetrofits_Logger.logging(exstraText + "income: " + income,this);
+        MarketRetrofits_Logger.logging(exstraText + "spec: " + spec,this);
+        MarketRetrofits_Logger.logging(exstraText + "special: " + special,this);
+        MarketRetrofits_Logger.logging(exstraText + "supply: " + supply,this);
+        MarketRetrofits_Logger.logging(exstraText + "supplyBonus: " + supplyBonus,this);
+        MarketRetrofits_Logger.logging(exstraText + "supplyBonusFromOther: " + supplyBonusFromOther,this);
+        MarketRetrofits_Logger.logging(exstraText + "upgradeId: " + upgradeId,this);
+        MarketRetrofits_Logger.logging(exstraText + "upkeep: " + upkeep,this);
+        MarketRetrofits_Logger.logging(exstraText + "wasDisrupted: " + wasDisrupted,this);
     }
 }
