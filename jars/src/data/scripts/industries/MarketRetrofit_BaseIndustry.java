@@ -39,18 +39,19 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
         * also this will reduce calculation a little.*/
         if(CurrentInstance == null){
             CurrentInstance = MarketRetrofits_IndustryMasterList.getInstance(MarketRetrofits_IndustryID()).getActiveInstance(super.getMarket(),super.getId(),this);
+
         }
         return CurrentInstance;
     }
 
     public void applyDataToInstance(MarketRetrofits_DefaltInstanceIndustry a){
-        //MarketRetrofits_Logger.logging("running applyDataToInstance in: " + this,this);
-        //MarketRetrofits_Logger.logging("    size: " + pastIndustrys.size(),this);
+        MarketRetrofits_Logger.logging("running applyDataToInstance in: " + this,this);
+        MarketRetrofits_Logger.logging("    size: " + pastIndustrys.size(),this);
         a.CurrentIndustry = this;
-        a.exstraData = this.exstraData;
         if(pastIndustrys.size() == 0){
-            //MarketRetrofits_Logger.logging("    getting data from BaseIndustry",this);
+            MarketRetrofits_Logger.logging("    getting data from BaseIndustry",this);
             //readData("from base industry: ");
+            a.exstraData = this.exstraData;
             a.IndustryDataGet(this,this);
             pastIndustrys.add(a);
             return;
@@ -58,33 +59,39 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
         MarketRetrofits_DefaltInstanceIndustry b = pastIndustrys.get(pastIndustrys.size() - 1);
         //MarketRetrofits_Logger.logging("    getting data from: " + b,this);
         //if(!b.equals(a)) {
-            a.IndustryDataGet(b);
+        b.setExtraDataToIndustry(b.exstraData);
+        a.exstraData = b.exstraData;
+        a.IndustryDataGet(b);
         //}
         pastIndustrys.add(a);
     }
     public void getDataFromInstance(MarketRetrofits_DefaltInstanceIndustry a){
-        //MarketRetrofits_Logger.logging("running getDataFromInstance in: " + this,this);
-        //MarketRetrofits_Logger.logging("    size: " + pastIndustrys.size(),this);
+        MarketRetrofits_Logger.logging("running getDataFromInstance in: " + this,this);
+        MarketRetrofits_Logger.logging("    size: " + pastIndustrys.size(),this);
         a.CurrentIndustry = this;
-        a.exstraData = this.exstraData;
 
         if(pastIndustrys.size() <= 1){
-            //MarketRetrofits_Logger.logging("    setting data to BaseIndustry",this);
+            MarketRetrofits_Logger.logging("    setting data to BaseIndustry",this);
             a.IndustryDataCleanup(this);
-            if(pastIndustrys.size() != 0) {
+            a.exstraData = this.exstraData;
+            //if(pastIndustrys.size() != 0) {
                 pastIndustrys.remove(pastIndustrys.size() - 1);
-            }
+            //}
             return;
         }
         MarketRetrofits_DefaltInstanceIndustry b = pastIndustrys.get(pastIndustrys.size() - 1);
         //MarketRetrofits_Logger.logging("    setting data to: " + b,this);
         //if(!b.equals(a)) {
-            a.IndustryDataCleanup(b);
+        b.setExtraDataToIndustry(b.exstraData);
+        a.IndustryDataCleanup(b);
+        a.exstraData = b.exstraData;
         //}
         pastIndustrys.remove(pastIndustrys.size() - 1);
     }
+    private static boolean maxLogsActive = true;
     @Override
     public void apply() {
+        MarketRetrofits_Logger.logging("running class: apply()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //super.apply(true);//done like this in normal industry
         applyDataToInstance(a);
@@ -95,6 +102,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addAICoreSection(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
+        MarketRetrofits_Logger.logging("running class: addAICoreSection(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -104,6 +112,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addAICoreSection(TooltipMakerAPI tooltip, java.lang.String coreId, Industry.AICoreDescriptionMode mode){
+        MarketRetrofits_Logger.logging("running class: addAICoreSection(TooltipMakerAPI tooltip, java.lang.String coreId, Industry.AICoreDescriptionMode mode)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -113,6 +122,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addAlphaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
+        MarketRetrofits_Logger.logging("running class: addAlphaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -122,6 +132,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addBetaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
+        MarketRetrofits_Logger.logging("running class: addBetaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -131,6 +142,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addGammaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode){
+        MarketRetrofits_Logger.logging("running class: addGammaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -140,6 +152,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addGroundDefensesImpactSection(TooltipMakerAPI tooltip, float bonus, java.lang.String... commodities){
+        MarketRetrofits_Logger.logging("running class: addGroundDefensesImpactSection(TooltipMakerAPI tooltip, float bonus, java.lang.String... commodities)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -149,6 +162,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addImproveDesc(TooltipMakerAPI info, Industry.ImprovementDescriptionMode mode){
+        MarketRetrofits_Logger.logging("running class: addImproveDesc(TooltipMakerAPI info, Industry.ImprovementDescriptionMode mode)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -158,6 +172,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addImprovedSection(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded){
+        MarketRetrofits_Logger.logging("running class: addImprovedSection(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -167,6 +182,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addInstalledItemsSection(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded){
+        MarketRetrofits_Logger.logging("running class: addInstalledItemsSection(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -176,6 +192,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean addNonAICoreInstalledItems(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded){
+        MarketRetrofits_Logger.logging("running class: addNonAICoreInstalledItems(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -186,6 +203,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode){
+        MarketRetrofits_Logger.logging("running class: addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //blank by default
         applyDataToInstance(a);
@@ -195,6 +213,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addPostDescriptionSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode){
+        MarketRetrofits_Logger.logging("running class: addPostDescriptionSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -204,6 +223,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addPostSupplySection(TooltipMakerAPI tooltip, boolean hasSupply, Industry.IndustryTooltipMode mode){
+        MarketRetrofits_Logger.logging("running class: addPostSupplySection(TooltipMakerAPI tooltip, boolean hasSupply, Industry.IndustryTooltipMode mode)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -213,6 +233,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addPostUpkeepSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode){
+        MarketRetrofits_Logger.logging("running class: addPostUpkeepSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -222,6 +243,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addRightAfterDescriptionSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode){
+        MarketRetrofits_Logger.logging("running class: addRightAfterDescriptionSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -230,6 +252,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	addStabilityPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode){
+        MarketRetrofits_Logger.logging("running class: addStabilityPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -239,6 +262,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     @Override
     //Override
     public MarketCMD.RaidDangerLevel adjustCommodityDangerLevel(java.lang.String commodityId, MarketCMD.RaidDangerLevel level){
+        MarketRetrofits_Logger.logging("running class: adjustCommodityDangerLevel(java.lang.String commodityId, MarketCMD.RaidDangerLevel level)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //empty
         applyDataToInstance(a);
@@ -250,6 +274,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     @Override
     //Override
     public MarketCMD.RaidDangerLevel adjustItemDangerLevel(java.lang.String itemId, java.lang.String data, MarketCMD.RaidDangerLevel level){
+        MarketRetrofits_Logger.logging("running class: adjustItemDangerLevel(java.lang.String itemId, java.lang.String data, MarketCMD.RaidDangerLevel level)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //empty
         applyDataToInstance(a);
@@ -260,6 +285,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     @Override
     //Includes nonecon "commodities" such as AI cores.
     public int	adjustMarineTokensToRaidItem(java.lang.String itemId, java.lang.String data, int marineTokens){
+        MarketRetrofits_Logger.logging("running class: adjustMarineTokensToRaidItem(java.lang.String itemId, java.lang.String data, int marineTokens)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //empty
         applyDataToInstance(a);
@@ -269,6 +295,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	advance(float amount){
+        MarketRetrofits_Logger.logging("running class: advance(float amount)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //super.advance(amount);//required in all seen instances
         applyDataToInstance(a);
@@ -277,6 +304,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	apply(boolean withIncomeUpdate){
+        MarketRetrofits_Logger.logging("running class: apply(boolean withIncomeUpdate)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //super.apply(true);//unknown requirements. still want to run it though.
         applyDataToInstance(a);
@@ -285,6 +313,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	applyAICoreModifiers(){
+        MarketRetrofits_Logger.logging("running class: applyAICoreModifiers()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -293,6 +322,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	applyAICoreToIncomeAndUpkeep(){
+        MarketRetrofits_Logger.logging("running class: applyAICoreToIncomeAndUpkeep()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -301,6 +331,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	applyAlphaCoreModifiers(){
+        MarketRetrofits_Logger.logging("running class: applyAlphaCoreModifiers()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //empty
         applyDataToInstance(a);
@@ -309,6 +340,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	applyAlphaCoreSupplyAndDemandModifiers(){
+        MarketRetrofits_Logger.logging("running class: applyAlphaCoreSupplyAndDemandModifiers()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -317,6 +349,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	applyBetaCoreModifiers(){
+        MarketRetrofits_Logger.logging("running class: applyBetaCoreModifiers()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //empty
         applyDataToInstance(a);
@@ -325,6 +358,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	applyBetaCoreSupplyAndDemandModifiers(){
+        MarketRetrofits_Logger.logging("running class: applyBetaCoreSupplyAndDemandModifiers()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -333,6 +367,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	applyDeficitToProduction(int index, Pair<java.lang.String,java.lang.Integer> deficit, java.lang.String... commodities){
+        MarketRetrofits_Logger.logging("running class: applyDeficitToProduction(int index, Pair<java.lang.String,java.lang.Integer> deficit, java.lang.String... commodities)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -341,6 +376,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	applyGammaCoreModifiers(){
+        MarketRetrofits_Logger.logging("running class: applyGammaCoreModifiers()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //empty
         applyDataToInstance(a);
@@ -349,6 +385,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	applyGammaCoreSupplyAndDemandModifiers(){
+        MarketRetrofits_Logger.logging("running class: applyGammaCoreSupplyAndDemandModifiers()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -357,6 +394,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	applyImproveModifiers(){
+        MarketRetrofits_Logger.logging("running class: applyImproveModifiers()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //empty
         applyDataToInstance(a);
@@ -365,6 +403,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	applyIncomeAndUpkeep(float sizeOverride){
+        MarketRetrofits_Logger.logging("running class: applyIncomeAndUpkeep(float sizeOverride)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -373,6 +412,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	applyNoAICoreModifiers(){
+        MarketRetrofits_Logger.logging("running class: applyNoAICoreModifiers()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //empty
         applyDataToInstance(a);
@@ -381,6 +421,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	buildingFinished(){
+        MarketRetrofits_Logger.logging("running class: buildingFinished()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //super.buildingFinished();//always run this
         applyDataToInstance(a);
@@ -389,6 +430,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	canBeDisrupted(){
+        MarketRetrofits_Logger.logging("running class: canBeDisrupted()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //allow. this is as intended.
         applyDataToInstance(a);
@@ -398,6 +440,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	cancelUpgrade(){
+        MarketRetrofits_Logger.logging("running class: cancelUpgrade()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //super.cancelUpgrade();//always run this
         applyDataToInstance(a);
@@ -407,6 +450,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	canDowngrade(){
+        MarketRetrofits_Logger.logging("running class: canDowngrade()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //super.canDowngrade();//always run this
         applyDataToInstance(a);
@@ -416,6 +460,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	canImprove(){
+        MarketRetrofits_Logger.logging("running class: canImprove()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -425,6 +470,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean canImproveToIncreaseProduction(){
+        MarketRetrofits_Logger.logging("running class: canImproveToIncreaseProduction()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -434,6 +480,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	canInstallAICores(){
+        MarketRetrofits_Logger.logging("running class: canInstallAICores()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -443,6 +490,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	canShutDown(){
+        MarketRetrofits_Logger.logging("running class: canShutDown()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -452,6 +500,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	canUpgrade(){
+        MarketRetrofits_Logger.logging("running class: canUpgrade()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         boolean re = a.canUpgrade();
@@ -460,6 +509,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	clearUnmodified(){
+        MarketRetrofits_Logger.logging("running class: clearUnmodified()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -468,6 +518,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public BaseIndustry	clone(){
+        MarketRetrofits_Logger.logging("running class: clone()",this,maxLogsActive);
         //HERE. what how does this work? who no defalt instance
         return super.clone();
         /*
@@ -476,6 +527,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	createTooltip(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded){
+        MarketRetrofits_Logger.logging("running class: createTooltip(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //description
         applyDataToInstance(a);
@@ -484,6 +536,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	demand(int index, java.lang.String commodityId, int quantity, java.lang.String desc){
+        MarketRetrofits_Logger.logging("running class: demand(int index, java.lang.String commodityId, int quantity, java.lang.String desc)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.demand(index,commodityId,quantity,desc);
@@ -491,6 +544,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	demand(java.lang.String commodityId, int quantity){
+        MarketRetrofits_Logger.logging("running class: demand(java.lang.String commodityId, int quantity)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.demand(commodityId,quantity);
@@ -498,6 +552,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	demand(java.lang.String commodityId, int quantity, java.lang.String desc){
+        MarketRetrofits_Logger.logging("running class: demand(java.lang.String commodityId, int quantity, java.lang.String desc)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.demand(commodityId,quantity,desc);
@@ -505,6 +560,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	demand(java.lang.String modId, java.lang.String commodityId, int quantity, java.lang.String desc){
+        MarketRetrofits_Logger.logging("running class: demand(java.lang.String modId, java.lang.String commodityId, int quantity, java.lang.String desc)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.demand(modId,commodityId,quantity,desc);
@@ -512,6 +568,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	disruptionFinished(){
+        MarketRetrofits_Logger.logging("running class: disruptionFinished()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //empty
         applyDataToInstance(a);
@@ -520,6 +577,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	doPostSaveRestore(){
+        MarketRetrofits_Logger.logging("running class: doPostSaveRestore()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //super.doPostSaveRestore();
         applyDataToInstance(a);
@@ -528,6 +586,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	doPreSaveCleanup(){
+        MarketRetrofits_Logger.logging("running class: doPreSaveCleanup()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //super.doPreSaveCleanup();
         applyDataToInstance(a);
@@ -536,6 +595,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	downgrade(){
+        MarketRetrofits_Logger.logging("running class: downgrade()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //super.downgrade();
         applyDataToInstance(a);
@@ -544,6 +604,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	finishBuildingOrUpgrading(){
+        MarketRetrofits_Logger.logging("running class: finishBuildingOrUpgrading()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //super.finishBuildingOrUpgrading();
         applyDataToInstance(a);
@@ -552,6 +613,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public CargoAPI	generateCargoForGatheringPoint(java.util.Random random){
+        MarketRetrofits_Logger.logging("running class: generateCargoForGatheringPoint(java.util.Random random)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -561,6 +623,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getAICoreId(){
+        MarketRetrofits_Logger.logging("running class: getAICoreId()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         String re = a.getAICoreId();
@@ -569,6 +632,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.util.List<Pair<java.lang.String,java.lang.Integer>>	getAllDeficit(){
+        MarketRetrofits_Logger.logging("running class: getAllDeficit()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         List<Pair<String, Integer>> re = a.getAllDeficit();
@@ -578,6 +642,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.util.List<Pair<java.lang.String,java.lang.Integer>>	getAllDeficit(java.lang.String... commodityIds){
+        MarketRetrofits_Logger.logging("running class: getAllDeficit(java.lang.String... commodityIds)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         List<Pair<String, Integer>> re = a.getAllDeficit(commodityIds);;
@@ -587,6 +652,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
 
     @Override
     public java.util.List<MutableCommodityQuantity>	getAllDemand(){
+        MarketRetrofits_Logger.logging("running class: getAllDemand()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         List<MutableCommodityQuantity> re = a.getAllDemand();;
@@ -595,6 +661,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.util.List<MutableCommodityQuantity>	getAllSupply(){
+        MarketRetrofits_Logger.logging("running class: getAllSupply()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         List<MutableCommodityQuantity> re = a.getAllSupply();;
@@ -603,6 +670,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public int	getBaseStabilityMod(){
+        MarketRetrofits_Logger.logging("running class: getBaseStabilityMod()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as inteded
         applyDataToInstance(a);
@@ -612,6 +680,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public float	getBaseUpkeep(){
+        MarketRetrofits_Logger.logging("running class: getBaseUpkeep()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         float re = a.getBaseUpkeep();
@@ -621,6 +690,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public float	getBuildCost(){
+        MarketRetrofits_Logger.logging("running class: getBuildCost()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         float re = a.getBuildCost();
@@ -630,6 +700,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
 
     @Override
     public java.lang.Float	getBuildCostOverride(){
+        MarketRetrofits_Logger.logging("running class: getBuildCostOverride()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         float re = a.getBuildCostOverride();
@@ -638,6 +709,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getBuildOrUpgradeDaysText(){
+        MarketRetrofits_Logger.logging("running class: getBuildOrUpgradeDaysText()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -647,6 +719,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public float	getBuildOrUpgradeProgress(){
+        MarketRetrofits_Logger.logging("running class: getBuildOrUpgradeProgress()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -656,6 +729,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getBuildOrUpgradeProgressText(){
+        MarketRetrofits_Logger.logging("running class: getBuildOrUpgradeProgressText()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -665,6 +739,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public float	getBuildProgress(){
+        MarketRetrofits_Logger.logging("running class: getBuildProgress()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -674,6 +749,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public float	getBuildTime(){
+        MarketRetrofits_Logger.logging("running class: getBuildTime()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -683,6 +759,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getCanNotShutDownReason(){
+        MarketRetrofits_Logger.logging("running class: getCanNotShutDownReason()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -692,6 +769,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public CargoAPI	getCargoForInteractionMode(MarketAPI.MarketInteractionMode mode){
+        MarketRetrofits_Logger.logging("running class: getCargoForInteractionMode(MarketAPI.MarketInteractionMode mode)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -701,6 +779,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getCargoTitleForGatheringPoint(){
+        MarketRetrofits_Logger.logging("running class: getCargoTitleForGatheringPoint()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -710,6 +789,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getCurrentImage(){
+        MarketRetrofits_Logger.logging("running class: getCurrentImage()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -719,6 +799,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getCurrentName(){
+        MarketRetrofits_Logger.logging("running class: getCurrentName()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -728,6 +809,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public float	getDeficitMult(java.lang.String... commodities){
+        MarketRetrofits_Logger.logging("running class: getDeficitMult(java.lang.String... commodities)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -737,6 +819,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public MutableCommodityQuantity	getDemand(java.lang.String id){
+        MarketRetrofits_Logger.logging("running class: getDemand(java.lang.String id)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         MutableCommodityQuantity re = a.getDemand(id);;
@@ -745,6 +828,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public MutableStat	getDemandReduction(){
+        MarketRetrofits_Logger.logging("running class: getDemandReduction()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         MutableStat re = a.getDemandReduction();;
@@ -753,6 +837,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public MutableStat	getDemandReductionFromOther(){
+        MarketRetrofits_Logger.logging("running class: getDemandReductionFromOther()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         MutableStat re = a.getDemandReductionFromOther();;
@@ -762,6 +847,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
 
     @Override
     public java.lang.String	getDescriptionOverride(){
+        MarketRetrofits_Logger.logging("running class: getDescriptionOverride()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -771,6 +857,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public float	getDisruptedDays(){
+        MarketRetrofits_Logger.logging("running class: getDisruptedDays()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -780,6 +867,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getDisruptedKey(){
+        MarketRetrofits_Logger.logging("running class: getDisruptedKey()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         String re = a.getDisruptedKey();;
@@ -788,6 +876,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String getId(){
+        MarketRetrofits_Logger.logging("running class: getId()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         String re = a.getId();;
@@ -796,6 +885,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public float	getImproveBonusXP(){
+        MarketRetrofits_Logger.logging("running class: getImproveBonusXP()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -805,6 +895,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getImproveDialogTitle(){
+        MarketRetrofits_Logger.logging("running class: getImproveDialogTitle()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -814,6 +905,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getImprovementsDescForModifiers(){
+        MarketRetrofits_Logger.logging("running class: getImprovementsDescForModifiers()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         String re = a.getImprovementsDescForModifiers();
@@ -822,6 +914,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getImproveMenuText(){
+        MarketRetrofits_Logger.logging("running class: getImproveMenuText()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -831,6 +924,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public int	getImproveProductionBonus(){
+        MarketRetrofits_Logger.logging("running class: getImproveProductionBonus()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -840,6 +934,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getImproveSoundId(){
+        MarketRetrofits_Logger.logging("running class: getImproveSoundId()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -849,6 +944,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public int	getImproveStoryPoints(){
+        MarketRetrofits_Logger.logging("running class: getImproveStoryPoints()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -858,6 +954,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public MutableStat	getIncome(){
+        MarketRetrofits_Logger.logging("running class: getIncome()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -867,6 +964,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.util.List<InstallableIndustryItemPlugin>	getInstallableItems(){
+        MarketRetrofits_Logger.logging("running class: getInstallableItems()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -876,6 +974,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public MarketAPI getMarket(){
+        MarketRetrofits_Logger.logging("running class: getMarket()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         MarketAPI re = a.getMarket();;
@@ -884,6 +983,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public Pair<java.lang.String,java.lang.Integer>	getMaxDeficit(java.lang.String... commodityIds){
+        MarketRetrofits_Logger.logging("running class: getMaxDeficit(java.lang.String... commodityIds)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //HERE utility function
         applyDataToInstance(a);
@@ -893,6 +993,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getModId(){
+        MarketRetrofits_Logger.logging("running class: getModId()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //HERE utility function
         applyDataToInstance(a);
@@ -902,6 +1003,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getModId(int index){
+        MarketRetrofits_Logger.logging("running class: getModId(int index)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //HERE utility function
         applyDataToInstance(a);
@@ -911,6 +1013,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getNameForModifier(){
+        MarketRetrofits_Logger.logging("running class: getNameForModifier()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //HERE utility function
         applyDataToInstance(a);
@@ -921,6 +1024,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public float	getPatherInterest(){
+        MarketRetrofits_Logger.logging("running class: getPatherInterest()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -930,6 +1034,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public float	getSizeMult(){
+        MarketRetrofits_Logger.logging("running class: getSizeMult()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -939,6 +1044,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public IndustrySpecAPI	getSpec(){
+        MarketRetrofits_Logger.logging("running class: getSpec()",this,maxLogsActive);
     MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -948,6 +1054,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public SpecialItemData	getSpecialItem(){
+        MarketRetrofits_Logger.logging("running class: getSpecialItem()",this,maxLogsActive);
     MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -957,6 +1064,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public Pair<java.lang.String,java.lang.Integer>	getStabilityAffectingDeficit(){
+        MarketRetrofits_Logger.logging("running class: getStabilityAffectingDeficit()",this,maxLogsActive);
     MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -966,6 +1074,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public int	getStabilityPenalty(){
+        MarketRetrofits_Logger.logging("running class: getStabilityPenalty()",this,maxLogsActive);
     MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -975,6 +1084,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public MutableCommodityQuantity	getSupply(java.lang.String id){
+        MarketRetrofits_Logger.logging("running class: getSupply(java.lang.String id)",this,maxLogsActive);
     MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -984,6 +1094,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public MutableStat	getSupplyBonus(){
+        MarketRetrofits_Logger.logging("running class: getSupplyBonus()",this,maxLogsActive);
     MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         MutableStat re = a.getSupplyBonus();
@@ -992,6 +1103,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public MutableStat	getSupplyBonusFromOther() {
+        MarketRetrofits_Logger.logging("running class: getSupplyBonusFromOther()",this,maxLogsActive);
     MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -1001,6 +1113,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public float	getTooltipWidth(){
+        MarketRetrofits_Logger.logging("running class: getTooltipWidth()",this,maxLogsActive);
     MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1010,6 +1123,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.String	getUnavailableReason(){
+        MarketRetrofits_Logger.logging("running class: getUnavailableReason()",this,maxLogsActive);
     MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1019,6 +1133,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public MutableStat	getUpkeep(){
+        MarketRetrofits_Logger.logging("running class: getUpkeep()",this,maxLogsActive);
     MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -1028,6 +1143,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.util.List<SpecialItemData>	getVisibleInstalledItems(){
+        MarketRetrofits_Logger.logging("running class: getVisibleInstalledItems()",this,maxLogsActive);
     MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -1037,6 +1153,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	hasPostDemandSection(boolean hasDemand, Industry.IndustryTooltipMode mode){
+        MarketRetrofits_Logger.logging("running class: hasPostDemandSection(boolean hasDemand, Industry.IndustryTooltipMode mode)",this,maxLogsActive);
     MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1046,6 +1163,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	init(java.lang.String idT, MarketAPI marketT){
+        MarketRetrofits_Logger.logging("running class: init(java.lang.String idT, MarketAPI marketT)",this,maxLogsActive);
         //super.init(idT,marketT);
         this.market = marketT;
         this.id = idT;
@@ -1057,6 +1175,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	initWithParams(java.util.List<java.lang.String> params){
+        MarketRetrofits_Logger.logging("running class: initWithParams(java.util.List<java.lang.String> params)",this,maxLogsActive);
         //super.initWithParams(params);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
@@ -1067,6 +1186,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     @Override
     //Used when loading market from an economy .json file.
     public boolean	isAICoreId(java.lang.String str){
+        MarketRetrofits_Logger.logging("running class: isAICoreId(java.lang.String str)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1076,6 +1196,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	isAvailableToBuild(){
+        MarketRetrofits_Logger.logging("running class: isAvailableToBuild()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -1085,6 +1206,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	isBuilding(){
+        MarketRetrofits_Logger.logging("running class: isBuilding()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -1095,6 +1217,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     @Override
     //Building OR upgrading.
     public boolean	isDemandLegal(CommodityOnMarketAPI com){
+        MarketRetrofits_Logger.logging("running class: isDemandLegal(CommodityOnMarketAPI com)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1104,6 +1227,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	isDisrupted(){
+        MarketRetrofits_Logger.logging("running class: isDisrupted()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         boolean re = a.isDisrupted();
@@ -1112,6 +1236,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	isFunctional(){
+        MarketRetrofits_Logger.logging("running class: isFunctional()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         ////APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -1122,6 +1247,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     @Override
     //Building and not upgrading.
     public boolean	isHidden(){
+        MarketRetrofits_Logger.logging("running class: isHidden()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -1131,6 +1257,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	isImproved(){
+        MarketRetrofits_Logger.logging("running class: isImproved()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         boolean re = a.isImproved();;
@@ -1139,6 +1266,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	isIndustry(){
+        MarketRetrofits_Logger.logging("running class: isIndustry()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         boolean re = a.isIndustry();;
@@ -1147,6 +1275,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	isOther(){
+        MarketRetrofits_Logger.logging("running class: isOther()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         boolean re = a.isOther();;
@@ -1155,6 +1284,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	isStructure(){
+        MarketRetrofits_Logger.logging("running class: isStructure()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         boolean re = a.isStructure();;
@@ -1163,6 +1293,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	isSupplyLegal(CommodityOnMarketAPI com){
+        MarketRetrofits_Logger.logging("running class: isSupplyLegal(CommodityOnMarketAPI com)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1172,6 +1303,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	isTooltipExpandable(){
+        MarketRetrofits_Logger.logging("running class: isTooltipExpandable()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1181,6 +1313,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	isUpgrading(){
+        MarketRetrofits_Logger.logging("running class: isUpgrading()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         boolean re = a.isUpgrading();;
@@ -1190,6 +1323,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     @Override
     //Upgrading, but not the initial building process.
     public void	modifyStabilityWithBaseMod(){
+        MarketRetrofits_Logger.logging("running class: modifyStabilityWithBaseMod()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -1198,6 +1332,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade){
+        MarketRetrofits_Logger.logging("running class: notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -1206,6 +1341,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	notifyColonyRenamed(){
+        MarketRetrofits_Logger.logging("running class: notifyColonyRenamed()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1214,6 +1350,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	notifyDisrupted(){
+        MarketRetrofits_Logger.logging("running class: notifyDisrupted()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1222,6 +1359,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public java.lang.Object	readResolve(){
+        MarketRetrofits_Logger.logging("running class: readResolve()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         Object re = a.readResolve();;
@@ -1230,6 +1368,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	reapply(){
+        MarketRetrofits_Logger.logging("running class: reapply()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.reapply();
@@ -1238,6 +1377,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	sendBuildOrUpgradeMessage(){
+        MarketRetrofits_Logger.logging("running class: sendBuildOrUpgradeMessage()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -1246,6 +1386,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	setAICoreId(java.lang.String aiCoreId){
+        MarketRetrofits_Logger.logging("running class: setAICoreId(java.lang.String aiCoreId)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -1254,6 +1395,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	setBuildCostOverride(float buildCostOverride){
+        MarketRetrofits_Logger.logging("running class: setBuildCostOverride(float buildCostOverride)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
         applyDataToInstance(a);
@@ -1262,6 +1404,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	setBuildProgress(float buildProgress){
+        MarketRetrofits_Logger.logging("running class: setBuildProgress(float buildProgress)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.setBuildProgress(buildProgress);
@@ -1269,6 +1412,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	setDisrupted(float days){
+        MarketRetrofits_Logger.logging("running class: setDisrupted(float days)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.setDisrupted(days);
@@ -1276,6 +1420,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	setDisrupted(float days, boolean useMax){
+        MarketRetrofits_Logger.logging("running class: setDisrupted(float days, boolean useMax)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.setDisrupted(days,useMax);
@@ -1284,6 +1429,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
 
     @Override
     public void	setHidden(boolean hidden){
+        MarketRetrofits_Logger.logging("running class: setHidden(boolean hidden)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.setHidden(hidden);
@@ -1291,6 +1437,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	setImproved(boolean improved){
+        MarketRetrofits_Logger.logging("running class: setImproved(boolean improved)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.setImproved(improved);
@@ -1298,6 +1445,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	setSpecialItem(SpecialItemData special){
+        MarketRetrofits_Logger.logging("running class: setSpecialItem(SpecialItemData special)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //APPLY SUPER FROM CLASS AS DEFAULT
@@ -1306,6 +1454,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	showShutDown(){
+        MarketRetrofits_Logger.logging("running class: showShutDown()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //as intended
@@ -1315,6 +1464,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	showWhenUnavailable(){
+        MarketRetrofits_Logger.logging("running class: showWhenUnavailable()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //APPLY SUPER FROM CLASS AS DEFAULT
@@ -1324,6 +1474,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	startBuilding(){
+        MarketRetrofits_Logger.logging("running class: startBuilding()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //APPLY SUPER FROM CLASS AS DEFAULT
@@ -1332,6 +1483,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	startUpgrading(){
+        MarketRetrofits_Logger.logging("running class: startUpgrading()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //APPLY SUPER FROM CLASS AS DEFAULT
@@ -1340,6 +1492,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	supply(int index, java.lang.String commodityId, int quantity, java.lang.String desc){
+        MarketRetrofits_Logger.logging("running class: supply(int index, java.lang.String commodityId, int quantity, java.lang.String desc)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.supply(index,commodityId,quantity,desc);
@@ -1347,6 +1500,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	supply(java.lang.String commodityId, int quantity){
+        MarketRetrofits_Logger.logging("running class: supply(java.lang.String commodityId, int quantity)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.supply(commodityId,quantity);
@@ -1354,6 +1508,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	supply(java.lang.String commodityId, int quantity, java.lang.String desc){
+        MarketRetrofits_Logger.logging("running class: supply(java.lang.String commodityId, int quantity, java.lang.String desc)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.supply(commodityId,quantity,desc);
@@ -1361,6 +1516,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	supply(java.lang.String modId, java.lang.String commodityId, int quantity, java.lang.String desc){
+        MarketRetrofits_Logger.logging("running class: supply(java.lang.String modId, java.lang.String commodityId, int quantity, java.lang.String desc)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //APPLY SUPER FROM CLASS AS DEFAULT
@@ -1369,6 +1525,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	unapply(){
+        MarketRetrofits_Logger.logging("running class: unapply()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //APPLY SUPER FROM CLASS AS DEFAULT
@@ -1377,6 +1534,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	unmodifyStabilityWithBaseMod(){
+        MarketRetrofits_Logger.logging("running class: unmodifyStabilityWithBaseMod()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         a.unmodifyStabilityWithBaseMod();
@@ -1385,6 +1543,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	updateAICoreToSupplyAndDemandModifiers(){
+        MarketRetrofits_Logger.logging("running class: updateAICoreToSupplyAndDemandModifiers()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //APPLY SUPER FROM CLASS AS DEFAULT
@@ -1393,6 +1552,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	updateImprovementSupplyAndDemandModifiers(){
+        MarketRetrofits_Logger.logging("running class: updateImprovementSupplyAndDemandModifiers()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //APPLY SUPER FROM CLASS AS DEFAULT
@@ -1401,6 +1561,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	updateIncomeAndUpkeep(){
+        MarketRetrofits_Logger.logging("running class: updateIncomeAndUpkeep()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //APPLY SUPER FROM CLASS AS DEFAULT
@@ -1409,6 +1570,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	updateSupplyAndDemandModifiers(){
+        MarketRetrofits_Logger.logging("running class: updateSupplyAndDemandModifiers()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //APPLY SUPER FROM CLASS AS DEFAULT
@@ -1417,6 +1579,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	upgradeFinished(Industry previous){
+        MarketRetrofits_Logger.logging("running class: upgradeFinished(Industry previous)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //APPLY SUPER FROM CLASS AS DEFAULT
@@ -1425,6 +1588,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public boolean	wantsToUseSpecialItem(SpecialItemData data){
+        MarketRetrofits_Logger.logging("running class: wantsToUseSpecialItem(SpecialItemData data)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //APPLY SUPER FROM CLASS AS DEFAULT
@@ -1436,6 +1600,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     //Return false if already using one of that type, unless the other one is better.
 
     public java.lang.Object	writeReplace() {
+        MarketRetrofits_Logger.logging("running class: writeReplace()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         Object re = a.writeReplace();;
@@ -1446,6 +1611,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     //HERE apply all implementations
     @Override
     public void modifyIncoming(MarketAPI market, PopulationComposition incoming) {
+        MarketRetrofits_Logger.logging("running class: modifyIncoming(MarketAPI market, PopulationComposition incoming)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         applyDataToInstance(a);
         //as intended
@@ -1455,6 +1621,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
 
     @Override
     public void reportFleetDespawnedToListener(CampaignFleetAPI fleet, CampaignEventListener.FleetDespawnReason reason, Object param) {
+        MarketRetrofits_Logger.logging("running class: reportFleetDespawnedToListener(CampaignFleetAPI fleet, CampaignEventListener.FleetDespawnReason reason, Object param)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1464,6 +1631,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
 
     @Override
     public void reportBattleOccurred(CampaignFleetAPI fleet, CampaignFleetAPI primaryWinner, BattleAPI battle) {
+        MarketRetrofits_Logger.logging("running class: reportBattleOccurred(CampaignFleetAPI fleet, CampaignFleetAPI primaryWinner, BattleAPI battle)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1474,6 +1642,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
 
     @Override
     public CampaignFleetAPI spawnFleet(RouteManager.RouteData route) {
+        MarketRetrofits_Logger.logging("running class: spawnFleet(RouteManager.RouteData route)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1484,6 +1653,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
 
     @Override
     public boolean shouldCancelRouteAfterDelayCheck(RouteManager.RouteData route) {
+        MarketRetrofits_Logger.logging("running class: shouldCancelRouteAfterDelayCheck(RouteManager.RouteData route)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1494,6 +1664,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
 
     @Override
     public boolean shouldRepeat(RouteManager.RouteData route) {
+        MarketRetrofits_Logger.logging("running class: shouldRepeat(RouteManager.RouteData route)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);
@@ -1504,6 +1675,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
 
     @Override
     public void reportAboutToBeDespawnedByRouteManager(RouteManager.RouteData route) {
+        MarketRetrofits_Logger.logging("running class: reportAboutToBeDespawnedByRouteManager(RouteManager.RouteData route)",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //as intended
         applyDataToInstance(a);

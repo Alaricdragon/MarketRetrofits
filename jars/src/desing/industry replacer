@@ -2,16 +2,23 @@ industry are extremely complicated. there is a lot of interaction going back and
 
 finished issue 8.
 this required testing.
+(note: logs enabled in orbital station instance, and in base industry)
+(not: i have not ran the new set of logs. might do that when i try this again)
 testing status:
     random crash on:
         java.lang.NullPointerException
             at data.scripts.industries.Implementation.defaultIndustrys.MarketRetrofit_OrbitalStationInstance.matchStationAndCommanderToCurrentIndustry(MarketRetrofit_OrbitalStationInstance.java:457)
-            -theory: converting objects over to Object then back into something else seems to make copys, so im not setting to the right
+            -(wrong)theory: converting objects over to Object then back into something else seems to make copys, so im not setting to the right
                      object, but a copy of it, causeing issues.
-             sollution:
-                create a way to store objects without converting said object into a object.
-                how? exapland the exstra data class to hold anything, as apposed to just objects. make it overrideable? maybe?
-                exspand the get / set exstra data thing to be better able to send data around. this will help
+             -data: looking at the logs, it seems that im never sending my data to anything else, just keeping it for myself, then having it be overwritten.
+             -(old)theory: it cant be caused by me trying to run data from the spec, unless the act of getting the spec itself causeing some related issue
+             -confirmed:
+                -ok: so heres whats happing: sometimes im getting more data then im sending...
+                     this results in the 'get data' function, getting data from base industry when it should not be doing so.
+
+                -when is this going on? the error, when i try to set data to base industry at size zero, seems to be whats going on.
+                -it also resalts in me setting data to base industry 2 times in a row. this will liekly cause all sort so issues
+
     lag on: load game:
         reason? data transfer. its very slow. might need to gass gass gass
     understood bugs:
@@ -78,6 +85,7 @@ status of default industry and base industry:
             11) currently, everything in the CSV file is linked to different files. this might be unrequierd.
             12) currently, its possible to set a instance industry to be a default instance. make the game crash if you try.
             13) data is trying to set null to MarketRetrofits_baseIndustry
+            14) there are times when i want a previous 'upd=grade' of a industry, and then i try to get the data stright from
 
         solutions:
             2)
@@ -127,6 +135,8 @@ status of default industry and base industry:
             11) link everything to MarketRetrofitsBaseIndustry. see if it works.
             12) create a error handler.
             13) don't add data in case of null?
+            14) get data by creating a temp default industry, then setting previous industry data to it, then getting the data from that.
+                this lets me use 'get extra data' to get the required data. wish is more module.
         incomplete:
 
         ISSUE:

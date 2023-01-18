@@ -21,6 +21,8 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import com.fs.starfarer.campaign.econ.Market;
+import data.scripts.MarketRetrofits_Logger;
 import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.industries.MarketRetrofit_BaseIndustry;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
@@ -53,18 +55,34 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
     private static String stationFleetName = "stationFleet";
     private static String usingExistingStationName = "usingExistingStation";
     private static String stationEntityName = "stationEntity";
+
+    private boolean displayAllInOutPuts = false;
+
+    public MarketRetrofit_OrbitalStationInstance() {
+        super("",0);
+    }
+
     @Override
     public void getExtraDataFromIndustry(MarketRetorfits_ExstraData extraData){
         stationFleet = (CampaignFleetAPI) extraData.getData(stationFleetName);
         usingExistingStation = extraData.getBoolean(usingExistingStationName);
         stationEntity = (SectorEntityToken) extraData.getData(stationEntityName);
+        if(stationEntity != null || stationFleet != null || displayAllInOutPuts){
+            MarketRetrofits_Logger.logging("HERE:",this);
+            MarketRetrofits_Logger.logging("station entity get: " + stationEntity,this);
+            MarketRetrofits_Logger.logging("station fleet get: " + stationFleet,this);
+        }
     }
     @Override
     public void setExtraDataToIndustry(MarketRetorfits_ExstraData extraData){
         extraData.addData(stationFleetName,stationFleet);
         extraData.addData(usingExistingStationName,usingExistingStation);
         extraData.addData(stationEntityName,stationEntity);
-    }
+        if(stationEntity != null || stationFleet != null || displayAllInOutPuts){
+            MarketRetrofits_Logger.logging("HERE:",this);
+            MarketRetrofits_Logger.logging("station entity set: " + stationEntity,this);
+            MarketRetrofits_Logger.logging("station fleet set: " + stationFleet,this);
+        }    }
 
     public static float DEFENSE_BONUS_BASE = 0.5f;
     public static float DEFENSE_BONUS_BATTLESTATION = 1f;
@@ -300,12 +318,15 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         super.upgradeFinished(previous);
         if (previous instanceof MarketRetrofit_BaseIndustry) {
             MarketRetrofit_BaseIndustry prev = (MarketRetrofit_BaseIndustry) previous;
-            if(prev.getExstraData().getData(stationEntityName) == null && prev.getExstraData().getData(stationFleetName) == null){//HERE. this loop is added by me, to 'hopefully' filter out some bad data
+            //HERE. changed this data get to create a dummy instance to hold the data. hope this helps
+            MarketRetrofit_OrbitalStationInstance tempInstance = new MarketRetrofit_OrbitalStationInstance();
+            prev.applyDataToInstance(tempInstance);
+            if(tempInstance.stationEntity == null && tempInstance.stationFleet == null){//(prev.getExstraData().getData(stationEntityName) == null && prev.getExstraData().getData(stationFleetName) == null){//HERE. this loop is added by me, to 'hopefully' filter out some bad data
                 return;
             }
-            stationEntity = (SectorEntityToken) prev.getExstraData().getData(stationEntityName);
-            stationFleet = (CampaignFleetAPI) prev.getExstraData().getData(stationFleetName);
-            usingExistingStation = (boolean) prev.getExstraData().getBoolean(usingExistingStationName);
+            stationEntity = tempInstance.stationEntity;//(SectorEntityToken) prev.getExstraData().getData(stationEntityName);
+            stationFleet = tempInstance.stationFleet;//(CampaignFleetAPI) prev.getExstraData().getData(stationFleetName);
+            usingExistingStation = tempInstance.usingExistingStation;//(boolean) prev.getExstraData().getBoolean(usingExistingStationName);
 
             if (stationFleet != null) {
                 stationFleet.removeEventListener(prev);
@@ -407,6 +428,10 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         stationFleet.setCircularOrbit(stationEntity, 0, 0, 100);
         stationFleet.getMemoryWithoutUpdate().set(MemFlags.STATION_MARKET, market);
         stationFleet.setHidden(true);
+
+        MarketRetrofits_Logger.logging("station entity should be here: " + stationEntity,this);
+        MarketRetrofits_Logger.logging("station fleet should be here: " + stationFleet,this);
+        displayAllInOutPuts = true;
         matchStationAndCommanderToCurrentIndustry();
     }
 
@@ -441,19 +466,32 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         String variantId = null;
         float radius = 60f;
 
+        MarketRetrofits_Logger.logging("station entity should be here 2: " + stationEntity,this);
+        MarketRetrofits_Logger.logging("station fleet should be here 2: " + stationFleet,this);
+
         try {
+            MarketRetrofits_Logger.logging("station entity should be here 3a: " + stationEntity,this);
+            MarketRetrofits_Logger.logging("station fleet should be here 3a: " + stationFleet,this);
+            CurrentIndustry.getSpec();
+            MarketRetrofits_Logger.logging("station entity should be here 3b: " + stationEntity,this);
+            MarketRetrofits_Logger.logging("station fleet should be here 3b: " + stationFleet,this);
             JSONObject json = new JSONObject(CurrentIndustry.getSpec().getData());
+            MarketRetrofits_Logger.logging("station entity should be here 3c: " + stationEntity,this);
+            MarketRetrofits_Logger.logging("station fleet should be here 3c: " + stationFleet,this);
             variantId = json.getString("variant");
             radius = (float) json.getDouble("radius");
             fleetName = json.getString("fleetName");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+        MarketRetrofits_Logger.logging("station entity should be here 4: " + stationEntity,this);
+        MarketRetrofits_Logger.logging("station fleet should be here 4: " + stationFleet,this);
         if (stationEntity != null) {
             fleetName = stationEntity.getName();
         }
 
-
+        MarketRetrofits_Logger.logging("station entity should be here 5: " + stationEntity,this);
+        MarketRetrofits_Logger.logging("station fleet should be here 5: " + stationFleet,this);
         stationFleet.setName(fleetName);
 
 //		try {
