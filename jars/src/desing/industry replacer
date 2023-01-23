@@ -19,6 +19,54 @@ testing status:
                 -when is this going on? the error, when i try to set data to base industry at size zero, seems to be whats going on.
                 -it also resalts in me setting data to base industry 2 times in a row. this will liekly cause all sort so issues
 
+
+        494678 [Thread-3] ERROR com.fs.starfarer.combat.CombatMain  - java.lang.NullPointerException
+        java.lang.NullPointerException
+        	at com.fs.starfarer.api.impl.campaign.fleets.RouteManager$RouteSegment.isInSystem(RouteManager.java:143)
+        	at com.fs.starfarer.api.impl.campaign.fleets.RouteManager$RouteData.getInterpolatedHyperLocation(RouteManager.java:379)
+        	at com.fs.starfarer.api.impl.campaign.fleets.RouteManager.shouldSpawn(RouteManager.java:651)
+        	at com.fs.starfarer.api.impl.campaign.fleets.RouteManager.spawnAndDespawn(RouteManager.java:617)
+        	at com.fs.starfarer.api.impl.campaign.fleets.RouteManager.advance(RouteManager.java:577)
+        	at com.fs.starfarer.api.impl.campaign.CoreScript.advance(CoreScript.java:140)
+        	at com.fs.starfarer.campaign.CampaignEngine.advance(Unknown Source)
+        	at com.fs.starfarer.campaign.save.CampaignGameManager.o00000(Unknown Source)
+        	at com.fs.starfarer.title.TitleScreenState.dialogDismissed(Unknown Source)
+        	at com.fs.starfarer.ui.N.dismiss(Unknown Source)
+        	at com.fs.starfarer.ui.impl.K.dismiss(Unknown Source)
+        	at com.fs.starfarer.campaign.save.if.actionPerformed(Unknown Source)
+        	at com.fs.starfarer.ui.OoO0.buttonPressed(Unknown Source)
+        	at com.fs.starfarer.ui.oooO.Ò00000(Unknown Source)
+        	at com.fs.starfarer.ui.oooO.processInput(Unknown Source)
+        	at com.fs.starfarer.ui.OoO0.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.Q.processInput(Unknown Source)
+        	at com.fs.starfarer.ui.v.dispatchEventsToChildren(Unknown Source)
+        	at com.fs.starfarer.ui.v.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.coreui.interfacesuper.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.Q.processInput(Unknown Source)
+        	at com.fs.starfarer.ui.v.dispatchEventsToChildren(Unknown Source)
+        	at com.fs.starfarer.ui.v.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.Q.processInput(Unknown Source)
+        	at com.fs.starfarer.E.I.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.Q.processInput(Unknown Source)
+        	at com.fs.starfarer.ui.v.dispatchEventsToChildren(Unknown Source)
+        	at com.fs.starfarer.ui.v.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.N.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.campaign.save.if.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.Q.processInput(Unknown Source)
+        	at com.fs.starfarer.ui.v.dispatchEventsToChildren(Unknown Source)
+        	at com.fs.starfarer.ui.v.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.Q.processInput(Unknown Source)
+        	at com.fs.starfarer.title.TitleScreenState.processInput(Unknown Source)
+        	at com.fs.starfarer.BaseGameState.traverse(Unknown Source)
+        	at com.fs.state.AppDriver.begin(Unknown Source)
+        	at com.fs.starfarer.combat.CombatMain.main(Unknown Source)
+        	at com.fs.starfarer.StarfarerLauncher.o00000(Unknown Source)
+        	at com.fs.starfarer.StarfarerLauncher$1.run(Unknown Source)
+        	at java.lang.Thread.run(Unknown Source)
+
+        -theory: might have something to do with messed up data being given over / checked on the root manager.
+        -i don't understand the location the logs are pointing to. ask people on discord for help?
+        -also, take a look at each of the military_base like things and see if i can find any way to improve said things
     lag on: load game:
         reason? data transfer. its very slow. might need to gass gass gass
     understood bugs:

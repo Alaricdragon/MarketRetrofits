@@ -109,7 +109,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
         industryT.CurrentIndustry = CurrentIndustry;
     }
     public MarketRetrofit_BaseIndustry getIndustry() {
-        return this.CurrentIndustry;
+        return this.CurrentIndustry;//why does this exsist?
     }
 
     public MarketRetrofits_DefaltInstanceIndustry(String name, float orderT) {

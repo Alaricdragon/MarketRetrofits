@@ -1097,6 +1097,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
         MarketRetrofits_Logger.logging("running class: getSupplyBonus()",this,maxLogsActive);
     MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
+        applyDataToInstance(a);
         MutableStat re = a.getSupplyBonus();
         getDataFromInstance(a);
         return re;
@@ -1230,6 +1231,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
         MarketRetrofits_Logger.logging("running class: isDisrupted()",this,maxLogsActive);
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();
         //APPLY SUPER FROM CLASS AS DEFAULT
+        applyDataToInstance(a);
         boolean re = a.isDisrupted();
         getDataFromInstance(a);
         return re;
