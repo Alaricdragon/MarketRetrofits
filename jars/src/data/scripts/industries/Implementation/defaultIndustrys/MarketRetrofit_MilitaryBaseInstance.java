@@ -16,8 +16,10 @@ import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
+import data.scripts.MarketRetrofits_Logger;
 import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
+import org.apache.log4j.Logger;
 import org.lwjgl.util.vector.Vector2f;
 
 
@@ -48,6 +50,7 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
     private static String trackerName = "tracker";
     public float returningPatrolValue = 0f;
     private static String returningPatrolValueName = "returningPatrolValue";
+    private final static boolean MilataryBaseLogs = Global.getSettings().getBoolean("MarketRetrofits_MiltaryBaseLogs");
     @Override
     public void getExtraDataFromIndustry(MarketRetorfits_ExstraData extraData){
         returningPatrolValue = (float) extraData.getFloat(returningPatrolValueName);
@@ -748,6 +751,7 @@ public class MarketRetrofit_MilitaryBaseInstance extends MarketRetrofits_DefaltI
 
 
     private void loging(String output){
+        MarketRetrofits_Logger.logging(output,this,MilataryBaseLogs);
         //final Logger LOG = Global.getLogger(this.getClass());
         //LOG.info(output);
     }

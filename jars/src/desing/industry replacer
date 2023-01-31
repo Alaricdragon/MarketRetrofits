@@ -1,4 +1,32 @@
 industry are extremely complicated. there is a lot of interaction going back and forwards here. this creates issues.
+Temp theory:
+    a lot of issues might be able to be fixed if i could clone my dam instances. so im going to try that.
+    is that a good idea? it might be a lot of save game blout.
+    well i have the possability to do so now, so there is that.
+    -EDIT: the issue with a single word having all the mining is back. going to try this, sounds more stable
+    -issues:
+        something is up with failing to send / recive data when doing a post save restore (something that always happens on startup.)
+            this might be a issue with:
+            A: something going wrong on post save restore
+            B: some other issue?
+        something is going wrong with data sending / getting were data is not being send or gotten again.
+        how frustrating. this is causing getSpec to return null, because ID is null, because all availble data is null...
+        need more logs next time. but eventually i will get this. or give up. maybe the latter.
+
+    -tested code using data saved on save things or something.
+    -tested this basicly
+        -isssue:
+            when i reload a game, the industrys try to be converted into instance industrys, for unknown reasons.
+            to fix this, i need to find out what the fuck is causeing this, once thats done, its as far as i can see
+            hopefully the last major bug here. hopefully
+        -known data on issue:
+            -this is not happing directly in one of my functions.
+            -what is likely happing is that, somewere in defaultIndustry, there is a line of code that commits a function to memory, so i can load it latter, and it saves the class.
+             this would cause this. but were and how are a different story.
+
+         -issue 2:
+            when i remove current industry and defalt industry, the code gets null on everything. i don't understand why, but i need to understand somehow.
+            -maybe change the way data transfer works so it pulls on the same data always no matter what? i though this is what i was doing...
 
 finished issue 8.
 this required testing.
@@ -20,6 +48,7 @@ testing status:
                 -it also resalts in me setting data to base industry 2 times in a row. this will liekly cause all sort so issues
 
 
+        (counter of number of times i have has this): 2
         494678 [Thread-3] ERROR com.fs.starfarer.combat.CombatMain  - java.lang.NullPointerException
         java.lang.NullPointerException
         	at com.fs.starfarer.api.impl.campaign.fleets.RouteManager$RouteSegment.isInSystem(RouteManager.java:143)

@@ -38,7 +38,20 @@ public class MarketRetrofits_IndustryList {
         return false;
     }
     public MarketRetrofits_DefaltInstanceIndustry getActiveInstance(MarketAPI market, String IDT, MarketRetrofit_BaseIndustry industry){
-        for(MarketRetrofits_DefaltInstanceIndustry a: sets){
+        return getActiveInstance(defaultInstance,sets,market,IDT,industry);
+    }
+    public ArrayList<MarketRetrofits_DefaltInstanceIndustry> copySets(){
+        ArrayList<MarketRetrofits_DefaltInstanceIndustry> output = new ArrayList<MarketRetrofits_DefaltInstanceIndustry>();
+        for(MarketRetrofits_DefaltInstanceIndustry a:sets){
+            output.add(a.CloneInstance());
+        }
+        return output;
+    }
+    public MarketRetrofits_DefaltInstanceIndustry copyDefaltIndustry(){
+        return defaultInstance.CloneInstance();
+    }
+    public static MarketRetrofits_DefaltInstanceIndustry getActiveInstance(MarketRetrofits_DefaltInstanceIndustry defalt, ArrayList<MarketRetrofits_DefaltInstanceIndustry> instance,MarketAPI market, String IDT, MarketRetrofit_BaseIndustry industry){
+        for(MarketRetrofits_DefaltInstanceIndustry a: instance){
             if(a.canImply(market,industry)){
                 //a.init(IDT,market);
                 //a.IndustryDataGet(industry);
@@ -52,6 +65,6 @@ public class MarketRetrofits_IndustryList {
         /*
         defaultInstance.getBaseDataFromIndustry(industry);
         defaultInstance.getExtraDataFromIndustry(industry.getExstraData());*/
-        return defaultInstance;
+        return defalt;
     }
 }

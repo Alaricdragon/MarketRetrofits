@@ -52,9 +52,10 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
     public MarketRetrofit_OrbitalStationInstance(String name, float orderT) {
         super(name, orderT);
     }
-    private static String stationFleetName = "stationFleet";
-    private static String usingExistingStationName = "usingExistingStation";
-    private static String stationEntityName = "stationEntity";
+    private static final boolean OrbitalStationLogs = Global.getSettings().getBoolean("MarketRetrofit_OrbitalStationLogs");
+    private final static String stationFleetName = "stationFleet";
+    private final static String usingExistingStationName = "usingExistingStation";
+    private final static String stationEntityName = "stationEntity";
 
     private boolean displayAllInOutPuts = false;
 
@@ -68,9 +69,9 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         usingExistingStation = extraData.getBoolean(usingExistingStationName);
         stationEntity = (SectorEntityToken) extraData.getData(stationEntityName);
         if(stationEntity != null || stationFleet != null || displayAllInOutPuts){
-            MarketRetrofits_Logger.logging("HERE:",this);
-            MarketRetrofits_Logger.logging("station entity get: " + stationEntity,this);
-            MarketRetrofits_Logger.logging("station fleet get: " + stationFleet,this);
+            MarketRetrofits_Logger.logging("HERE:",this,OrbitalStationLogs);
+            MarketRetrofits_Logger.logging("station entity get: " + stationEntity,this,OrbitalStationLogs);
+            MarketRetrofits_Logger.logging("station fleet get: " + stationFleet,this,OrbitalStationLogs);
         }
     }
     @Override
@@ -79,9 +80,9 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         extraData.addData(usingExistingStationName,usingExistingStation);
         extraData.addData(stationEntityName,stationEntity);
         if(stationEntity != null || stationFleet != null || displayAllInOutPuts){
-            MarketRetrofits_Logger.logging("HERE:",this);
-            MarketRetrofits_Logger.logging("station entity set: " + stationEntity,this);
-            MarketRetrofits_Logger.logging("station fleet set: " + stationFleet,this);
+            MarketRetrofits_Logger.logging("HERE:",this,OrbitalStationLogs);
+            MarketRetrofits_Logger.logging("station entity set: " + stationEntity,this,OrbitalStationLogs);
+            MarketRetrofits_Logger.logging("station fleet set: " + stationFleet,this,OrbitalStationLogs);
         }    }
 
     public static float DEFENSE_BONUS_BASE = 0.5f;
@@ -429,8 +430,8 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         stationFleet.getMemoryWithoutUpdate().set(MemFlags.STATION_MARKET, market);
         stationFleet.setHidden(true);
 
-        MarketRetrofits_Logger.logging("station entity should be here: " + stationEntity,this);
-        MarketRetrofits_Logger.logging("station fleet should be here: " + stationFleet,this);
+        MarketRetrofits_Logger.logging("station entity should be here: " + stationEntity,this,OrbitalStationLogs);
+        MarketRetrofits_Logger.logging("station fleet should be here: " + stationFleet,this,OrbitalStationLogs);
         displayAllInOutPuts = true;
         matchStationAndCommanderToCurrentIndustry();
     }
@@ -466,32 +467,32 @@ public class MarketRetrofit_OrbitalStationInstance extends MarketRetrofits_Defal
         String variantId = null;
         float radius = 60f;
 
-        MarketRetrofits_Logger.logging("station entity should be here 2: " + stationEntity,this);
-        MarketRetrofits_Logger.logging("station fleet should be here 2: " + stationFleet,this);
+        MarketRetrofits_Logger.logging("station entity should be here 2: " + stationEntity,this,OrbitalStationLogs);
+        MarketRetrofits_Logger.logging("station fleet should be here 2: " + stationFleet,this,OrbitalStationLogs);
 
         try {
-            MarketRetrofits_Logger.logging("station entity should be here 3a: " + stationEntity,this);
-            MarketRetrofits_Logger.logging("station fleet should be here 3a: " + stationFleet,this);
+            MarketRetrofits_Logger.logging("station entity should be here 3a: " + stationEntity,this,OrbitalStationLogs);
+            MarketRetrofits_Logger.logging("station fleet should be here 3a: " + stationFleet,this,OrbitalStationLogs);
             CurrentIndustry.getSpec();
-            MarketRetrofits_Logger.logging("station entity should be here 3b: " + stationEntity,this);
-            MarketRetrofits_Logger.logging("station fleet should be here 3b: " + stationFleet,this);
+            MarketRetrofits_Logger.logging("station entity should be here 3b: " + stationEntity,this,OrbitalStationLogs);
+            MarketRetrofits_Logger.logging("station fleet should be here 3b: " + stationFleet,this,OrbitalStationLogs);
             JSONObject json = new JSONObject(CurrentIndustry.getSpec().getData());
-            MarketRetrofits_Logger.logging("station entity should be here 3c: " + stationEntity,this);
-            MarketRetrofits_Logger.logging("station fleet should be here 3c: " + stationFleet,this);
+            MarketRetrofits_Logger.logging("station entity should be here 3c: " + stationEntity,this,OrbitalStationLogs);
+            MarketRetrofits_Logger.logging("station fleet should be here 3c: " + stationFleet,this,OrbitalStationLogs);
             variantId = json.getString("variant");
             radius = (float) json.getDouble("radius");
             fleetName = json.getString("fleetName");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        MarketRetrofits_Logger.logging("station entity should be here 4: " + stationEntity,this);
-        MarketRetrofits_Logger.logging("station fleet should be here 4: " + stationFleet,this);
+        MarketRetrofits_Logger.logging("station entity should be here 4: " + stationEntity,this,OrbitalStationLogs);
+        MarketRetrofits_Logger.logging("station fleet should be here 4: " + stationFleet,this,OrbitalStationLogs);
         if (stationEntity != null) {
             fleetName = stationEntity.getName();
         }
 
-        MarketRetrofits_Logger.logging("station entity should be here 5: " + stationEntity,this);
-        MarketRetrofits_Logger.logging("station fleet should be here 5: " + stationFleet,this);
+        MarketRetrofits_Logger.logging("station entity should be here 5: " + stationEntity,this,OrbitalStationLogs);
+        MarketRetrofits_Logger.logging("station fleet should be here 5: " + stationFleet,this,OrbitalStationLogs);
         stationFleet.setName(fleetName);
 
 //		try {

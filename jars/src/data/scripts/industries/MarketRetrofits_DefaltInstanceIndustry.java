@@ -49,6 +49,7 @@ import data.scripts.MarketRetrofits_Logger;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryList;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryMasterList;
 import data.scripts.industries.base.MarketRetrofit_IndustryDataExstange;
+//import sun.jvm.hotspot.oops.Mark;
 
 public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_IndustryDataExstange {
 
@@ -67,7 +68,9 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
     public float order;
     public MarketRetrofits_IndustryList industryGroup = null;
     //public MarketRetrofit_BaseIndustry CurrentIndustry;
-
+    public MarketRetrofits_DefaltInstanceIndustry CloneInstance(){
+        return (MarketRetrofits_DefaltInstanceIndustry) this.clone();
+    }
     public void IndustryDataCleanup(MarketRetrofit_IndustryDataExstange industryT){
         setBaseDataToIndustry(industryT);
         setExtraDataToIndustry(industryT.getExstraData());
@@ -790,8 +793,12 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
         //MarketRetrofits_Logger.logging("id gotting as: " + id,this);
         //MarketRetrofits_Logger.logging("spec scaned as: " + spec,this);
         //MarketRetrofits_Logger.logging("setting gotting as: " + Global.getSettings().getIndustrySpec(id),this);
+        //MarketRetrofits_Logger.logging("spec is: " + spec,this);
+        //MarketRetrofits_Logger.logging("id is: " + id,this);
+
         if (spec == null) spec = Global.getSettings().getIndustrySpec(id);
-        //MarketRetrofits_Logger.logging("spec gotting as: " + spec,this);
+        //MarketRetrofits_Logger.logging("spec is: " + spec,this);
+        //MarketRetrofits_Logger.logging("id is: " + id,this);
         return spec;
     }
     @Override
@@ -2015,6 +2022,9 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
 
     @Override
     public boolean isIndustry() {
+        //MarketRetrofits_Logger.logging("do I have a current industry?: " + CurrentIndustry,this);
+        //MarketRetrofits_Logger.logging("do I have a spec on that industry?: " + CurrentIndustry.getSpec(),this);
+        //MarketRetrofits_Logger.logging("do i have a hasTage on that spec?: " + CurrentIndustry.getSpec().hasTag(Industries.TAG_INDUSTRY),this);
         return CurrentIndustry.getSpec().hasTag(Industries.TAG_INDUSTRY);
     }
     @Override
