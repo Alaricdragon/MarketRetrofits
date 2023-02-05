@@ -22,7 +22,7 @@ public class MarketRetrofits_IndustryList {
     }
     public MarketRetrofits_DefaltInstanceIndustry getInstance(String name){
         for(MarketRetrofits_DefaltInstanceIndustry a: sets){
-            if(a.ID.equals(name)){
+            if(a.InstanceID.equals(name)){
                 return a;
             }
         }
@@ -30,7 +30,7 @@ public class MarketRetrofits_IndustryList {
     }
     public boolean removeInstance(String name){
         for(MarketRetrofits_DefaltInstanceIndustry a: sets){
-            if(a.ID.equals(name)){
+            if(a.InstanceID.equals(name)){
                 sets.remove(a);
                 return true;
             }

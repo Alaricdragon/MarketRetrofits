@@ -11,11 +11,15 @@ import data.scripts.MarketRetrofits_Logger;
 import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.industries.MarketRetrofit_BaseIndustry;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class MarketRetrofit_IndustryDataExstange extends BaseIndustry{
     public MarketRetorfits_ExstraData exstraData = new MarketRetorfits_ExstraData();
     public MarketRetrofit_BaseIndustry CurrentIndustry;
+
+    protected transient String modId;
+    protected transient String [] modIds;
     public Object getData(String dataName){
         //pastIndustrys.add(CurrentInstance);
         //if(pastIndustrys.size() <= 1){
@@ -109,6 +113,10 @@ public class MarketRetrofit_IndustryDataExstange extends BaseIndustry{
                 return this.upkeep;
             case "wasDisrupted":
                 return this.wasDisrupted;
+            case "modId":
+                return this.modId;
+            case "modIds":
+                return this.modIds;
             default:
                 return this.exstraData.getData(dataName);
         }
@@ -189,6 +197,13 @@ public class MarketRetrofit_IndustryDataExstange extends BaseIndustry{
             case "wasDisrupted":
                 this.wasDisrupted = (boolean) data;
                 break;
+            case "modId":
+                this.modId = (String) data;
+                break;
+            case "modIds":
+                // assert data instanceof String[];//HERE. what is this?
+                this.modIds = (String[]) data;
+                break;
             default:
                 this.exstraData.addData(dataName,data);
                 break;
@@ -203,6 +218,8 @@ public class MarketRetrofit_IndustryDataExstange extends BaseIndustry{
         /*this.CurrentIndustry = industryT.CurrentIndustry;
         this.exstraData = industryT.exstraData;*/
         //a = industry.getData("a");
+        this.market = (MarketAPI) industryT.getData("market");
+
         this.aiCoreId = getStringData(industryT,"aiCoreId");
         this.buildCostOverride = (Float) industryT.getData("buildCostOverride");
         this.building = (boolean) industryT.getData("building");
@@ -229,9 +246,14 @@ public class MarketRetrofit_IndustryDataExstange extends BaseIndustry{
         this.upgradeId = getStringData(industryT,"upgradeId");
         this.upkeep = (MutableStat) industryT.getData("upkeep");
         this.wasDisrupted = (boolean) industryT.getData("wasDisrupted");
+
+        this.modId = getStringData(industryT,"modId");
+        this.modIds = (String[]) industryT.getData("modIds");
         //get data from industry
     }
     public void setBaseDataToIndustry(MarketRetrofit_IndustryDataExstange industryT) {
+        industryT.setData("market",this.market);
+
         industryT.setData("aiCoreId",this.aiCoreId);
         industryT.setData("buildCostOverride",this.buildCostOverride);
         industryT.setData("building",this.building);
@@ -259,6 +281,8 @@ public class MarketRetrofit_IndustryDataExstange extends BaseIndustry{
         industryT.setData("upkeep",this.upkeep);
         industryT.setData("wasDisrupted",this.wasDisrupted);
         //get data from industry
+        industryT.setData("modId",modId);
+        industryT.setData("modIds",modIds);
     }
 
     private String getStringData(MarketRetrofit_IndustryDataExstange industryT,String dataname){
@@ -274,31 +298,37 @@ public class MarketRetrofit_IndustryDataExstange extends BaseIndustry{
     }
 
     protected void readData(String exstraText){
-        MarketRetrofits_Logger.logging(exstraText + "aiCoreId: " + aiCoreId,this);
-        MarketRetrofits_Logger.logging(exstraText + "buildCostOverride: " + buildCostOverride,this);
-        MarketRetrofits_Logger.logging(exstraText + "building: " + building,this);
-        MarketRetrofits_Logger.logging(exstraText + "buildProgress: " + buildProgress,this);
+        boolean canread = MarketRetrofit_BaseIndustry.BaseIndustryLogs;
+        MarketRetrofits_Logger.logging(exstraText + "market: " + market,this,canread);
 
-        MarketRetrofits_Logger.logging(exstraText + "buildTime: " + buildTime,this);
-        MarketRetrofits_Logger.logging(exstraText + "currTooltipMode: " + currTooltipMode,this);
-        MarketRetrofits_Logger.logging(exstraText + "demand: " + demand,this);
-        MarketRetrofits_Logger.logging(exstraText + "demandReduction: " + demandReduction,this);
+        MarketRetrofits_Logger.logging(exstraText + "aiCoreId: " + aiCoreId,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "buildCostOverride: " + buildCostOverride,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "building: " + building,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "buildProgress: " + buildProgress,this,canread);
 
-        MarketRetrofits_Logger.logging(exstraText + "demandReductionFromOther: " + demandReductionFromOther,this);
-        MarketRetrofits_Logger.logging(exstraText + "dKey: " + dKey,this);
-        MarketRetrofits_Logger.logging(exstraText + "hasInstallableItems: " + hasInstallableItems,this);
-        MarketRetrofits_Logger.logging(exstraText + "hiddenOverride: " + hiddenOverride,this);
-        MarketRetrofits_Logger.logging(exstraText + "id: " + id,this);
-        MarketRetrofits_Logger.logging(exstraText + "improved: " + improved,this);
+        MarketRetrofits_Logger.logging(exstraText + "buildTime: " + buildTime,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "currTooltipMode: " + currTooltipMode,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "demand: " + demand,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "demandReduction: " + demandReduction,this,canread);
 
-        MarketRetrofits_Logger.logging(exstraText + "income: " + income,this);
-        MarketRetrofits_Logger.logging(exstraText + "spec: " + spec,this);
-        MarketRetrofits_Logger.logging(exstraText + "special: " + special,this);
-        MarketRetrofits_Logger.logging(exstraText + "supply: " + supply,this);
-        MarketRetrofits_Logger.logging(exstraText + "supplyBonus: " + supplyBonus,this);
-        MarketRetrofits_Logger.logging(exstraText + "supplyBonusFromOther: " + supplyBonusFromOther,this);
-        MarketRetrofits_Logger.logging(exstraText + "upgradeId: " + upgradeId,this);
-        MarketRetrofits_Logger.logging(exstraText + "upkeep: " + upkeep,this);
-        MarketRetrofits_Logger.logging(exstraText + "wasDisrupted: " + wasDisrupted,this);
+        MarketRetrofits_Logger.logging(exstraText + "demandReductionFromOther: " + demandReductionFromOther,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "dKey: " + dKey,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "hasInstallableItems: " + hasInstallableItems,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "hiddenOverride: " + hiddenOverride,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "id: " + id,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "improved: " + improved,this,canread);
+
+        MarketRetrofits_Logger.logging(exstraText + "income: " + income,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "spec: " + spec,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "special: " + special,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "supply: " + supply,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "supplyBonus: " + supplyBonus,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "supplyBonusFromOther: " + supplyBonusFromOther,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "upgradeId: " + upgradeId,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "upkeep: " + upkeep,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "wasDisrupted: " + wasDisrupted,this,canread);
+
+        MarketRetrofits_Logger.logging(exstraText + "modId: " + modId,this,canread);
+        MarketRetrofits_Logger.logging(exstraText + "modIds: " + Arrays.toString(modIds),this,canread);
     }
 }

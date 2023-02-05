@@ -44,7 +44,6 @@ import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import com.fs.starfarer.campaign.econ.Market;
 import data.scripts.MarketRetrofits_Logger;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryList;
 import data.scripts.industries.Lists.MarketRetrofits_IndustryMasterList;
@@ -52,7 +51,7 @@ import data.scripts.industries.base.MarketRetrofit_IndustryDataExstange;
 //import sun.jvm.hotspot.oops.Mark;
 
 public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_IndustryDataExstange {
-
+/*
     public static int SIZE_FOR_SMALL_IMAGE = 3;
     public static int SIZE_FOR_LARGE_IMAGE = 6;
 
@@ -61,10 +60,10 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
     public static int SUPPLY_BONUS = 1;
 
     public static int DEFAULT_IMPROVE_SUPPLY_BONUS = 1;
-    public static final String BASE_VALUE_TEXT = "Base value for colony size";
+    public static final String BASE_VALUE_TEXT = "Base value for colony size";*/
 
     /*this is the class that an industry would extend, if and only if said industry wants to be the default industry for an industry type.*/
-    public String ID;
+    public String InstanceID;
     public float order;
     public MarketRetrofits_IndustryList industryGroup = null;
     //public MarketRetrofit_BaseIndustry CurrentIndustry;
@@ -75,7 +74,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
         setBaseDataToIndustry(industryT);
         setExtraDataToIndustry(industryT.getExstraData());
         setOtherDataIternal(industryT);
-
+        readData("  set instance data to:");
         //MarketRetrofits_Logger.logging("IndustryDataCleanup: reading data after cleanup",this);
         //readData("");
     }
@@ -84,7 +83,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
         getBaseDataFromIndustry(industryT);
         getExtraDataFromIndustry(industryT.getExstraData());
         getOtherDataIternal(industryT.getExstraData(),CurrentIndustryT);
-
+        readData("  set instance data to:");
         //MarketRetrofits_Logger.logging("IndustryDataGet: reading data after getting said data",this);
         //readData("");
     }
@@ -117,7 +116,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
 
     public MarketRetrofits_DefaltInstanceIndustry(String name, float orderT) {
         //super(name,orderT);
-        ID = name;
+        InstanceID = name;
         order = orderT;
     }
 
@@ -149,6 +148,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
 
     // want to have some ability to add random supply/demand to industries
     // e.g. market condition adding Volturnian Lobster supply to Volturn's Farming/Aquaculture
+    /*
     public Map<String, MutableCommodityQuantity> supply = new LinkedHashMap<String, MutableCommodityQuantity>();
     public Map<String, MutableCommodityQuantity> demand = new LinkedHashMap<String, MutableCommodityQuantity>();
 
@@ -174,7 +174,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
     public MutableStat supplyBonus = new MutableStat(0);
 
     public transient MutableStat demandReductionFromOther = new MutableStat(0);
-    public transient MutableStat supplyBonusFromOther = new MutableStat(0);
+    public transient MutableStat supplyBonusFromOther = new MutableStat(0);*/
 
     @Override
     public MutableStat getDemandReduction() {
@@ -214,8 +214,8 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
         CurrentIndustry.readResolve();
     }
 
-    private transient String modId;
-    private transient String [] modIds;
+    //private transient String modId;
+    //private transient String [] modIds;
     @Override
     public Object readResolve() {
         spec = Global.getSettings().getIndustrySpec(id);
@@ -329,11 +329,13 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
     @Override
     public String getModId() {
         //return "ind_" + id;
+        //MarketRetrofits_Logger.logging("my mod id outputed is: " + modId,this);
         return modId;
     }
     @Override
     public String getModId(int index) {
         //return "ind_" + id + "_" + index;
+        //MarketRetrofits_Logger.logging("my mod id outputed is: " + modIds[index],this);
         return modIds[index];
     }
     @Override
@@ -484,7 +486,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
         return CurrentIndustry.getSpec().getBuildTime();
     }
 
-    public Float buildCostOverride = null;
+    //public Float buildCostOverride = null;
     @Override
     public Float getBuildCostOverride() {
         return buildCostOverride;
@@ -510,7 +512,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
 //		return getBaseUpkeep() * market.getUpkeepMult().getModifiedValue();
 //	}
 
-    public boolean wasDisrupted = false;
+    //public boolean wasDisrupted = false;
     @Override
     public void advance(float amount) {
         boolean disrupted = CurrentIndustry.isDisrupted();
@@ -798,6 +800,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
 
         if (spec == null) spec = Global.getSettings().getIndustrySpec(id);
         //MarketRetrofits_Logger.logging("spec is: " + spec,this);
+        //MarketRetrofits_Logger.logging("id is: " + super.id,this);
         //MarketRetrofits_Logger.logging("id is: " + id,this);
         return spec;
     }
@@ -1030,7 +1033,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
         return 400f;
     }
 
-    public transient Industry.IndustryTooltipMode currTooltipMode = null;
+    //public transient Industry.IndustryTooltipMode currTooltipMode = null;
     @Override
     public void createTooltip(Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, boolean expanded) {
         currTooltipMode = mode;
@@ -1847,7 +1850,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
         else hiddenOverride = null;
     }
 
-    public Boolean hiddenOverride = null;
+    //public Boolean hiddenOverride = null;
     @Override
     public boolean isHidden() {
         if (hiddenOverride != null) return hiddenOverride;
@@ -1939,7 +1942,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
     }
 
 
-    public SpecialItemData special = null;
+    //public SpecialItemData special = null;
     @Override
     public SpecialItemData getSpecialItem() {
         return special;
@@ -2195,7 +2198,7 @@ public class MarketRetrofits_DefaltInstanceIndustry extends MarketRetrofit_Indus
 //	return new ArrayList<InstallableIndustryItemPlugin>();
 //}
 
-    public transient Boolean hasInstallableItems = null;
+    //public transient Boolean hasInstallableItems = null;
     @Override
     public List<InstallableIndustryItemPlugin> getInstallableItems() {
         boolean found = false;

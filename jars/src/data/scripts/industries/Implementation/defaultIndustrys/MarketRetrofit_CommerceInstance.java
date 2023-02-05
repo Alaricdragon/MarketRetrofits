@@ -11,6 +11,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.scripts.MarketRetrofits_Logger;
 import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
@@ -165,6 +166,8 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
 
     @Override
     public void applyNoAICoreModifiers() {
+        //MarketRetrofits_Logger.logging("TEMP LOG: market: " + market,this);
+        //MarketRetrofits_Logger.logging("TEMP LOG: market.getIncomeMult(): " + market.getIncomeMult(),this);
         market.getIncomeMult().unmodifyPercent(CurrentIndustry.getModId(1));
     }
 

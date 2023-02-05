@@ -27,6 +27,14 @@ Temp theory:
          -issue 2:
             when i remove current industry and defalt industry, the code gets null on everything. i don't understand why, but i need to understand somehow.
             -maybe change the way data transfer works so it pulls on the same data always no matter what? i though this is what i was doing...
+         -issue 3:
+            the following data is set to private in the industry, and i might have to scrap any functions that use it in the code, to avoid -issues-
+            private transient String modId;
+            private transient String [] modIds
+
+            might be fixed. moved data into data exstange, and that seemed to work
+        -issue 4: issue with some data. was not sending or receiving data. (i forgot market was a thing and didint set it right.)
+            run the game and then check for a crash. if it crashes, there is a issue.
 
 finished issue 8.
 this required testing.
