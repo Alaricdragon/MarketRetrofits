@@ -24,7 +24,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     /* this is the industry base for all instance industry.
     * this is what an user would extend if they wanted to there industry to support this mod*/
     //public String Industry = "";
-    public static boolean BaseIndustryLogs = Global.getSettings().getBoolean("MarketRetrofits_BaseIndustryLogs");
+    public static final boolean BaseIndustryLogs = Global.getSettings().getBoolean("MarketRetrofits_BaseIndustryLogs");
     //private MarketRetorfits_ExstraData exstraData = new MarketRetorfits_ExstraData();//moved into industryDataExstange
     //private MarketRetorfits_ExstraData exstraDataTemp = new MarketRetorfits_ExstraData();//never used
     private ArrayList<MarketRetrofits_DefaltInstanceIndustry> pastIndustrys = new ArrayList<>();
@@ -64,7 +64,6 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
         }
         return CurrentInstance;
     }
-
     public void applyDataToInstance(MarketRetrofits_DefaltInstanceIndustry a){
         MarketRetrofits_Logger.logging("running applyDataToInstance in: " + this,this,BaseIndustryLogs);
         MarketRetrofits_Logger.logging("    size: " + pastIndustrys.size(),this,BaseIndustryLogs);
@@ -635,7 +634,7 @@ public class MarketRetrofit_BaseIndustry extends MarketRetrofit_IndustryDataExst
     }
     @Override
     public void	doPreSaveCleanup(){
-        BaseIndustryLogs = true;
+        //BaseIndustryLogs = true;
         MarketRetrofits_Logger.logging("running class: doPreSaveCleanup()",this, BaseIndustryLogs);
         resetPossableInstances();
         MarketRetrofits_DefaltInstanceIndustry a = getActiveInstance();

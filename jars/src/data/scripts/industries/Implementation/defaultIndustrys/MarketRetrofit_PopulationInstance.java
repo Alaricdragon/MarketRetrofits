@@ -21,6 +21,7 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import data.scripts.MarketRetrofits_Logger;
 import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.industries.MarketRetrofit_BaseIndustry;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
@@ -38,15 +39,15 @@ public class MarketRetrofit_PopulationInstance extends MarketRetrofits_DefaltIns
     }
     public String addedHeatCondition = null;
     public String removedHeatCondition = null;
-    public SectorEntityToken lamp;
+    public SectorEntityToken lamp = null;
 
-    static private String addedHeatConditionName = "addedHeatCondition";
-    static private String removedHeatConditionName = "removedHeatCondition";
-    static private String lampName = "lamp";
+    static private final String addedHeatConditionName = "addedHeatCondition";
+    static private final String removedHeatConditionName = "removedHeatCondition";
+    static private final String lampName = "lamp";
     @Override
     public void getExtraDataFromIndustry(MarketRetorfits_ExstraData extraData){
         addedHeatCondition = (String) extraData.getData(addedHeatConditionName);
-        removedHeatConditionName = (String) extraData.getData(removedHeatConditionName);
+        removedHeatCondition = (String) extraData.getData(removedHeatConditionName);
         lamp = (SectorEntityToken) extraData.getData(lampName);
     }
     @Override

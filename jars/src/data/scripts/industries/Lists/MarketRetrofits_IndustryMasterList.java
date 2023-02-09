@@ -1,10 +1,7 @@
 package data.scripts.industries.Lists;
 
-import com.fs.starfarer.api.Global;
 import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
 import data.scripts.industries.MarketRetrofits_InstanceIndustry;
-import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 

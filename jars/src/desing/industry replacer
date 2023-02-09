@@ -1,4 +1,6 @@
 industry are extremely complicated. there is a lot of interaction going back and forwards here. this creates issues.
+Note: latest test resulted in EXSTRAM UNACCEPTABLE LAG. this part of the project might need to be scraped.
+
 Temp theory:
     a lot of issues might be able to be fixed if i could clone my dam instances. so im going to try that.
     is that a good idea? it might be a lot of save game blout.
@@ -16,25 +18,14 @@ Temp theory:
     -tested code using data saved on save things or something.
     -tested this basicly
         -isssue:
-            when i reload a game, the industrys try to be converted into instance industrys, for unknown reasons.
-            to fix this, i need to find out what the fuck is causeing this, once thats done, its as far as i can see
+            when i reload a game, the industrys try to be converted into instance industry, for unknown reasons.
+            to fix this, i need to find out what the fuck is causing this, once that's done, its as far as i can see
             hopefully the last major bug here. hopefully
         -known data on issue:
-            -this is not happing directly in one of my functions.
-            -what is likely happing is that, somewere in defaultIndustry, there is a line of code that commits a function to memory, so i can load it latter, and it saves the class.
+            -this is not hoping directly in one of my functions.
+            -what is likely hoping is that, somewhere in defaultIndustry, there is a line of code that commits a function to memory, so i can load it latter, and it saves the class.
              this would cause this. but were and how are a different story.
 
-         -issue 2:
-            when i remove current industry and defalt industry, the code gets null on everything. i don't understand why, but i need to understand somehow.
-            -maybe change the way data transfer works so it pulls on the same data always no matter what? i though this is what i was doing...
-         -issue 3:
-            the following data is set to private in the industry, and i might have to scrap any functions that use it in the code, to avoid -issues-
-            private transient String modId;
-            private transient String [] modIds
-
-            might be fixed. moved data into data exstange, and that seemed to work
-        -issue 4: issue with some data. was not sending or receiving data. (i forgot market was a thing and didint set it right.)
-            run the game and then check for a crash. if it crashes, there is a issue.
 
 finished issue 8.
 this required testing.
