@@ -7,12 +7,12 @@ import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.ids.Strings;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
 
 import java.awt.Color;
 
-public class MarketRetrofit_PlanetaryShieldInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
+public class MarketRetrofit_PlanetaryShieldInstance extends MarketRetrofits_DefaltInstanceIndustry {
     public MarketRetrofit_PlanetaryShieldInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -27,16 +27,16 @@ public class MarketRetrofit_PlanetaryShieldInstance extends MarketRetrofits_Defa
         super.apply(false);
 
         int size = 5;
-        applyIncomeAndUpkeep(size);
+        CurrentIndustry.applyIncomeAndUpkeep(size);
 
         float bonus = DEFENSE_BONUS;
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD)
-                .modifyMult(getModId(), 1f + bonus, getNameForModifier());
+                .modifyMult(CurrentIndustry.getModId(), 1f + bonus, CurrentIndustry.getNameForModifier());
 
-        if (isFunctional()) {
+        if (CurrentIndustry.isFunctional()) {
             applyVisuals(market.getPlanetEntity());
         } else {
-            unapply();
+            CurrentIndustry.unapply();
         }
     }
 
@@ -65,12 +65,12 @@ public class MarketRetrofit_PlanetaryShieldInstance extends MarketRetrofits_Defa
 
         unapplyVisuals(market.getPlanetEntity());
 
-        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(getModId());
+        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(CurrentIndustry.getModId());
     }
 
     @Override
     public boolean isAvailableToBuild() {
-        if (!Global.getSector().getPlayerFaction().knowsIndustry(getId())) {
+        if (!Global.getSector().getPlayerFaction().knowsIndustry(CurrentIndustry.getId())) {
             return false;
         }
         return market.getPlanetEntity() != null && !market.getPlanetEntity().isGasGiant();
@@ -83,40 +83,40 @@ public class MarketRetrofit_PlanetaryShieldInstance extends MarketRetrofits_Defa
     }
     @Override
     public boolean showWhenUnavailable() {
-        return Global.getSector().getPlayerFaction().knowsIndustry(getId());
+        return Global.getSector().getPlayerFaction().knowsIndustry(CurrentIndustry.getId());
     }
     @Override
-    protected boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
-        return mode != IndustryTooltipMode.NORMAL || isFunctional();
+    public boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
+        return mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional();
     }
 
     @Override
-    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
-        if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
+    public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+        if (mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional()) {
 
             float bonus = DEFENSE_BONUS;
-            addGroundDefensesImpactSection(tooltip, bonus, (String[])null);
+            CurrentIndustry.addGroundDefensesImpactSection(tooltip, bonus, (String[])null);
         }
     }
 
 
     @Override
-    protected void applyAlphaCoreModifiers() {
+    public void applyAlphaCoreModifiers() {
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult(
-                getModId(1), 1f + ALPHA_CORE_BONUS, "Alpha core (" + getNameForModifier() + ")");
+                CurrentIndustry.getModId(1), 1f + ALPHA_CORE_BONUS, "Alpha core (" + CurrentIndustry.getNameForModifier() + ")");
     }
 
     @Override
-    protected void applyNoAICoreModifiers() {
-        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(getModId(1));
+    public void applyNoAICoreModifiers() {
+        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(CurrentIndustry.getModId(1));
     }
 
     @Override
-    protected void applyAlphaCoreSupplyAndDemandModifiers() {
-        demandReduction.modifyFlat(getModId(0), DEMAND_REDUCTION, "Alpha core");
+    public void applyAlphaCoreSupplyAndDemandModifiers() {
+        demandReduction.modifyFlat(CurrentIndustry.getModId(0), DEMAND_REDUCTION, "Alpha core");
     }
     @Override
-    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+    public void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
         float opad = 10f;
         Color highlight = Misc.getHighlightColor();
 
@@ -152,13 +152,13 @@ public class MarketRetrofit_PlanetaryShieldInstance extends MarketRetrofits_Defa
         return true;
     }
     @Override
-    protected void applyImproveModifiers() {
-        if (isImproved()) {
-            market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult(getModId(2),
+    public void applyImproveModifiers() {
+        if (CurrentIndustry.isImproved()) {
+            market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult(CurrentIndustry.getModId(2),
                     1f + IMPROVE_DEFENSE_BONUS,
-                    getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
+                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + CurrentIndustry.getNameForModifier() + ")");
         } else {
-            market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(getModId(2));
+            market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(CurrentIndustry.getModId(2));
         }
     }
     @Override

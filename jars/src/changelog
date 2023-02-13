@@ -1,7 +1,10 @@
-V0
--recreated the supply demand library.
-    -***data regarding the supply demand library here
--(working on)added a new system, for replacing industry data with you own
-    -***data regarding that here
--added a system for replacing data from market growth with your own growth.
-    -***data regarding that here
+V0.1 -
+    save compatible with any older version
+    new
+        -recreated the supply demand library.
+        -see documentation at (add link here)
+        (may contain bugs, but tests showed it was stable. should be no risk of breaking your game.)
+
+    notes:
+        i said i was going to release supply demand library a while ago, but the project went out of control. i though i could
+        complete the basics of all the library's i wanted to make, but i could not. so this is late now, with little to show. oh well..

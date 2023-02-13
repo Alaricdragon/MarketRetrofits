@@ -1,65 +1,272 @@
 industry are extremely complicated. there is a lot of interaction going back and forwards here. this creates issues.
-current to do list:
-    1) build way to accuses and storage data in 'base industry'
-instance industry
-    issues:
-        1)  something i forgot at first is that a 'instance industry' dose not hold all the values and data that it is trying to get
-            from its 'base industry'. it also dose not have the functions of the 'base industry'
-        2)  default data from the 'games base industry' is not what i want to run in my 'instance industry' by default
-            as a result i -cannot use .super for anything-, as it would try to run with the default instances code and cause issues
-    solutions:
-        1)  get all data and functions from 'base industry'
-        2)  store all data in 'base industry'
-             -requires a way tog et and store data. ill get to this.
-        3)  replace all functions in 'default industry' with copy's of functions from 'games base industry', well calling its
-            functions and variables from its 'base industry'
+Note: latest test resulted in EXSTRAM UNACCEPTABLE LAG. this part of the project might need to be scraped.
 
-(MarketRetrofit) base industry:
-    issues:
-        1)  getting data to and from this class.
-    solutions:
-        1)  give 'instance industry' a reference to this class every time a function is called.
-        2)  create a set of functions for storing and receiving data
-            every function would correspond to a data type, and would let the me send and receive data as i please
+Temp theory:
+    a lot of issues might be able to be fixed if i could clone my dam instances. so im going to try that.
+    is that a good idea? it might be a lot of save game blout.
+    well i have the possability to do so now, so there is that.
+    -EDIT: the issue with a single word having all the mining is back. going to try this, sounds more stable
+    -issues:
+        something is up with failing to send / recive data when doing a post save restore (something that always happens on startup.)
+            this might be a issue with:
+            A: something going wrong on post save restore
+            B: some other issue?
+        something is going wrong with data sending / getting were data is not being send or gotten again.
+        how frustrating. this is causing getSpec to return null, because ID is null, because all availble data is null...
+        need more logs next time. but eventually i will get this. or give up. maybe the latter.
+
+    -tested code using data saved on save things or something.
+    -tested this basicly
+        -isssue:
+            when i reload a game, the industrys try to be converted into instance industry, for unknown reasons.
+            to fix this, i need to find out what the fuck is causing this, once that's done, its as far as i can see
+            hopefully the last major bug here. hopefully
+        -known data on issue:
+            -this is not hoping directly in one of my functions.
+            -what is likely hoping is that, somewhere in defaultIndustry, there is a line of code that commits a function to memory, so i can load it latter, and it saves the class.
+             this would cause this. but were and how are a different story.
 
 
+finished issue 8.
+this required testing.
+(note: logs enabled in orbital station instance, and in base industry)
+(not: i have not ran the new set of logs. might do that when i try this again)
+testing status:
+    random crash on:
+        java.lang.NullPointerException
+            at data.scripts.industries.Implementation.defaultIndustrys.MarketRetrofit_OrbitalStationInstance.matchStationAndCommanderToCurrentIndustry(MarketRetrofit_OrbitalStationInstance.java:457)
+            -(wrong)theory: converting objects over to Object then back into something else seems to make copys, so im not setting to the right
+                     object, but a copy of it, causeing issues.
+             -data: looking at the logs, it seems that im never sending my data to anything else, just keeping it for myself, then having it be overwritten.
+             -(old)theory: it cant be caused by me trying to run data from the spec, unless the act of getting the spec itself causeing some related issue
+             -confirmed:
+                -ok: so heres whats happing: sometimes im getting more data then im sending...
+                     this results in the 'get data' function, getting data from base industry when it should not be doing so.
 
+                -when is this going on? the error, when i try to set data to base industry at size zero, seems to be whats going on.
+                -it also resalts in me setting data to base industry 2 times in a row. this will liekly cause all sort so issues
+
+
+        (counter of number of times i have has this): 2
+        494678 [Thread-3] ERROR com.fs.starfarer.combat.CombatMain  - java.lang.NullPointerException
+        java.lang.NullPointerException
+        	at com.fs.starfarer.api.impl.campaign.fleets.RouteManager$RouteSegment.isInSystem(RouteManager.java:143)
+        	at com.fs.starfarer.api.impl.campaign.fleets.RouteManager$RouteData.getInterpolatedHyperLocation(RouteManager.java:379)
+        	at com.fs.starfarer.api.impl.campaign.fleets.RouteManager.shouldSpawn(RouteManager.java:651)
+        	at com.fs.starfarer.api.impl.campaign.fleets.RouteManager.spawnAndDespawn(RouteManager.java:617)
+        	at com.fs.starfarer.api.impl.campaign.fleets.RouteManager.advance(RouteManager.java:577)
+        	at com.fs.starfarer.api.impl.campaign.CoreScript.advance(CoreScript.java:140)
+        	at com.fs.starfarer.campaign.CampaignEngine.advance(Unknown Source)
+        	at com.fs.starfarer.campaign.save.CampaignGameManager.o00000(Unknown Source)
+        	at com.fs.starfarer.title.TitleScreenState.dialogDismissed(Unknown Source)
+        	at com.fs.starfarer.ui.N.dismiss(Unknown Source)
+        	at com.fs.starfarer.ui.impl.K.dismiss(Unknown Source)
+        	at com.fs.starfarer.campaign.save.if.actionPerformed(Unknown Source)
+        	at com.fs.starfarer.ui.OoO0.buttonPressed(Unknown Source)
+        	at com.fs.starfarer.ui.oooO.Ò00000(Unknown Source)
+        	at com.fs.starfarer.ui.oooO.processInput(Unknown Source)
+        	at com.fs.starfarer.ui.OoO0.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.Q.processInput(Unknown Source)
+        	at com.fs.starfarer.ui.v.dispatchEventsToChildren(Unknown Source)
+        	at com.fs.starfarer.ui.v.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.coreui.interfacesuper.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.Q.processInput(Unknown Source)
+        	at com.fs.starfarer.ui.v.dispatchEventsToChildren(Unknown Source)
+        	at com.fs.starfarer.ui.v.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.Q.processInput(Unknown Source)
+        	at com.fs.starfarer.E.I.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.Q.processInput(Unknown Source)
+        	at com.fs.starfarer.ui.v.dispatchEventsToChildren(Unknown Source)
+        	at com.fs.starfarer.ui.v.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.N.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.campaign.save.if.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.Q.processInput(Unknown Source)
+        	at com.fs.starfarer.ui.v.dispatchEventsToChildren(Unknown Source)
+        	at com.fs.starfarer.ui.v.processInputImpl(Unknown Source)
+        	at com.fs.starfarer.ui.Q.processInput(Unknown Source)
+        	at com.fs.starfarer.title.TitleScreenState.processInput(Unknown Source)
+        	at com.fs.starfarer.BaseGameState.traverse(Unknown Source)
+        	at com.fs.state.AppDriver.begin(Unknown Source)
+        	at com.fs.starfarer.combat.CombatMain.main(Unknown Source)
+        	at com.fs.starfarer.StarfarerLauncher.o00000(Unknown Source)
+        	at com.fs.starfarer.StarfarerLauncher$1.run(Unknown Source)
+        	at java.lang.Thread.run(Unknown Source)
+
+        -theory: might have something to do with messed up data being given over / checked on the root manager.
+        -i don't understand the location the logs are pointing to. ask people on discord for help?
+        -also, take a look at each of the military_base like things and see if i can find any way to improve said things
+    lag on: load game:
+        reason? data transfer. its very slow. might need to gass gass gass
+    understood bugs:
+        1) when running another function from MArketRetrofit_BaseIndustry, there is a chance to get the -wrong data- replayed to itself.
 status of default industry and base industry:
-    (old)
-        some functions require different things to run. some functions require different amount of work to get right.
-        i have been looking at my functions and seeing what i required to do, for both 'instance industry' and 'default industry'.
-        i want to have the option to override all the classes, even if it is silly, because someone might need one someday.
-
-        i have created some lists to what i thought i needed to do, but they are insufficient. so, new lists:
-        2 sets of lists. one for 'base industry' and one for 'default industry'
-        the 'base industry' one is for what i need to do in 'base industry' to get it working there.
-        the 'default industry' one is for what i need to do there.
-
-        Base Industry:
-            run super -> instance:
-
-            run instance -> super:
-
-            run instance:
-
-            run 'set data from instance' before end loop
-        default instance:
-
-
     (current)
-        current plan:
-            1) in default instance, replace everything with a copy from baseIndustry
+        current plan(complete):
+            1)( in default instance, replace everything with a copy from baseIndustry
             2) in MarketRetrofit_BaseIndustry create 2 functions:
                 2.a) one to call any data from itself
                 2.b) one to set any data in itself
             3) in default instance, make it so i collect all data form MarketRetrofit_BaseIndustry.
             4) in MarketRetrofit_BaseIndustry, make it so i recompile all data from default instance
             5) in default instance, every time i call a baseIndustry function, do so from the industry that is being emulated right now.
-            (im here)6) in instance industry, apply 5 and 3.
+            (NO. not worth it. let the peple have a slightly harder time with conversion, for a better time without)6) in MarketRetrofit_BaseIndustry, readd all removed functions. they can be handled, i think.
+            7) in instance industry, apply 5 and 3.
+            8)get all custom data storged in the primary industry
         issues:
-            1)  i set all functions in default instance to public. im going to try and set the ones that were protected back, and
+            1)(canceled. being public is the lesser of evils. very easy to adapt to)  i set all functions in default instance to public. im going to try and set the ones that were protected back, and
                 see if that makes it easier to connect to the old instance industry.
+            2) regarding .super:
+                its completely fine on default industry.
+                it is not find on instance industry.
+                instance industry super returns whatever active default industry is in use.
+                this is a issue because it dose not return what the super should, and in fact just runs a different instance.
+            3)(solved. not tested) population and infrastructure:
+                -this industry has some confusing custom data. i need to complete the custom data set before i can upgrade it
+                -(see "industrys with custom data that needs a way to be saved")
+            4) init and init with parms in baseIndustry:
+                issue is this causes issues. my current theory is that i should just run a super there, then run exstra data from active instance.
+            5) i change active instance every function. this can cause issues when things are not unaplyed right.
+            6) IMPORTANT: MarketRetrofits_DefaultInstanceIndustry does not call all its functions from CurrentIndustry.
+            7) IMPORTANT: data handling error:
+                data is gotten at the start of every function and set at the end of every function.
+                issue: 2 functions. one that you call first, then calls a second function.
+                second function changes data, then sets it.
+                first function finishes running, overwrites data, and sets it.
+            7.a) what instance industry / default instance industry is active again?
+                i need to get what industry is active before i can set and get data.
+                should be simple:
+            7.b) i was using the wrong functions for getting / sending data.
+                i should use / replace:
+                    IndustryDataCleanup(this);
+                    IndustryDataGet(industry);
 
+            8) IMPORTANT: industry get data error
+                right now all MarketRetrofitBaseIndustry function are ran through getActiveInstance.
+                getActiveInstance sets a instance data to current industry.
+                get data from instance runs through this...
+                AAAAAAA
+                -NOTE: data passing between instance industry and default industry:
+                    so i don't know when i get data from a default industry or a active one, simply because
+                    i need to comunacate that somehow.
+                    theory:
+                        create a function in instance industry that sends, then gets data from default industry.
+                        this would mean that any data gotten would be instantly sent no no n on o n on no no no no
+                        issue:
+                            function can run from default industry, calling the data ladder, then trying to set data to
+                            default instance.
+            9) the clone class.
+                what is clone? what does it do? i have no flipping clue
+                current theory, is its were i create more instances of a industry
+            10) currently, there is no way to change what the active instance is in baseIndustry.
+            11) currently, everything in the CSV file is linked to different files. this might be unrequierd.
+            12) currently, its possible to set a instance industry to be a default instance. make the game crash if you try.
+            13) data is trying to set null to MarketRetrofits_baseIndustry
+            14) there are times when i want a previous 'upd=grade' of a industry, and then i try to get the data stright from
+
+        solutions:
+            2)
+                create a set of functions in MarketRetrofitBaseIndustry that call the super of that class?
+                or create them in default industry. testing required.
+                ...
+                or create said functions in instance industry, there super would call defalt industry, then classes that
+                exstend instance industry would beable to accses said functions.
+            5) make it so i only change my 'active industry' only after i run apply / init with parms.
+                whatever one comes first, really.
+            6) make it call all its functions from Current industry.
+                done. all functions added
+            7) this will require a solution to run cleanly..
+                things that help: every function this apply to will run through the CurrentIndustry.
+                theory: have 2 sets of memory, + active instance?
+                theory: a list of 'last instance' to save data to.
+                    1) when a instance is set to run, add instance to list
+                    2) when new instance is gotten, get data from last inputted last instance
+                    3) when a instance stops running, get data from last instance, and apply it to second last instance
+                        -set the first instance to be the memory of the current industry.
+                        -issue: possible memory leak: some functions call from baseIndustry.speck, and not from base industry.
+                                this means that the list will increase in size forever in some cases... this is a issue
+                                can be mitigated by making.....
+            7.a) how to do this?
+                simple, reverse order of getData and getExtraData.
+                have getExtraData and setExtraData return the the the the the the the the issue.
+                this is already available though. it has to be to run the code..
+                not what im looking for.
+                already available data exists. data is attached to different things...
+                the only times i can get confused are when a instance industry calls a default.
+                i will already be running the data through there. save the industry as i increase the ladder.
+                then pass the data on as i reduce the ladder.
+
+            7.b) incorrect functions edited. edits undone.
+                IndustryDataCleanup(this);
+                IndustryDataGet(industry);
+                1) remove all uses of said functions.
+                2) create and run 2 MarketRetrofitBaseIndustry functions, to replace said functions.
+                3) functions should be able to get/set data from/to saved instance industry's, or the baseIndustry itself, if required.
+
+            8) this will require a messy solution:
+                when getting running a default industry from a instance industry, call the data with the function that
+                were made in solutions 7. this will raise the item up the ladder a little, letting data be sent back and forth
+                to and from the default instance to the instance industry.
+            9) run tests
+            10) find the ideal spot(s) to change ActiveInstance to null. next time the industry tres to get the instance, it will change it to whatever the currently active instance is.
+            11) link everything to MarketRetrofitsBaseIndustry. see if it works.
+            12) create a error handler.
+            13) don't add data in case of null?
+            14) get data by creating a temp default industry, then setting previous industry data to it, then getting the data from that.
+                this lets me use 'get extra data' to get the required data. wish is more module.
         incomplete:
-            1) for 2 of the current plan, i cant store or set custom data yet. only existing data can be set right now.
-            2) right now i have no way to automatically get and set any extra data that i create
+
+        ISSUE:
+            different data types might require a different way to get them from null.
+            if a null data type is inputted, it cannot be set to any primitive data type. like at all.
+            solution: have different functions to get data from different primitive types.
+
+            solution(failed): data and infermation can be set from null this way.
+                      but only if its null. any other value will fail.
+                boolean a = Boolean.parseBoolean(null);
+                int b = Integer.parseInt(null);
+                float c = Float.parseFloat(null);
+                double d = Double.parseDouble(null);
+                MarketRetorfits_ExstraData e = null;
+                String f = null;
+                char g = null;//char cannot get from null.
+
+                a = 0;//cant
+                b = 0;
+                c = 0;
+                d = 0;
+                e = 0;//cant
+                f = 0;//cant
+                g = 0;
+            final solution: have get data have a the ability to get a 'type' of data.
+            make Exstra data public, so it can be the way one gets and sets data
+
+            new issue:
+            sometimes a defalt industry will call functions that will change exstra data.
+            i must call set and get exstra data before and after said function, to avoid issues...
+            have not added this yet. will do so soon
+
+            HERE new solution:
+            give every instance industry its own 'extra data' class. set and get the extra data after and before running data. its maddeningly simple.
+        industrys with custom data that needs a way to be saved:
+            1) (done. not tested)population and infrastructure
+                -lamp
+                -removedHeatCondition
+                -addedHeatCondition
+            2) (done.not tested)MarketRetrofit_CommerceInstance
+                -saved
+            3)(done. not tested)MarketRetrofit_LionsGuardHQInstance
+                -returningPatrolValue
+                -tracker
+            4)(done. not tested)MarketRetrofit_MilitaryBaseInstance
+                -returningPatrolValue
+                -tracker
+            5)(done. not tested)MarketRetrofit_MiningInstance
+                -shownPlasmaNetVisuals
+            6)(done. not tested)MarketRetrofit_HeavyIndustryInstance
+                -permaPollution
+                -daysWithNanoforge
+                -addedPollution
+            7)(done. not tested)MarketRetrofit_OrbitalStationInstance
+                -(done)stationEntity
+                -(done)usingExistingStation
+                -(done)stationFleet

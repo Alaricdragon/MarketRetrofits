@@ -17,7 +17,7 @@ import com.fs.starfarer.api.impl.campaign.procgen.SalvageEntityGenDataSpec;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.Random;
 
 import com.fs.starfarer.api.campaign.econ.MarketImmigrationModifier;
 
-public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {//implements MarketImmigrationModifier{
+public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltInstanceIndustry {//implements MarketImmigrationModifier{
     public MarketRetrofit_TechminingInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -58,7 +58,7 @@ public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltIns
 
         size = Math.min(size, max);
 
-        applyIncomeAndUpkeep(size);
+        CurrentIndustry.applyIncomeAndUpkeep(size);
 
 //		supply(Commodities.METALS, size + 2);
 //		supply(Commodities.HEAVY_MACHINERY, size);
@@ -69,7 +69,7 @@ public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltIns
 //		supply(Commodities.RARE_METALS, size - 2);
 //		supply(Commodities.VOLATILES, size - 2);
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
         }
 
@@ -121,12 +121,12 @@ public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltIns
     }
 
     @Override
-    protected boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
+    public boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
         return true;
     }
 
     @Override
-    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+    public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         float opad = 10f;
         tooltip.addPara("In addition to extracting basic resources, " +
                 "there's also a chance to find blueprints and other rare items. Anything " +
@@ -161,7 +161,7 @@ public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltIns
 
     }
 
-    protected float getEffectivenessMult() {
+    public float getEffectivenessMult() {
         float mult = market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).getModifiedValue();
         return mult;
     }
@@ -201,7 +201,7 @@ public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltIns
 
     @Override
     public CargoAPI generateCargoForGatheringPoint(Random random) {
-        if (!isFunctional()) return null;
+        if (!CurrentIndustry.isFunctional()) return null;
 
         float mult = getTechMiningMult();
         float decay = Global.getSettings().getFloat("techMiningDecay");
@@ -308,21 +308,21 @@ public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltIns
 
 
     @Override
-    protected void applyAlphaCoreModifiers() {
-        market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).modifyMult(getModId(0), 1f + ALPHA_CORE_FINDS_BONUS);
+    public void applyAlphaCoreModifiers() {
+        market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).modifyMult(CurrentIndustry.getModId(0), 1f + ALPHA_CORE_FINDS_BONUS);
     }
 
     @Override
-    protected void applyNoAICoreModifiers() {
-        market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).unmodifyMult(getModId(0));
+    public void applyNoAICoreModifiers() {
+        market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).unmodifyMult(CurrentIndustry.getModId(0));
     }
 
     @Override
-    protected void applyAlphaCoreSupplyAndDemandModifiers() {
-        demandReduction.modifyFlat(getModId(0), DEMAND_REDUCTION, "Alpha core");
+    public void applyAlphaCoreSupplyAndDemandModifiers() {
+        demandReduction.modifyFlat(CurrentIndustry.getModId(0), DEMAND_REDUCTION, "Alpha core");
     }
     @Override
-    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+    public void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
         float opad = 10f;
         Color highlight = Misc.getHighlightColor();
 
@@ -356,11 +356,11 @@ public class MarketRetrofit_TechminingInstance extends MarketRetrofits_DefaltIns
         return true;
     }
     @Override
-    protected void applyImproveModifiers() {
-        if (isImproved()) {
-            market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).modifyMult(getModId(1), 1f + IMPROVE_FINDS_BONUS);
+    public void applyImproveModifiers() {
+        if (CurrentIndustry.isImproved()) {
+            market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).modifyMult(CurrentIndustry.getModId(1), 1f + IMPROVE_FINDS_BONUS);
         } else {
-            market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).unmodifyMult(getModId(1));
+            market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).unmodifyMult(CurrentIndustry.getModId(1));
         }
     }
     @Override

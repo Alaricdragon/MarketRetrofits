@@ -1,0 +1,91 @@
+THIS IS NOT ACTIVE. if you really wanna activate it, going into the data/campaign/old folder, and move the CSV file there to data/campaign.
+however, it will create EXTREME LAG do to its poor structure. and it will brick your save. enjoy.
+
+how this mode choices what code to run on what industry:
+    when a industry that is supports this mod (example: any industry from the base game) calls a function, this mod:
+        1st: sees if there is a 'current instance' saved
+            a: if so, it runs that industry.
+            b: if not, goes onto the 2nd step
+        2nd: looks and sees if any of the conditional instances that are attached to this industry return 'true' on there 'canImply' function
+        3rd: if so, it runs the conditional instance (and sets 'current instance' to said instance) that returned true that has the lowest order value.
+            -if this instance dose not @Override the function the code is trying to run, it runs the default instance instead.
+        4th: if no conditional instance returns true on on canImply, runs the default instance of this industry.
+        1st: looks and sees if any of the conditional instances that are attached to this industry return 'true' on there 'canImply' function
+        2nd: if so, it runs the conditional instance that returned true that has the lowest order value.
+            -if this instance dose not @Override the function the code is trying to run, it runs the default instance instead.
+        3rd: if no conditional instance returns true on on canImply, runs the default instance of this industry.
+
+
+for people looking to add support for an industry to marketReplacer:
+    how to do it:
+        1st: create a new default instance with all the functions your custom industry has, and apply it to your industry
+        2nd: create a new class that 'extends MarketRetrofit_BaseIndustry'
+        3rd: add and override the function 'public String MarketRetrofits_IndustryID()' somewere in your class. make it return your industrys ID.
+        4th: if you have any data that you don't want to be randomly removed in the function:
+            add and override the following functions.
+            the data and dataname is an example. what you want to do is you want to try to exstract all data you have from
+            the provided extra data class in 'getExtraDataFromIndustry'.
+            you will also want to send all the data to the exstra data class in 'setExtraDataToIndustry.
+            this will let others run or edit functions of your industry well still getting the data.
+                public void getExtraDataFromIndustry(MarketRetorfits_ExstraData extraData){
+                    data = (String) extraData.getData(dataName);
+                }
+                @Override
+                public void setExtraDataToIndustry(MarketRetorfits_ExstraData extraData){
+                    extraData.addData(dataName,data);
+                }
+        5th: reroute the script path to your new class in the industry.csv file.
+
+    Notes:
+    if you are having any issues, feel free to contact me. for real though, do contact me, i have no life so im always free.
+
+for people looking to add an conditional instances to an industry:
+    how to do it:
+        1st: create a class that extends MarketRetrofits_InstanceIndustry
+        2nd: (optional) @Override the function public boolean canImply(MarketAPI market) and make it return weather or not your instance should trigger for an given market.
+        3rd: modify the class like you would if you were to replace the industry normally with the following exceptions:
+            1) any function you run that is a BaseIndustry function, must be ran through CurrentIndustry
+                -example: 'CurrentIndustry.isFunctional();', as apposed to 'isFunctional();'.
+            2) any time you would normally run a super.functionname();, you should instead:
+                -'not yet possable'. super only gets what the defalt industry does, wish is intended, but not very useful....
+            3) if you want to run a function from the formed default industry, run a super.functionname(). this will get the default industry.
+            4) if you want to have custom variables not act like static variables
+                add and override the following functions.
+                the data and dataname is an example. what you want to do is you want to try to exstract all data you have from
+                the provided extra data class in 'getExtraDataFromIndustry'.
+                you will also want to send all the data to the exstra data class in 'setExtraDataToIndustry.
+                public void getExtraDataFromIndustry(MarketRetorfits_ExstraData extraData){
+                    data = (String) extraData.getData(dataName);
+                }
+                @Override
+                public void setExtraDataToIndustry(MarketRetorfits_ExstraData extraData){
+                    extraData.addData(dataName,data);
+                }
+        4th: in onApplicationLoad(), run the following code:
+            1) intilize your new class. (order is what order the code will check. lower order values will ha e there functions ran over instances with a higher order. name is what your instances name is. set it to something uneek)
+            2) run the function yourClass.applyToIndustry(industryId) were industryId is the Id of the industry you want to add this instance to.
+
+    Notes:
+    if you wish to have one conditional instance apply to more then one industry, you must re-initialize the class before running yourClass.applyToIndustry(industryId)
+    the 'protected boolean Active' is always available if you don't want to override the canImply function. this lets you toggle weather or not this instance can be ran or not.
+        * if you do override the 'canImply' function, you need to have it run 'return (your output) && super.canImply(market)' if you want this feature to be supported.
+
+
+for people looking to change the default instance of an industry:
+    how to do it:
+        1st: create a class that extends 'MarketRetrofits_DefaltInstanceIndustry'
+        2nd modify the class like you would if you were to replace the industry normally with the following exceptions:
+            1) any function you run that is a BaseIndustry function, must be ran through CurrentIndustry
+                -example: 'CurrentIndustry.isFunctional();', as apposed to 'isFunctional();'.
+        3rd: in onApplicationLoad(), run the following code:
+             1) initialize your new class. (order dose nothing here. name is what your instances name is. set it to something uneek)
+             2) run the function yourClass.applyToIndustry(industryId) were industryId is the Id of the industry you want to add this instance to.
+
+     Notes:
+     if you wish to have one default instance apply to more then one industry, you must re-initialize the class before running yourClass.applyToIndustry(industryId)
+     if more then one instance try's to be the default instance of a industry, the code will only remember the latest inputed instance
+     yes canImply dose exist here. it dose nothing. its just inherent from MarketRetrofits_InstanceIndustry. it helps keep this simple.
+
+
+
+

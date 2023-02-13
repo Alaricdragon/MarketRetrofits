@@ -1,0 +1,16 @@
+extends MutableStat
+
+public String ID;                                       the ID of the change. each change needs its own ID.
+public float order;                                     the order of the change. determined the order they are ran in.
+
+
+public MarketRetrofit_CCBase(String name, float orderT){
+    super(0);
+    ID = name;
+    order = orderT;
+}
+
+public boolean active()                                 when true, this change will run. you should use MarketRetrofit_CCSetBase to apply condition changes, so i don't advice touching this, but you can if you want.
+public void apply(Industry industry,String ID)          apply the modifier to a industry.
+public void unApply(Industry industry,String ID)        unapply the modifier to a industry.
+public float applyMutableStat(float input)              returns modified value

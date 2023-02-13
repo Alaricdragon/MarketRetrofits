@@ -1,0 +1,11 @@
+regarding sets:
+
+sets are were most of the complexity can com into play in this library. they allow you to have changes only apply conditional, provided you
+override the public boolean active(Industry industry) function.
+
+the fact there are two types of sets might be confusing, but the diffrence is simple:
+
+MarketRetrofit_CCSetGenral is applied to all industry's, and is saved in MarketRetrofit_CCMasterList automatically on creation
+
+MarketRetrofit_CCIndustrySet is implied to any industry(s) you want, and requires you to run the function
+applyToIndustry(String Industry) were Industry is the ID of Industry you want the set to apply its changes to. can be applied to as many industry as you want

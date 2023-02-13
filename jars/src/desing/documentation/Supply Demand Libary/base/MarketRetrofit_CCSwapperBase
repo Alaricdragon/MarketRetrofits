@@ -1,0 +1,10 @@
+extends MarketRetrofit_CCBase
+
+public String removedCommodity;                                                                             the commodity you want to remove
+public String addedCommodity;                                                                               the commodity you want to replace it with.
+
+public MarketRetrofit_CCSwapperBase(String name, float orderT, String removeCommodity, String addCommodity){
+    super(name, orderT);
+    removedCommodity = removeCommodity;
+    addedCommodity = addCommodity;
+}

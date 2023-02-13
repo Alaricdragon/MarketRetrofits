@@ -1,0 +1,8 @@
+extends MarketRetrofit_CCSetBase
+
+public MarketRetrofit_CCSetGenral(String name) {
+    super(name);
+    applyToGenralChanges();
+}
+
+private void applyToGenralChanges()                 apply this set to general sets. makes it so it runs on every industry, provided active(Industry industry) returns true.

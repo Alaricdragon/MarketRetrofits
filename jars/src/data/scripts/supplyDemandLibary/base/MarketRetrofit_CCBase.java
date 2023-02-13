@@ -5,14 +5,9 @@ import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.combat.StatBonus;
 
 public class MarketRetrofit_CCBase extends MutableStat {
-    /*
-        to do list:
-        swap out the float modifiers with an mutable state modifiers.
-        also make it an option to change that. not required.
-     */
     public String ID ="";
     public float order = 0;
-    public float modifiers;
+    //public float modifiers;
     public MarketRetrofit_CCBase(String name, float orderT){
         super(0);
         ID = name;

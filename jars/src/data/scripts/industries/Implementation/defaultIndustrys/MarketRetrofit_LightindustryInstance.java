@@ -4,9 +4,9 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
-public class MarketRetrofit_LightindustryInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
+public class MarketRetrofit_LightindustryInstance extends MarketRetrofits_DefaltInstanceIndustry {
     public MarketRetrofit_LightindustryInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -17,33 +17,33 @@ public class MarketRetrofit_LightindustryInstance extends MarketRetrofits_Defalt
 
         int size = market.getSize();
 
-        demand(Commodities.ORGANICS, size);
+        CurrentIndustry.demand(Commodities.ORGANICS, size);
 
-        supply(Commodities.DOMESTIC_GOODS, size);
+        CurrentIndustry.supply(Commodities.DOMESTIC_GOODS, size);
         //supply(Commodities.SUPPLIES, size - 3);
 
         //if (!market.getFaction().isIllegal(Commodities.LUXURY_GOODS)) {
         if (!market.isIllegal(Commodities.LUXURY_GOODS)) {
-            supply(Commodities.LUXURY_GOODS, size - 2);
+            CurrentIndustry.supply(Commodities.LUXURY_GOODS, size - 2);
         } else {
-            supply(Commodities.LUXURY_GOODS, 0);
+            CurrentIndustry.supply(Commodities.LUXURY_GOODS, 0);
         }
         //if (!market.getFaction().isIllegal(Commodities.DRUGS)) {
         if (!market.isIllegal(Commodities.DRUGS)) {
-            supply(Commodities.DRUGS, size - 2);
+            CurrentIndustry.supply(Commodities.DRUGS, size - 2);
         } else {
-            supply(Commodities.DRUGS, 0);
+            CurrentIndustry.supply(Commodities.DRUGS, 0);
         }
 
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORGANICS);
+        Pair<String, Integer> deficit = CurrentIndustry.getMaxDeficit(Commodities.ORGANICS);
 
-        applyDeficitToProduction(1, deficit,
+        CurrentIndustry.applyDeficitToProduction(1, deficit,
                 Commodities.DOMESTIC_GOODS,
                 Commodities.LUXURY_GOODS,
                 //Commodities.SUPPLIES,
                 Commodities.DRUGS);
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
         }
     }
@@ -81,7 +81,7 @@ public class MarketRetrofit_LightindustryInstance extends MarketRetrofits_Defalt
     }
 
     @Override
-    protected boolean canImproveToIncreaseProduction() {
+    public boolean canImproveToIncreaseProduction() {
         return true;
     }
 

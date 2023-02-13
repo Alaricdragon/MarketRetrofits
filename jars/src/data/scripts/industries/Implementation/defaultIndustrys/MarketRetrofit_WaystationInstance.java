@@ -3,18 +3,19 @@ package data.scripts.industries.Implementation.defaultIndustrys;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SubmarketPlugin;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
+import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.submarkets.LocalResourcesSubmarketPlugin;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
 
 import java.awt.Color;
 
-public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
+public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltInstanceIndustry {
     public MarketRetrofit_WaystationInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -33,11 +34,11 @@ public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltIns
 
         int size = market.getSize();
 
-        demand(Commodities.FUEL, size);
-        demand(Commodities.SUPPLIES, size);
-        demand(Commodities.CREW, size);
+        CurrentIndustry.demand(Commodities.FUEL, size);
+        CurrentIndustry.demand(Commodities.SUPPLIES, size);
+        CurrentIndustry.demand(Commodities.CREW, size);
 
-        String desc = getNameForModifier();
+        String desc = CurrentIndustry.getNameForModifier();
 
 //		Pair<String, Integer> deficit = getUpkeepAffectingDeficit();
 //		if (deficit.two > 0) {
@@ -51,7 +52,7 @@ public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltIns
 
         float a = BASE_ACCESSIBILITY;
         if (a > 0) {
-            market.getAccessibilityMod().modifyFlat(getModId(0), a, desc);
+            market.getAccessibilityMod().modifyFlat(CurrentIndustry.getModId(0), a, desc);
         }
 
         if (market.isPlayerOwned()) {
@@ -59,16 +60,16 @@ public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltIns
             if (sub instanceof LocalResourcesSubmarketPlugin) {
                 LocalResourcesSubmarketPlugin lr = (LocalResourcesSubmarketPlugin) sub;
                 float mult = Global.getSettings().getFloat("stockpileMultExcess");
-                lr.getStockpilingBonus(Commodities.FUEL).modifyFlat(getModId(0), size * mult);
-                lr.getStockpilingBonus(Commodities.SUPPLIES).modifyFlat(getModId(0), size * mult);
-                lr.getStockpilingBonus(Commodities.CREW).modifyFlat(getModId(0), size * mult);
+                lr.getStockpilingBonus(Commodities.FUEL).modifyFlat(CurrentIndustry.getModId(0), size * mult);
+                lr.getStockpilingBonus(Commodities.SUPPLIES).modifyFlat(CurrentIndustry.getModId(0), size * mult);
+                lr.getStockpilingBonus(Commodities.CREW).modifyFlat(CurrentIndustry.getModId(0), size * mult);
             }
         }
 
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
-            unapply();
+            CurrentIndustry.unapply();
         }
     }
 
@@ -77,35 +78,35 @@ public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltIns
         super.unapply();
 
         market.setHasWaystation(false);
-        market.getAccessibilityMod().unmodifyFlat(getModId(0));
-        market.getAccessibilityMod().unmodifyFlat(getModId(1));
-        market.getAccessibilityMod().unmodifyFlat(getModId(2));
+        market.getAccessibilityMod().unmodifyFlat(CurrentIndustry.getModId(0));
+        market.getAccessibilityMod().unmodifyFlat(CurrentIndustry.getModId(1));
+        market.getAccessibilityMod().unmodifyFlat(CurrentIndustry.getModId(2));
 
         if (market.isPlayerOwned()) {
             SubmarketPlugin sub = Misc.getLocalResources(market);
             if (sub instanceof LocalResourcesSubmarketPlugin) {
                 LocalResourcesSubmarketPlugin lr = (LocalResourcesSubmarketPlugin) sub;
                 // base bonuses
-                lr.getStockpilingBonus(Commodities.FUEL).unmodifyFlat(getModId(0));
-                lr.getStockpilingBonus(Commodities.SUPPLIES).unmodifyFlat(getModId(0));
-                lr.getStockpilingBonus(Commodities.CREW).unmodifyFlat(getModId(0));
+                lr.getStockpilingBonus(Commodities.FUEL).unmodifyFlat(CurrentIndustry.getModId(0));
+                lr.getStockpilingBonus(Commodities.SUPPLIES).unmodifyFlat(CurrentIndustry.getModId(0));
+                lr.getStockpilingBonus(Commodities.CREW).unmodifyFlat(CurrentIndustry.getModId(0));
             }
         }
     }
 
-    protected float getUpkeepPenalty(Pair<String, Integer> deficit) {
+    public float getUpkeepPenalty(Pair<String, Integer> deficit) {
         float loss = deficit.two * UPKEEP_MULT_PER_DEFICIT;
         if (loss < 0) loss = 0;
         return loss;
     }
 
-    protected Pair<String, Integer> getUpkeepAffectingDeficit() {
-        return getMaxDeficit(Commodities.FUEL, Commodities.SUPPLIES, Commodities.CREW);
+    public Pair<String, Integer> getUpkeepAffectingDeficit() {
+        return CurrentIndustry.getMaxDeficit(Commodities.FUEL, Commodities.SUPPLIES, Commodities.CREW);
     }
 
 
     @Override
-    protected void addPostDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
+    public void addPostDescriptionSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode) {
         if (!market.isPlayerOwned()) return;
 
         float opad = 10f;
@@ -114,19 +115,19 @@ public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltIns
 //						"if it does not produce them locally.", opad);
     }
     @Override
-    protected boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
-        return mode != IndustryTooltipMode.NORMAL || isFunctional();
+    public boolean hasPostDemandSection(boolean hasDemand, Industry.IndustryTooltipMode mode) {
+        return mode != Industry.IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional();
     }
 
     @Override
-    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
-        if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
+    public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode) {
+        if (mode != Industry.IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional()) {
             MutableStat fake = new MutableStat(0);
 
-            String desc = getNameForModifier();
+            String desc = CurrentIndustry.getNameForModifier();
             float a = BASE_ACCESSIBILITY;
             if (a > 0) {
-                fake.modifyFlat(getModId(0), a, desc);
+                fake.modifyFlat(CurrentIndustry.getModId(0), a, desc);
             }
             float total = a;
             String totalStr = "+" + (int)Math.round(total * 100f) + "%";
@@ -149,49 +150,49 @@ public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltIns
     }
 
     @Override
-    protected void applyAlphaCoreModifiers() {
+    public void applyAlphaCoreModifiers() {
         if (market.isPlayerOwned()) {
             SubmarketPlugin sub = Misc.getLocalResources(market);
             if (sub instanceof LocalResourcesSubmarketPlugin) {
                 float bonus = market.getSize() * Global.getSettings().getFloat("stockpileMultExcess");
                 LocalResourcesSubmarketPlugin lr = (LocalResourcesSubmarketPlugin) sub;
-                lr.getStockpilingBonus(Commodities.FUEL).modifyFlat(getModId(1), bonus);
-                lr.getStockpilingBonus(Commodities.SUPPLIES).modifyFlat(getModId(1), bonus);
-                lr.getStockpilingBonus(Commodities.CREW).modifyFlat(getModId(1), bonus);
+                lr.getStockpilingBonus(Commodities.FUEL).modifyFlat(CurrentIndustry.getModId(1), bonus);
+                lr.getStockpilingBonus(Commodities.SUPPLIES).modifyFlat(CurrentIndustry.getModId(1), bonus);
+                lr.getStockpilingBonus(Commodities.CREW).modifyFlat(CurrentIndustry.getModId(1), bonus);
             }
         }
     }
 
     @Override
-    protected void applyNoAICoreModifiers() {
+    public void applyNoAICoreModifiers() {
         if (market.isPlayerOwned()) {
             SubmarketPlugin sub = Misc.getLocalResources(market);
             if (sub instanceof LocalResourcesSubmarketPlugin) {
                 LocalResourcesSubmarketPlugin lr = (LocalResourcesSubmarketPlugin) sub;
-                lr.getStockpilingBonus(Commodities.FUEL).unmodifyFlat(getModId(1));
-                lr.getStockpilingBonus(Commodities.SUPPLIES).unmodifyFlat(getModId(1));
-                lr.getStockpilingBonus(Commodities.CREW).unmodifyFlat(getModId(1));
+                lr.getStockpilingBonus(Commodities.FUEL).unmodifyFlat(CurrentIndustry.getModId(1));
+                lr.getStockpilingBonus(Commodities.SUPPLIES).unmodifyFlat(CurrentIndustry.getModId(1));
+                lr.getStockpilingBonus(Commodities.CREW).unmodifyFlat(CurrentIndustry.getModId(1));
             }
         }
     }
 
     @Override
-    protected void applyAlphaCoreSupplyAndDemandModifiers() {
-        demandReduction.modifyFlat(getModId(0), DEMAND_REDUCTION, "Alpha core");
+    public void applyAlphaCoreSupplyAndDemandModifiers() {
+        demandReduction.modifyFlat(CurrentIndustry.getModId(0), DEMAND_REDUCTION, "Alpha core");
     }
     @Override
-    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+    public void addAlphaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode) {
         float opad = 10f;
         Color highlight = Misc.getHighlightColor();
 
         String pre = "Alpha-level AI core currently assigned. ";
-        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+        if (mode == Industry.AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == Industry.AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
             pre = "Alpha-level AI core. ";
         }
         float a = ALPHA_CORE_ACCESSIBILITY;
         String aStr = "" + (int)Math.round(a * 100f) + "%";
 
-        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+        if (mode == Industry.AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
             CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
             text.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. " +
@@ -224,23 +225,23 @@ public class MarketRetrofit_WaystationInstance extends MarketRetrofits_DefaltIns
         return true;
     }
     @Override
-    protected void applyImproveModifiers() {
-        if (isImproved()) {
-            market.getAccessibilityMod().modifyFlat(getModId(3), IMPROVE_ACCESSIBILITY,
-                    getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
+    public void applyImproveModifiers() {
+        if (CurrentIndustry.isImproved()) {
+            market.getAccessibilityMod().modifyFlat(CurrentIndustry.getModId(3), IMPROVE_ACCESSIBILITY,
+                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + CurrentIndustry.getNameForModifier() + ")");
         } else {
-            market.getAccessibilityMod().unmodifyFlat(getModId(3));
+            market.getAccessibilityMod().unmodifyFlat(CurrentIndustry.getModId(3));
         }
     }
     @Override
-    public void addImproveDesc(TooltipMakerAPI info, ImprovementDescriptionMode mode) {
+    public void addImproveDesc(TooltipMakerAPI info, Industry.ImprovementDescriptionMode mode) {
         float opad = 10f;
         Color highlight = Misc.getHighlightColor();
 
         float a = IMPROVE_ACCESSIBILITY;
         String aStr = "" + (int)Math.round(a * 100f) + "%";
 
-        if (mode == ImprovementDescriptionMode.INDUSTRY_TOOLTIP) {
+        if (mode == Industry.ImprovementDescriptionMode.INDUSTRY_TOOLTIP) {
             info.addPara("Accessibility increased by %s.", 0f, highlight, aStr);
         } else {
             info.addPara("Increases accessibility by %s.", 0f, highlight, aStr);

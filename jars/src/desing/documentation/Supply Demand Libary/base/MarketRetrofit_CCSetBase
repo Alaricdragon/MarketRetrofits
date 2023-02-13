@@ -1,0 +1,14 @@
+public boolean active = true;                               set this to false to turn of this set. can be toggled anytime.
+public String ID;                                           the ID of this set. must not be equal to any other set.
+private ArrayList<MarketRetrofit_CCBase> items;             the private list of all changes in this set.
+
+
+public MarketRetrofit_CCSetBase(String name){
+    ID = name;
+}
+
+public boolean active(Industry industry)                    returns true if the change should take place on this industry. @Override this to apply conditional changes.
+public void addChange(MarketRetrofit_CCBase change)         adds the inputted change to the set.
+public MarketRetrofit_CCBase getChange(String name)         gets a change from a set, with the matching ID. returns null if no change is found
+public boolean removeChange(String name)                    removes a change from the set. returns true if the change was removed, false otherwise
+public ArrayList<MarketRetrofit_CCBase> getAllChanges()     returns the private list of changes. dont use this to edit the list of changes. it will break things.

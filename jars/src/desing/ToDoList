@@ -1,26 +1,43 @@
 current:
 MOVED industry.csv FILE TO 'old' FOLDER. MOVE BACK TO 'campaing' to reactavate
+create the list of wanted libarys:
+    1) industry replacer (disabled for now) (reason: extra unacceptable lag)
+        -to fix, minimize possible causes of lag, like for example, the number of data transfers, and the hundreds of if statements.
+        -possibility: remove about 95% of functions. keep all descriptions, images, apply/unapply. remove checking for current industry every time.
+        -possability: remove ALL data transfer. have the code run the stored industry directly
+    2) condition replacer
+        -replaces functions in market conditions with ones of my own.
+    3) supply demand libary (functional)
+        -allows the mass or pacific changing of supply or demand on a industry
+    4) growth changer
+        -allows one to remove or add new growth from outside of conditions or industry
+    5) hazard changer
+        -allows for changing in the hazard button name, description, looks, and function.
+    6) free port changer
+        -allows the change in the free-port name, and description.
+    7) found a market change
+        -allows players to have there own requirements and addition code run when founding a market. multiple options available.
 to do list:
-    Industry Replacer:
-        see new folder called 'industry replaced'
-supplyDemandLibary:
-    create masterList:
-        -(done)the masterList is an collection of lists. its were all lists ever made are stored.
-        -(done)every time an list is added/requested with an industry reference that dose not exist, creates an new set of lists for that industry reference.
-        -remembers weather or not an industry has an MarketRetrofits reference, and if so, runs all change data in that industry?
-    (done)create lists:
-        -lists are collection of sets. one list handles one industry.
-        -an list holds an organized by order list of all 'changes', with references back to said 'changes' 'set'. organized by order.
-        -when activated, an list runs through all changes in order, each time it reaches an new set, it checks to see if that set is valid.
-        -list holds references to its required industry ID.
-    (done)create sets
-        -sets are were i calculate and run code. they decide what is allowed, and what is not.
-        -they also run and calculate all changes in the order they want to be calculated in.
-        -should be able to automatically apply itself to to the 'lists' that are required for its wanted industry.
-    (done)finish testing the 'applyMutableStat' function in supplyBase.
-        -i made the class extend an MutableState. no idea if this is the right call or not.
-    (done) test the following:
-        -demandSwap
-        -supplySwap
-        -supplyAdd
-        -demandAdd
+    ExtraData:
+        make the data organize itself with that fast find method.
+    supplyDemandLibary:
+        create masterList:
+            -(done)the masterList is an collection of lists. its were all lists ever made are stored.
+            -(done)every time an list is added/requested with an industry reference that dose not exist, creates an new set of lists for that industry reference.
+            -remembers weather or not an industry has an MarketRetrofits reference, and if so, runs all change data in that industry?
+        (done)create lists:
+            -lists are collection of sets. one list handles one industry.
+            -an list holds an organized by order list of all 'changes', with references back to said 'changes' 'set'. organized by order.
+            -when activated, an list runs through all changes in order, each time it reaches an new set, it checks to see if that set is valid.
+            -list holds references to its required industry ID.
+        (done)create sets
+            -sets are were i calculate and run code. they decide what is allowed, and what is not.
+            -they also run and calculate all changes in the order they want to be calculated in.
+            -should be able to automatically apply itself to to the 'lists' that are required for its wanted industry.
+        (done)finish testing the 'applyMutableStat' function in supplyBase.
+            -i made the class extend an MutableState. no idea if this is the right call or not.
+        (done) test the following:
+            -demandSwap
+            -supplySwap
+            -supplyAdd
+            -demandAdd

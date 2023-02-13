@@ -1,2 +1,2 @@
 name,id,planetary,decivRemove,script,desc,icon,order
-applyData,marketRetrofit_hiddinCondition,,FALSE,data.scripts.marketconditions.MarketRetrofit_hiddenCondition,this dose not exsist. hopefully,graphics/icons/markets/AIRetrofit_AIPopulation.png,999
+applyData,marketRetrofit_hiddinCondition,,FALSE,data.scripts.marketconditions.MarketRetrofit_hiddenCondition,this dose not exsist. hopefully,,999

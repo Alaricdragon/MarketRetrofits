@@ -1,0 +1,9 @@
+extends MarketRetrofit_CCBase
+
+public string added;                 this string is the commodity ID that you are adding with this change.
+
+
+public MarketRetrofit_CCAddDemandSupplyBase(String name, float orderT, String addedT){
+    super(name, orderT);
+    added = addedT;
+}

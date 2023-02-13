@@ -1,0 +1,12 @@
+extends MarketRetrofit_CCAddDemandSupplyBase
+
+
+public MarketRetrofit_CCAddDemand(String name, float orderT, String addedT){
+    super(name,orderT,addedT);
+}
+
+@Override
+public void apply(Industry industry,String ID)          adds demand with mutable stat. base value is market size.
+
+Override
+public void unApply(Industry industry,String ID)        removes any added demand from this change.

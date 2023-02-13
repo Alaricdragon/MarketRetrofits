@@ -1,0 +1,7 @@
+extends MarketRetrofit_CCSetBase
+
+public MarketRetrofit_CCSetIndustry(String name) {
+    super(name);
+}
+
+public void applyToIndustry(String Industry)            apply this set to a industry. all attached changes will run on said industry provided active(Industry industry) returns true.

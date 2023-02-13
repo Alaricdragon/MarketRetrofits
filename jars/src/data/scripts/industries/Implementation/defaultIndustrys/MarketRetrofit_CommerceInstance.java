@@ -1,7 +1,9 @@
 package data.scripts.industries.Implementation.defaultIndustrys;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
+import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
@@ -9,16 +11,25 @@ import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.MarketRetrofits_Logger;
+import data.scripts.industries.MarketRetorfits_ExstraData;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
 
 
 import java.awt.Color;
 
-public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
+public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInstanceIndustry {
     public MarketRetrofit_CommerceInstance(String name, float orderT) {
         super(name, orderT);
     }
-
+    @Override
+    public void getExtraDataFromIndustry(MarketRetorfits_ExstraData extraData){
+        saved = (SubmarketAPI) extraData.getData(savedName);
+    }
+    @Override
+    public void setExtraDataToIndustry(MarketRetorfits_ExstraData extraData){
+        extraData.addData(savedName,saved);
+    }
 
 
     public static float BASE_BONUS = 25f;
@@ -27,13 +38,13 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
 
     public static float STABILITY_PELANTY = 3f;
 
-    //protected transient CargoAPI savedCargo = null;
-    protected transient SubmarketAPI saved = null;
+    //public transient CargoAPI savedCargo = null;
+    public transient SubmarketAPI saved = null;
+    private static String savedName = "saved";
     @Override
     public void apply() {
         super.apply(true);
-
-        if (isFunctional() && market.isPlayerOwned()) {
+        if (CurrentIndustry.isFunctional() && market.isPlayerOwned()) {
             SubmarketAPI open = market.getSubmarket(Submarkets.SUBMARKET_OPEN);
             if (open == null) {
                 if (saved != null) {
@@ -63,12 +74,12 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
         }
 
         //modifyStabilityWithBaseMod();
-        market.getStability().modifyFlat(getModId(), -STABILITY_PELANTY, getNameForModifier());
+        market.getStability().modifyFlat(CurrentIndustry.getModId(), -STABILITY_PELANTY, CurrentIndustry.getNameForModifier());
 
-        market.getIncomeMult().modifyPercent(getModId(0), BASE_BONUS, getNameForModifier());
+        market.getIncomeMult().modifyPercent(CurrentIndustry.getModId(0), BASE_BONUS, CurrentIndustry.getNameForModifier());
 
-        if (!isFunctional()) {
-            unapply();
+        if (!CurrentIndustry.isFunctional()) {
+            CurrentIndustry.unapply();
         }
     }
 
@@ -79,7 +90,7 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
 
         if (market.isPlayerOwned()) {
             SubmarketAPI open = market.getSubmarket(Submarkets.SUBMARKET_OPEN);
-            saved = open;
+            //saved = open;
 //			if (open.getPlugin() instanceof BaseSubmarketPlugin) {
 //				BaseSubmarketPlugin base = (BaseSubmarketPlugin) open.getPlugin();
 //				if (base.getSinceLastCargoUpdate() < 30) {
@@ -89,12 +100,12 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
             market.removeSubmarket(Submarkets.SUBMARKET_OPEN);
         }
 
-        market.getStability().unmodifyFlat(getModId());
+        market.getStability().unmodifyFlat(CurrentIndustry.getModId());
 
-        market.getIncomeMult().unmodifyPercent(getModId(0));
+        market.getIncomeMult().unmodifyPercent(CurrentIndustry.getModId(0));
     }
     @Override
-    protected void addStabilityPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+    public void addStabilityPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode) {
         Color h = Misc.getHighlightColor();
         float opad = 10f;
 
@@ -107,16 +118,16 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
     }
 
     @Override
-    protected void addRightAfterDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
-        if (market.isPlayerOwned() || currTooltipMode == IndustryTooltipMode.ADD_INDUSTRY) {
+    public void addRightAfterDescriptionSection(TooltipMakerAPI tooltip, Industry.IndustryTooltipMode mode) {
+        if (market.isPlayerOwned() || currTooltipMode == Industry.IndustryTooltipMode.ADD_INDUSTRY) {
             tooltip.addPara("Adds an independent \'Open Market\' that the colony's owner is able to trade with.", 10f);
         }
     }
 
     @Override
-    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
-        if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
-            addStabilityPostDemandSection(tooltip, hasDemand, mode);
+    public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, Industry.IndustryTooltipMode mode) {
+        if (mode != Industry.IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional()) {
+            CurrentIndustry.addStabilityPostDemandSection(tooltip, hasDemand, mode);
         }
     }
     @Override
@@ -149,32 +160,34 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
 
     //market.getIncomeMult().modifyMult(id, INCOME_MULT, "Industrial planning");
     @Override
-    protected void applyAlphaCoreModifiers() {
-        market.getIncomeMult().modifyPercent(getModId(1), ALPHA_CORE_BONUS, "Alpha core (" + getNameForModifier() + ")");
+    public void applyAlphaCoreModifiers() {
+        market.getIncomeMult().modifyPercent(CurrentIndustry.getModId(1), ALPHA_CORE_BONUS, "Alpha core (" + CurrentIndustry.getNameForModifier() + ")");
     }
 
     @Override
-    protected void applyNoAICoreModifiers() {
-        market.getIncomeMult().unmodifyPercent(getModId(1));
+    public void applyNoAICoreModifiers() {
+        //MarketRetrofits_Logger.logging("TEMP LOG: market: " + market,this);
+        //MarketRetrofits_Logger.logging("TEMP LOG: market.getIncomeMult(): " + market.getIncomeMult(),this);
+        market.getIncomeMult().unmodifyPercent(CurrentIndustry.getModId(1));
     }
 
     @Override
-    protected void applyAlphaCoreSupplyAndDemandModifiers() {
-        demandReduction.modifyFlat(getModId(0), DEMAND_REDUCTION, "Alpha core");
+    public void applyAlphaCoreSupplyAndDemandModifiers() {
+        demandReduction.modifyFlat(CurrentIndustry.getModId(0), DEMAND_REDUCTION, "Alpha core");
     }
     @Override
-    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+    public void addAlphaCoreDescription(TooltipMakerAPI tooltip, Industry.AICoreDescriptionMode mode) {
         float opad = 10f;
         Color highlight = Misc.getHighlightColor();
 
         String pre = "Alpha-level AI core currently assigned. ";
-        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+        if (mode == Industry.AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == Industry.AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
             pre = "Alpha-level AI core. ";
         }
         float a = ALPHA_CORE_BONUS;
         String str = "" + (int) Math.round(a) + "%";
 
-        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+        if (mode == Industry.AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
             CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
             text.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. " +
@@ -198,23 +211,23 @@ public class MarketRetrofit_CommerceInstance extends MarketRetrofits_DefaltInsta
         return true;
     }
     @Override
-    protected void applyImproveModifiers() {
-        if (isImproved()) {
-            market.getIncomeMult().modifyPercent(getModId(2), IMPROVE_BONUS,
-                    getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
+    public void applyImproveModifiers() {
+        if (CurrentIndustry.isImproved()) {
+            market.getIncomeMult().modifyPercent(CurrentIndustry.getModId(2), IMPROVE_BONUS,
+                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + CurrentIndustry.getNameForModifier() + ")");
         } else {
-            market.getIncomeMult().unmodifyPercent(getModId(2));
+            market.getIncomeMult().unmodifyPercent(CurrentIndustry.getModId(2));
         }
     }
     @Override
-    public void addImproveDesc(TooltipMakerAPI info, ImprovementDescriptionMode mode) {
+    public void addImproveDesc(TooltipMakerAPI info, Industry.ImprovementDescriptionMode mode) {
         float opad = 10f;
         Color highlight = Misc.getHighlightColor();
 
         float a = IMPROVE_BONUS;
         String aStr = "" + (int)Math.round(a * 1f) + "%";
 
-        if (mode == ImprovementDescriptionMode.INDUSTRY_TOOLTIP) {
+        if (mode == Industry.ImprovementDescriptionMode.INDUSTRY_TOOLTIP) {
             info.addPara("Colony income increased by %s.", 0f, highlight, aStr);
         } else {
             info.addPara("Increases colony income by %s.", 0f, highlight, aStr);

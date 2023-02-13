@@ -1,0 +1,27 @@
+this is the supply demand class description. it has nothing to do with the rest of crew replacer:
+objective:
+the supply demand library lets you completely change an markets supply and demand (or just of certain industry's.)
+
+how it works:
+    1: create set(s). they can be a 'MarketRetrofit_CCSetGenral' or an 'MarketRetrofit_CCSetIndustry'
+        a) MarketRetrofit_CCSetGenral is for when you want to effect all industry's with your changes
+        b) MarketRetrofit_CCSetIndustry is for when you want to effect pacific industry's with your changes
+            -) applyToIndustry(String industryName) will add this set to an industry. it can be added to all the industrys you want
+        -) all sets require an name. if it shares an name with another set, one or the other will not be changeable. sets with the same names will still work as normal
+        -) custom activation requirements:
+            you can have your sets be active conditional by @Override the public boolean active(Industry industry) function.
+            Or you can use the 'active' variable, to toggle weather or not a set is 'on' or not.
+    2: create change(s). they can be any of the following:
+        a) MarketRetrofit_CCAddDemand       for adding demand to an industry's      base stat = market size
+        b) MarketRetrofit_CCAddSupply       for adding supply to an industry's      base star = market size
+        c) MarketRetrofit_CCSwapDemand      for replacing demand on an industry's   base stat = old demand
+        d) MarketRetrofit_CCSwapSupply      for replacing supply on an industry's   base stat = old supply
+
+        -)every change is also an 'MutableStat'. this means that you can modify the output as you would any other 'MutableStat'. base stat == the before modified value of every mutable stat
+        -)custom changes:
+            sometimes, you might want to make a change that does something vary vary diffrent. if so, you can contact me,
+            or try to solve this issue yourself.
+            a change only has a few requirements:
+            it must extend 'MarketRetrofit_CCBase'
+            it must @Override 'public void apply(Industry industry,String ID)' and 'public void unApply(Industry industry,String ID)'.
+            you can see other classes in the 'base' or 'change' folder to see how said functions should be set up.

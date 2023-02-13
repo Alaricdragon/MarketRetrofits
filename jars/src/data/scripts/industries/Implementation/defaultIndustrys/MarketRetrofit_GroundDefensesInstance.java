@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
+import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
@@ -12,10 +13,11 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustrytemp;
+import data.scripts.industries.MarketRetrofits_DefaltInstanceIndustry;
+
 import java.awt.Color;
 
-public class MarketRetrofit_GroundDefensesInstance extends MarketRetrofits_DefaltInstanceIndustrytemp {
+public class MarketRetrofit_GroundDefensesInstance extends MarketRetrofits_DefaltInstanceIndustry {
     public MarketRetrofit_GroundDefensesInstance(String name, float orderT) {
         super(name, orderT);
     }
@@ -31,35 +33,35 @@ public class MarketRetrofit_GroundDefensesInstance extends MarketRetrofits_Defal
         super.apply(true);
 
         int size = market.getSize();
-        boolean hb = Industries.HEAVYBATTERIES.equals(getId());
+        boolean hb = Industries.HEAVYBATTERIES.equals(CurrentIndustry.getId());
 
-        demand(Commodities.SUPPLIES, size);
-        demand(Commodities.MARINES, size);
-        demand(Commodities.HAND_WEAPONS, size - 2);
+        CurrentIndustry.demand(Commodities.SUPPLIES, size);
+        CurrentIndustry.demand(Commodities.MARINES, size);
+        CurrentIndustry.demand(Commodities.HAND_WEAPONS, size - 2);
 
         //supply(Commodities.MARINES, size - 2);
 
 //		Pair<String, Integer> deficit = getMaxDeficit(Commodities.HAND_WEAPONS);
 //		applyDeficitToProduction(1, deficit, Commodities.MARINES);
 
-        modifyStabilityWithBaseMod();
+        CurrentIndustry.modifyStabilityWithBaseMod();
 
         float mult = getDeficitMult(Commodities.SUPPLIES, Commodities.MARINES, Commodities.HAND_WEAPONS);
         String extra = "";
         if (mult != 1) {
-            String com = getMaxDeficit(Commodities.SUPPLIES, Commodities.MARINES, Commodities.HAND_WEAPONS).one;
+            String com = CurrentIndustry.getMaxDeficit(Commodities.SUPPLIES, Commodities.MARINES, Commodities.HAND_WEAPONS).one;
             extra = " (" + getDeficitText(com).toLowerCase() + ")";
         }
         float bonus = hb ? DEFENSE_BONUS_BATTERIES : DEFENSE_BONUS_BASE;
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD)
-                .modifyMult(getModId(), 1f + bonus * mult, getNameForModifier() + extra);
+                .modifyMult(CurrentIndustry.getModId(), 1f + bonus * mult, CurrentIndustry.getNameForModifier() + extra);
 //		market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD)
 //		.modifyPercent(getModId(), bonus * mult * 100f, getNameForModifier() + extra);
 
 
-        if (!isFunctional()) {
+        if (!CurrentIndustry.isFunctional()) {
             supply.clear();
-            unapply();
+            CurrentIndustry.unapply();
         }
 
     }
@@ -68,16 +70,16 @@ public class MarketRetrofit_GroundDefensesInstance extends MarketRetrofits_Defal
     public void unapply() {
         super.unapply();
 
-        unmodifyStabilityWithBaseMod();
+        CurrentIndustry.unmodifyStabilityWithBaseMod();
 
-        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(getModId());
+        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(CurrentIndustry.getModId());
         //market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyPercent(getModId());
         //market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyFlat(getModId());
     }
 
     @Override
     public String getCurrentImage() {
-        boolean batteries = Industries.HEAVYBATTERIES.equals(getId());
+        boolean batteries = Industries.HEAVYBATTERIES.equals(CurrentIndustry.getId());
         if (batteries) {
             PlanetAPI planet = market.getPlanetEntity();
             if (planet == null || planet.isGasGiant()) {
@@ -96,52 +98,52 @@ public class MarketRetrofit_GroundDefensesInstance extends MarketRetrofits_Defal
     }
 
     @Override
-    protected boolean hasPostDemandSection(boolean hasDemand, IndustryTooltipMode mode) {
+    public boolean hasPostDemandSection(boolean hasDemand, Industry.IndustryTooltipMode mode) {
         //return mode == IndustryTooltipMode.NORMAL && isFunctional();
-        return mode != IndustryTooltipMode.NORMAL || isFunctional();
+        return mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional();
     }
 
     @Override
-    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+    public void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         //if (mode == IndustryTooltipMode.NORMAL && isFunctional()) {
-        if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
-            addStabilityPostDemandSection(tooltip, hasDemand, mode);
+        if (mode != IndustryTooltipMode.NORMAL || CurrentIndustry.isFunctional()) {
+            CurrentIndustry.addStabilityPostDemandSection(tooltip, hasDemand, mode);
 
-            boolean hb = Industries.HEAVYBATTERIES.equals(getId());
+            boolean hb = Industries.HEAVYBATTERIES.equals(CurrentIndustry.getId());
             float bonus = hb ? DEFENSE_BONUS_BATTERIES : DEFENSE_BONUS_BASE;
-            addGroundDefensesImpactSection(tooltip, bonus, Commodities.SUPPLIES, Commodities.MARINES, Commodities.HAND_WEAPONS);
+            CurrentIndustry.addGroundDefensesImpactSection(tooltip, bonus, Commodities.SUPPLIES, Commodities.MARINES, Commodities.HAND_WEAPONS);
         }
     }
 
     @Override
-    protected int getBaseStabilityMod() {
+    public int getBaseStabilityMod() {
         return 1;
     }
 
     @Override
-    protected Pair<String, Integer> getStabilityAffectingDeficit() {
-        return getMaxDeficit(Commodities.SUPPLIES, Commodities.MARINES, Commodities.HAND_WEAPONS);
+    public Pair<String, Integer> getStabilityAffectingDeficit() {
+        return CurrentIndustry.getMaxDeficit(Commodities.SUPPLIES, Commodities.MARINES, Commodities.HAND_WEAPONS);
     }
 
 
     public static float ALPHA_CORE_BONUS = 0.5f;
     @Override
-    protected void applyAlphaCoreModifiers() {
+    public void applyAlphaCoreModifiers() {
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult(
-                getModId(1), 1f + ALPHA_CORE_BONUS, "Alpha core (" + getNameForModifier() + ")");
+                CurrentIndustry.getModId(1), 1f + ALPHA_CORE_BONUS, "Alpha core (" + CurrentIndustry.getNameForModifier() + ")");
     }
 
     @Override
-    protected void applyNoAICoreModifiers() {
-        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(getModId(1));
+    public void applyNoAICoreModifiers() {
+        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(CurrentIndustry.getModId(1));
     }
 
     @Override
-    protected void applyAlphaCoreSupplyAndDemandModifiers() {
-        demandReduction.modifyFlat(getModId(0), DEMAND_REDUCTION, "Alpha core");
+    public void applyAlphaCoreSupplyAndDemandModifiers() {
+        demandReduction.modifyFlat(CurrentIndustry.getModId(0), DEMAND_REDUCTION, "Alpha core");
     }
     @Override
-    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+    public void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
         float opad = 10f;
         Color highlight = Misc.getHighlightColor();
 
@@ -177,11 +179,11 @@ public class MarketRetrofit_GroundDefensesInstance extends MarketRetrofits_Defal
         return true;
     }
     @Override
-    protected void applyImproveModifiers() {
-        if (isImproved()) {
+    public void applyImproveModifiers() {
+        if (CurrentIndustry.isImproved()) {
             market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult("ground_defenses_improve",
                     1f + IMPROVE_DEFENSE_BONUS,
-                    getImprovementsDescForModifiers() + " (" + getNameForModifier() + ")");
+                    CurrentIndustry.getImprovementsDescForModifiers() + " (" + CurrentIndustry.getNameForModifier() + ")");
         } else {
             market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult("ground_defenses_improve");
         }
