@@ -1,7 +1,7 @@
 V0.1 -
     save compatible with any older version
     new
-        -recreated the supply demand library.
+        -recreated the supply demand library (now called Commodity Changer in notes and code).
         -see documentation at (add link here)
         (may contain bugs, but tests showed it was stable. should be no risk of breaking your game.)
 
