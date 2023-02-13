@@ -1,3 +1,6 @@
+THIS IS NOT ACTIVE. if you really wanna activate it, going into the data/campaign/old folder, and move the CSV file there to data/campaign.
+however, it will create EXTREME LAG do to its poor structure. and it will brick your save. enjoy.
+
 how this mode choices what code to run on what industry:
     when a industry that is supports this mod (example: any industry from the base game) calls a function, this mod:
         1st: sees if there is a 'current instance' saved

@@ -1,0 +1,4 @@
+please note: MarketRetrofit_CCIndustrySet should never be overriding lightly. and should only be accessed from
+MarketRetrofit_CCMasterList.
+
+MarketRetrofit_CCMasterList is the static list containing all the commodity change data. everything can be accessed from it.

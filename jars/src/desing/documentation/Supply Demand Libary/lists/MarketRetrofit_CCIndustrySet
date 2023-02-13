@@ -1,0 +1,22 @@
+public String industry = "";                                                the industryID that this set is attache to.
+public boolean connected = false;                                           weather or not this industry is present in industry replacer (currently inactive.)
+private ArrayList<MarketRetrofit_CCSetBase> sets = new ArrayList<>();       a private list of all the sets attached to this industry.
+private ArrayList<Integer> links = new ArrayList<>();                       a private let of links between changes and there respective sets.
+private ArrayList<MarketRetrofit_CCBase> changes = new ArrayList<>();       a private list of all the changes attached to this industry.
+
+
+MarketRetrofit_CCIndustrySet(String industryID){
+    industry = industryID;
+}
+
+public void addSet(MarketRetrofit_CCSetBase set)                            adds a set (and all its changes) to this industry.
+public void removeSet(MarketRetrofit_CCSetBase set)                         NOT YET IMPLEMENTED
+public void apply(Industry industry)                                        applys all active changes to this industry
+public void unApply(Industry industry)                                      unapplys all changes to this industry
+public void startup()                                                       cleans the sets and change list.
+private void addChangesToList(MarketRetrofit_CCSetBase set)                 adds the changes of a set to this
+private void removeChangesFromList(MarketRetrofit_CCSetBase set)            NOT YET IMPLEMENTED
+private boolean[] getActiveSets(Industry industry)                          finds out what sets are active, and are allowed to be applyed.
+private boolean[] wasActive()                                               not used. gets and returns all active sets. might be unrequited.
+private String getID(MarketRetrofit_CCBase a, MarketRetrofit_CCSetBase b)   not used. trys to create a ID for a change
+private String getID(int item)                                              creates a modifier ID for a change.

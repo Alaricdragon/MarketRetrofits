@@ -1,0 +1,9 @@
+extends MarketRetrofit_CCAddDemandSupplyBase
+
+public MarketRetrofit_CCAddSupply(String name, float orderT, String addedT){
+    super(name,orderT,addedT);
+}
+
+public void apply(Industry industry,String ID)          adds supply with mutable stat. base value is market size.
+
+public void unApply(Industry industry,String ID)        removes any added supply from this change

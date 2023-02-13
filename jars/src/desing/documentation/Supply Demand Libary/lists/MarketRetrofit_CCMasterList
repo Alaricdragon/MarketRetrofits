@@ -1,0 +1,12 @@
+private static ArrayList<MarketRetrofit_CCIndustrySet> IndustrySets = new ArrayList<>();            a private list of all industrySets
+private static MarketRetrofit_CCIndustrySet GeneralSets = new MarketRetrofit_CCIndustrySet("");     a private list of all General sets.
+private static ArrayList<MarketRetrofit_CCSetBase> sets = new ArrayList<>();                        a private list of all sets.
+
+public MarketRetrofit_CCSetBase getSet(String ID)                                                   returns a set with a given ID. returns null if no set is found.
+public static void startup()                                                                        cleans all the MarketRetrofit_CCIndustrySet stored in memory
+private static void applyGenralSetToSets()                                                          NOT USED. apply's all the changes and sets in the general set to all industry sets.
+private static void addSetToSets(MarketRetrofit_CCSetBase set)                                      adds a set to the main sets list.
+public static void addSetToGenral(MarketRetrofit_CCSetBase set)                                     adds a set to the main general set list.
+public static void addSetToIndustrySet(String industryName, MarketRetrofit_CCSetBase set)           adds a set to a industry.
+public static MarketRetrofit_CCIndustrySet getIndustrySet(String industry)                          gets the MarketRetrofit_CCIndustrySet that is implying itself to a given industry. returns null if nothing is found.
+public static MarketRetrofit_CCIndustrySet getGeneralSets()                                         gets the MarketRetrofit_CCIndustrySet that handles the general sets.

@@ -1,0 +1,11 @@
+extends MarketRetrofit_CCSwapperBase
+
+public MarketRetrofit_CCSwapDemand(String name, float orderT, String removeCommodity, String addCommodity){
+    super(name,orderT,removeCommodity,addCommodity);
+}
+
+@Override
+public void apply(Industry industry,String ID)      multiples the demand(removeCommodity) by zero. adds a new demand(addCommodity) equal to the amount of already present demand
+
+@Override
+public void unApply(Industry industry,String ID)    removes all demand changes created by this change.
