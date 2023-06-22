@@ -7,8 +7,10 @@ create the list of wanted libarys:
         -possability: remove ALL data transfer. have the code run the stored industry directly. when the industry changes, have a function that lets the new industry take whatever it wants from the old one. then i dont need to worry about things.
     2) condition replacer
         -replaces functions in market conditions with ones of my own.
-    3) supply demand libary (functional)
+    3) supply demand library (functional)
         -allows the mass or pacific changing of supply or demand on a industry
+        issues:
+            might possibly not effect the cargo supply fleets carry to and from the market? need to check that because i might be wrong.
     4) growth changer
         -allows one to remove or add new growth from outside of conditions or industry
     5) hazard changer
@@ -17,27 +19,22 @@ create the list of wanted libarys:
         -allows the change in the free-port name, and description.
     7) found a market change
         -allows players to have there own requirements and addition code run when founding a market. multiple options available.
-to do list:
-    ExtraData:
-        make the data organize itself with that fast find method.
-    supplyDemandLibary:
-        create masterList:
-            -(done)the masterList is an collection of lists. its were all lists ever made are stored.
-            -(done)every time an list is added/requested with an industry reference that dose not exist, creates an new set of lists for that industry reference.
-            -remembers weather or not an industry has an MarketRetrofits reference, and if so, runs all change data in that industry?
-        (done)create lists:
-            -lists are collection of sets. one list handles one industry.
-            -an list holds an organized by order list of all 'changes', with references back to said 'changes' 'set'. organized by order.
-            -when activated, an list runs through all changes in order, each time it reaches an new set, it checks to see if that set is valid.
-            -list holds references to its required industry ID.
-        (done)create sets
-            -sets are were i calculate and run code. they decide what is allowed, and what is not.
-            -they also run and calculate all changes in the order they want to be calculated in.
-            -should be able to automatically apply itself to to the 'lists' that are required for its wanted industry.
-        (done)finish testing the 'applyMutableStat' function in supplyBase.
-            -i made the class extend an MutableState. no idea if this is the right call or not.
-        (done) test the following:
-            -demandSwap
-            -supplySwap
-            -supplyAdd
-            -demandAdd
+        -here is the plan for this:
+            1)(done) survey plugging: the survey plugging has a function called found outpost. this is founding a market, and can be set to any commodities.
+                -need to have this with a built in compatibility patch for crew replacer, or im going to have issues.
+                -will need to beable to change what function is running based off a variable.
+            2)(very asic started) edit the rules that normal found a market.
+                -need to replace the thing that greys out the market found button if your in a 'closed system'. replace it with a custom function that detects if there is any type of market available to found.
+                    -surveySystemIsCutOffCanNotColonize: add a extra condition that only returns true if -every- possible colony type is not OK with its market being cut off from hyperspace.
+                    -surveyPrintHostilesTextEstColony: add a extra condition that only returns true if -every- possible colony type is not OK with being founding well under pressure.
+                    -surveyAddOptionPerformedAlready: change its options to a new option that creates a list of possible markets types, and lets you click on one of them.
+                    -MarketRetrofits_FoundAMarket: runs what surveyAddOptionPreformedAlready normally does. runs only when clicking a item from the list formed in surveyAddOptionPerformedAlready. sends a little bit of extra data back to the survey plugin.
+            3)(started) create the 'market founder' class. it will require the following functions:
+                3.1) a function to get the required resources to found a market.
+                3.2) a function to set what the text is named for there own market.
+                3.3) a function to set the description of that market type.
+                3.4) a function to deside if this market type is valid on this world.
+                3.5) a function to run custom code -after- the market has been founded.
+            4)(started) a 'market founder master list' class. it will hold and allow you to aquire other market founders.
+
+        questions:

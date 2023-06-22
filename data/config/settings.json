@@ -1,4 +1,7 @@
 {
+  "plugins":{
+    "surveyPlugin":"data.scripts.customMarketFounding.surveyPlugin.MarketRetrofits_SurveyPlugin"
+  },
   #industry logs, consider them incavtive for now.
   "MarketRetrofits_BaseIndustryLogs": false,#WARNING, exstram lag when active
   "MarketRetrofit_OrbitalStationLogs": false,#WARNING, high lag when active

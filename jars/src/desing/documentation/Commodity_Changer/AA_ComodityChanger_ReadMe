@@ -9,7 +9,7 @@ how it works:
             -) applyToIndustry(String industryName) will add this set to an industry. it can be added to all the industrys you want
         -) all sets require an name. if it shares an name with another set, one or the other will not be changeable. sets with the same names will still work as normal
         -) custom activation requirements:
-            you can have your sets be active conditional by @Override the public boolean active(Industry industry) function.
+            you can have your sets be active conditional by @Override the 'public boolean active(Industry industry)' function.
             Or you can use the 'active' variable, to toggle weather or not a set is 'on' or not.
     2: create change(s). they can be any of the following:
         a) MarketRetrofit_CCAddDemand       for adding demand to an industry's      base stat = market size

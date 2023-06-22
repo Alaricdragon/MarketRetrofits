@@ -2,6 +2,7 @@ package data.scripts;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.campaign.econ.Market;
+import data.scripts.combatabilityPatches.MarketRetrofits_InitCombatabilityPatches;
 import data.scripts.industries.Implementation.defaultIndustrys.*;
 import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.listiners.marketRetrofit_marketInteractionListiner;
@@ -30,6 +31,7 @@ public class marketReplacer_startup extends BaseModPlugin {
             MarketRetrofits_Logger.logging("is null",this);
         }*/
         applyDefaultIndustryInstances();
+        MarketRetrofits_InitCombatabilityPatches.onApplicationLoad();
     }
 
     @Override
@@ -37,6 +39,7 @@ public class marketReplacer_startup extends BaseModPlugin {
         super.onGameLoad(newGame);
         applyListeners();
         MarketRetrofit_CCMasterList.startup();
+        MarketRetrofits_InitCombatabilityPatches.onGameLoad(newGame);
     }
     private static void applyListeners(){
         marketRetrofit_marketListiner a = new marketRetrofit_marketListiner();
