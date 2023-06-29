@@ -12,3 +12,9 @@ surveyPrintHostilesTextEstColony,PrintNearbySurveyHostilesTextIfSo,"$market.isPl
 $market.isSurveyed
 !$market.hasUnexploredRuins
 HostileFleetNearbyAndAware",SetEnabled surveyPerform false,"A nearby hostile fleet is tracking your movements, making establishing a colony impossible.",,
+surveyOptionPerformSurvey,DialogOptionSelected,$option == surveyPerform,OpenCoreTab CARGO OPEN,Your $shipOrFleet enters low orbit around $entityName.,,
+,,,,,,
+MarketRetrofits_customMarketFounding_CutOffCanNotColonize,MarketRetrofit_NoJumpCanFoundMarket,MarketRetrofits_customMarketFounding_CantFoundBecauseOfNoJumpPonits,SetEnabled surveyPerform false,"This system is cut off from hyperspace and the jump-points are unstable. The crew, and even officers, are muted; on-edge. You judge it unlikely that any amount of hazard pay could overcome the near-superstitious fear spacers have of being stranded in a system like this.
+
+Establishing a colony here is not an option.",,
+MarketRetrofits_customMakretFounder_HostilesAreAround,MarketRetrofit_HostilesCanFoundMarket,MarketRetrofits_customMarketFounding_CantFoundBecauseOfFleet,SetEnabled surveyPerform false,"A nearby hostile fleet is tracking your movements, making establishing a colony impossible.",,

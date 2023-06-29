@@ -25,10 +25,18 @@ create the list of wanted libarys:
                 -will need to beable to change what function is running based off a variable.
             2)(very asic started) edit the rules that normal found a market.
                 -need to replace the thing that greys out the market found button if your in a 'closed system'. replace it with a custom function that detects if there is any type of market available to found.
-                    -surveySystemIsCutOffCanNotColonize: add a extra condition that only returns true if -every- possible colony type is not OK with its market being cut off from hyperspace.
-                    -surveyPrintHostilesTextEstColony: add a extra condition that only returns true if -every- possible colony type is not OK with being founding well under pressure.
+                    -surveySystemIsCutOffCanNotColonize: remove text and script. make this trigger MarketRetrofits_customMarketFounding_CutOffCanNotColonize.
+                    -surveyPrintHostilesTextEstColony: (im unsure how this works. might need to experiment. ) remove text and script. make this trigger MarketRetrofits_customMakretFounder_HostilesAreAround.
                     -surveyAddOptionPerformedAlready: change its options to a new option that creates a list of possible markets types, and lets you click on one of them.
+                    -surveyOptionPerformSurvey: founds a market (i think?).
+
                     -MarketRetrofits_FoundAMarket: runs what surveyAddOptionPreformedAlready normally does. runs only when clicking a item from the list formed in surveyAddOptionPerformedAlready. sends a little bit of extra data back to the survey plugin.
+                    -MarketRetrofits_customMarketFounding_CutOffCanNotColonize
+                    -MarketRetrofits_customMakretFounder_HostilesAreAround
+
+                -put this somewhere:
+                    when i leave the space / found a market, set MarketRetrofits_MarketFounderMasterList. hostilesTemp && noJumpTemp to false.
+
             3)(started) create the 'market founder' class. it will require the following functions:
                 3.1) a function to get the required resources to found a market.
                 3.2) a function to set what the text is named for there own market.
@@ -36,5 +44,25 @@ create the list of wanted libarys:
                 3.4) a function to deside if this market type is valid on this world.
                 3.5) a function to run custom code -after- the market has been founded.
             4)(started) a 'market founder master list' class. it will hold and allow you to aquire other market founders.
+                this is hard to understand..
+                so i don't think i can run the dialog from the inputed dialog pluging.
+                well, i might beable to, but i dont understand how to form options so im not even goin to try.
+                so heres what im going to do:
+                1)(done)create a new sell class. it will run a dialog interaction thing. (mimic AIRetrofits_RobotForgeDiologPlugin2 form AIRetrofits.)
+                2)(done)make a cass for the main menu, called MarketRetrofits_customMarketFounder_dialog
+            5)(started) make a interaction dialog plugin for displaying my list of available markets at a given time.
+                -this needs to:
+                1) read all the items in the master list, and display options for every valid market.
+                2) allow the user to click on any option, with will:
+                    a) run a description page, with a continue button at the bottom, the will move onto the found a market screen.
+                    b) run a custom dialog plugin thats stored in a given market founder.
+                    c) run the found a market screen.
+                3) allow so many items to show up per page, with a next / last button.
+                4) a back button, to return to the main screen of the world. (the one were you survey and things.)
 
-        questions:
+            issue:
+                i need to move the following data into basically every function:
+                1) the planet im interacting with.
+                2) weather or not this world is accessible by jump points.
+                3) weather or not this world is being blocked by a hostile fleet.
+                that's no the issue though. the issue is i have no idea what form all this data will take. so here hoping for the best because scary.
