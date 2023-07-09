@@ -52,13 +52,13 @@ create the list of wanted libarys:
                 2)(done)make a cass for the main menu, called MarketRetrofits_customMarketFounder_dialog
             5)(started) make a interaction dialog plugin for displaying my list of available markets at a given time.
                 -this needs to:
-                1) read all the items in the master list, and display options for every valid market.
-                2) allow the user to click on any option, with will:
-                    a) run a description page, with a continue button at the bottom, the will move onto the found a market screen.
-                    b) run a custom dialog plugin thats stored in a given market founder.
-                    c) run the found a market screen.
-                3) allow so many items to show up per page, with a next / last button.
-                4) a back button, to return to the main screen of the world. (the one were you survey and things.)
+                1)(done. untested) read all the items in the master list, and display options for every valid market.
+                2)(started untested) allow the user to click on any option, with will:
+                    a)(ready. not done) run a description page, with a continue button at the bottom, the will move onto the found a market screen.
+                    b)(ready. not done) run a custom dialog plugin thats stored in a given market founder.
+                    c)(i just need to fix a function) run the found a market screen.
+                3)(done. untested) allow so many items to show up per page, with a next / last button.
+                4)(done. untested) a back button, to return to the main screen of the world. (the one were you survey and things.)
 
             issue:
                 i need to move the following data into basically every function:

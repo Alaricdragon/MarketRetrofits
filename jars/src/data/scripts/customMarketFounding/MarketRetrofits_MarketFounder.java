@@ -12,9 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
-    String name = "";
-    String ID = "";
-    int order = 0;
+    public String name = "";
+    public String ID = "";
+    public int order = 0;
+    public boolean skipDescriptionIfOnlyOption = false;
+    public boolean canFoundWithHostileActivity = false;
+    public boolean canFoundWithoutJumpPonits = false;
     public MarketRetrofits_MarketFounder(String ID,String name){
         this.ID=ID;
         this.name = name;
@@ -27,22 +30,25 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     public boolean canEstablishOutpost(){
         return true;
     }
-    public void getOutpostFoundOption(String ruleId, InteractionDialogAPI dialog, List<Misc.Token> params, Map<String, MemoryAPI> memoryMap){
-        dialog.getOptionPanel().addOption(getOptionText(ruleId, dialog, params, memoryMap),this.ID);
+    public void getOutpostFoundOption(InteractionDialogAPI dialog, String planet){//List<Misc.Token> params, Map<String, MemoryAPI> memoryMap){
+        dialog.getOptionPanel().addOption(getOptionText(dialog, planet),this.ID);
     }
-    public String getOptionText(String ruleId, InteractionDialogAPI dialog, List<Misc.Token> params, Map<String, MemoryAPI> memoryMap){
+    public String getOptionText(InteractionDialogAPI dialog, String planet){//List<Misc.Token> params, Map<String, MemoryAPI> memoryMap){
         return name;
     }
     public boolean showOutpostFoundingDescription(){
         return false;
     }
     public boolean canFoundWithHostileActivity(){
-        return false;
+        return this.canFoundWithHostileActivity;
     }
     public boolean canFoundWithoutJumpPonits(){
-        return false;
+        return this.canFoundWithoutJumpPonits;
     }
-    public void getOutpostFoundingDescription(){
+    public boolean skipDescriptionIfOnlyOption(){
+        return this.skipDescriptionIfOnlyOption;
+    }
+    public void getOutpostFoundingDescription(InteractionDialogAPI dialog,String planet){
 
     }
     public Map<String, Integer> getOutpostConsumed() {
