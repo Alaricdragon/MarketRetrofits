@@ -54,15 +54,20 @@ create the list of wanted libarys:
                 -this needs to:
                 1)(done. untested) read all the items in the master list, and display options for every valid market.
                 2)(started untested) allow the user to click on any option, with will:
-                    a)(ready. not done) run a description page, with a continue button at the bottom, the will move onto the found a market screen.
-                    b)(ready. not done) run a custom dialog plugin thats stored in a given market founder.
+                    a)(done. not tested) run a description page, with a continue button at the bottom, the will move onto the found a market screen.
+                    b)(done. not tested) run a custom dialog plugin thats stored in a given market founder.
                     c)(i just need to fix a function) run the found a market screen.
-                3)(done. untested) allow so many items to show up per page, with a next / last button.
-                4)(done. untested) a back button, to return to the main screen of the world. (the one were you survey and things.)
+                3)(done. not tested) allow so many items to show up per page, with a next / last button.
+                4)(done. not tested) a back button, to return to the main screen of the world. (the one were you survey and things.)
 
             issue:
                 i need to move the following data into basically every function:
-                1) the planet im interacting with.
-                2) weather or not this world is accessible by jump points.
-                3) weather or not this world is being blocked by a hostile fleet.
-                that's no the issue though. the issue is i have no idea what form all this data will take. so here hoping for the best because scary.
+                    1)(done) the planet im interacting with.
+                    2)(started) weather or not this world is accessible by jump points.
+                    3)(started) weather or not this world is being blocked by a hostile fleet.
+                    that's no the issue though. the issue is i have no idea what form all this data will take. so here hoping for the best because scary.
+                right now i have a issue with determine if a market can be founded or not... need to work on this.
+
+            questions:
+                is there a way to determin if a market is in a 'cut off' (no jump ponits system) with code.
+                is there a way to find out if the 'world im interacting with' / 'my interaction target' is being cut off because of 'hostile activity' with code

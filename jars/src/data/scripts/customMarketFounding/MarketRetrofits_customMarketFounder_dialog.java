@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.scripts.MarketRetrofits_Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,22 +19,23 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
     public int pageLength = 10;
     public int depth = 0;
     public int sellected = 0;
-    public String planet = "";//this is a string as a temp untill i can change it to whatever a world is.
+    public SectorEntityToken planet;//this is a string as a temp untill i can change it to whatever a world is.
     public boolean noJumpTemp = MarketRetrofits_MarketFounderMasterList.noJumpTemp;
     public boolean hostilesTemp = MarketRetrofits_MarketFounderMasterList.hostilesTemp;
+    protected static final String backOption="BACK",exitOption="EXIT",nextOption="NEXT";
     /*todo list:
     *  what do i want to do here? simple:
     * 1) create a list of available markets (if any are available).
     * 2) allow you to click on a given market as a option, to load its description, or if description is disabled, simply load the vanilla 'found a market'
     * 2.a) if a given market option is the only option, and this market has its */
-    public MarketRetrofits_customMarketFounder_dialog(String planet){
+    public MarketRetrofits_customMarketFounder_dialog(SectorEntityToken planet){
         this.planet =planet;
     }
     protected void populateOptions() {
         this.options.clearOptions();
-        ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsInOrder();
+        ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsInOrder(planet);
         for(int a = pageLength*page; a < b.size() && a < (pageLength*page)+page; a++){
-            this.options.addOption(b.get(a).getOptionText(dialog,planet),b.get(a));
+            this.options.addOption(b.get(a).getOptionText(dialog,planet),b.get(a).ID);
         }
         this.addBackOption();
     }
@@ -45,18 +47,20 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
             this.exitDialog();
         } else {
             depth--;
+            this.populateOptions();
         }
     }
-    protected void openMarketScreen(){
+    public static void openMarketScreen(SectorEntityToken planet,MarketRetrofits_MarketFounder founder){
 
     }
     protected void runMarketFoundingPage(MarketRetrofits_MarketFounder option,int options){
-        if((options == 0 && option.skipDescriptionIfOnlyOption) || !option.showOutpostFoundingDescription()){
-            openMarketScreen();
+        if((options == 1 && option.skipDescriptionIfOnlyOption) || !option.showOutpostFoundingDescription()){
+            openMarketScreen(planet,option);
             return;
         }
-        option.getOutpostFoundingDescription(this.dialog,planet);
-
+        option.planate = planet;
+        MarketRetrofits_MarketFounderMasterList.dialog.Dialog = option;
+        MarketRetrofits_MarketFounderMasterList.dialog.init(dialog);
     }
     /*protected void showPaginatedMenu(){
         this.options.clearOptions();
@@ -71,10 +75,10 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
             addExitOption();
             return;
         }
-        this.options.addOption("BACK","BACK");
+        this.options.addOption("BACK",backOption);
     }
     protected void addExitOption(){
-        this.options.addOption("EXIT","EXIT");
+        this.options.addOption("Exit",exitOption);
     }
     @Override
     public void init(InteractionDialogAPI dialog) {
@@ -108,34 +112,29 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
         if (optionText != null) {
             this.text.addParagraph(optionText, Global.getSettings().getColor("buttonText"));
         }
-
+        String optionData2 = (String)optionData;
         try {
-            if (optionData.equals("NEXT")){//optionData == AIRetrofits_RobotForgeDiologPlugin.Menu.NEXT) {
+            if (optionData2.equals(nextOption)){//optionData2 == AIRetrofits_RobotForgeDiologPlugin.Menu.NEXT) {
                 ++this.page;
                 this.populateOptions();//showPaginatedMenu();
                 return;
             }
-
-            if (optionData.equals("PREVIOUS")){//optionData == AIRetrofits_RobotForgeDiologPlugin.Menu.PREVIOUS) {
-                --this.page;
-                this.populateOptions();//showPaginatedMenu();
+            if (optionData2.equals(exitOption)){
+                this.exitDialog();
                 return;
             }
-
-            if (optionData.equals("EXIT")){
-                this.exitDialog();
-            }
-            if (optionData.equals("BACK")){
+            if (optionData2.equals(backOption)){
                 this.back();
-            }else{
-                ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsInOrder();
-                for(int a = pageLength*page; a < b.size() && a < (pageLength*page)+page; a++){
-                    if(optionData.equals(b.get(a).getOptionText(dialog,planet))){
+                return;
+            }
+            ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsInOrder(planet);
+            for(int a = pageLength*page; a < b.size() && a < (pageLength*page)+page; a++){
+                if(optionData.equals(b.get(a).ID)){
                         sellected = a;
                         this.depth++;
                         this.runMarketFoundingPage(b.get(a),b.size());
+                        return;
                     }
-                }
             }
         } catch (Exception var7) {
             this.text.addPara(var7.toString());

@@ -3,6 +3,8 @@ import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.campaign.econ.Market;
 import data.scripts.combatabilityPatches.MarketRetrofits_InitCombatabilityPatches;
+import data.scripts.customMarketFounding.MarketRetrofits_MarketFounderMasterList;
+import data.scripts.customMarketFounding.MarketRetrofits_customMarketFounder_BaseMarket;
 import data.scripts.industries.Implementation.defaultIndustrys.*;
 import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.listiners.marketRetrofit_marketInteractionListiner;
@@ -30,8 +32,9 @@ public class marketReplacer_startup extends BaseModPlugin {
         }else if(b.equals(null)){
             MarketRetrofits_Logger.logging("is null",this);
         }*/
-        applyDefaultIndustryInstances();
+        //applyDefaultIndustryInstances();
         MarketRetrofits_InitCombatabilityPatches.onApplicationLoad();
+        applyDefaultCustomMarketFounder();
     }
 
     @Override
@@ -45,6 +48,11 @@ public class marketReplacer_startup extends BaseModPlugin {
         marketRetrofit_marketListiner a = new marketRetrofit_marketListiner();
         Global.getSector().getEconomy().addUpdateListener(a);
         //Global.getSector().addTransientListener(new marketRetrofit_marketInteractionListiner(false));
+    }
+    private static void applyDefaultCustomMarketFounder(){
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket","Found a ordinary market")
+        );
     }
     private static void applyDefaultIndustryInstances(){
         MarketRetrofit_MiningInstance miningInstance = new MarketRetrofit_MiningInstance("mining",0);

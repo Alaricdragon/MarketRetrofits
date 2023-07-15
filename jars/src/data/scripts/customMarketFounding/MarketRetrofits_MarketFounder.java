@@ -1,12 +1,12 @@
 package data.scripts.customMarketFounding;
 
-import com.fs.starfarer.api.campaign.InteractionDialogAPI;
-import com.fs.starfarer.api.campaign.InteractionDialogPlugin;
+import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.util.Misc;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +18,7 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     public boolean skipDescriptionIfOnlyOption = false;
     public boolean canFoundWithHostileActivity = false;
     public boolean canFoundWithoutJumpPonits = false;
+    public SectorEntityToken planate=null;
     public MarketRetrofits_MarketFounder(String ID,String name){
         this.ID=ID;
         this.name = name;
@@ -27,13 +28,13 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
         this.name = name;
         this.order = order;
     }
-    public boolean canEstablishOutpost(){
+    public boolean canEstablishOutpost(SectorEntityToken planet){
         return true;
     }
-    public void getOutpostFoundOption(InteractionDialogAPI dialog, String planet){//List<Misc.Token> params, Map<String, MemoryAPI> memoryMap){
+    public void getOutpostFoundOption(InteractionDialogAPI dialog, SectorEntityToken planet){//List<Misc.Token> params, Map<String, MemoryAPI> memoryMap){
         dialog.getOptionPanel().addOption(getOptionText(dialog, planet),this.ID);
     }
-    public String getOptionText(InteractionDialogAPI dialog, String planet){//List<Misc.Token> params, Map<String, MemoryAPI> memoryMap){
+    public String getOptionText(InteractionDialogAPI dialog, SectorEntityToken planet){//List<Misc.Token> params, Map<String, MemoryAPI> memoryMap){
         return name;
     }
     public boolean showOutpostFoundingDescription(){
@@ -48,8 +49,8 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     public boolean skipDescriptionIfOnlyOption(){
         return this.skipDescriptionIfOnlyOption;
     }
-    public void getOutpostFoundingDescription(InteractionDialogAPI dialog,String planet){
-
+    public void getOutpostFoundingDescription(InteractionDialogAPI dialog,SectorEntityToken planet){
+        dialog.getTextPanel().addPara("description test.");
     }
     public Map<String, Integer> getOutpostConsumed() {
         Map<String, Integer> result = new LinkedHashMap<String, Integer>();
@@ -63,15 +64,46 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     }
 
 
+    protected InteractionDialogAPI dialog;
+    protected TextPanelAPI text;
+    protected OptionPanelAPI options;
+    public final static String backOption="BACK",foundMarketOption="Found Market";
+    public void foundMarket(){
 
+    }
+    public void back(){
+
+    }
     @Override
     public void init(InteractionDialogAPI dialog) {
+        this.dialog = dialog;
+        this.options = dialog.getOptionPanel();
+        this.text = dialog.getTextPanel();
+        dialog.getVisualPanel().setVisualFade(0.25F, 0.25F);
+        this.getOutpostFoundingDescription(dialog,planate);
 
+
+        this.options.clearOptions();
+        this.options.addOption("BACK",backOption);
+        this.options.addOption("Found Market",foundMarketOption);
     }
 
     @Override
     public void optionSelected(String optionText, Object optionData) {
+        String optionData2 = (String)optionData;
+        try {
+            if(optionData2.equals(backOption)){
+                MarketRetrofits_MarketFounderMasterList.dialog.Dialog.init(dialog);
+                return;
+            }
+            if(optionData2.equals(foundMarketOption)){
+                MarketRetrofits_customMarketFounder_dialog.openMarketScreen(planate,this);
+                return;
+            }
+        } catch (Exception var7) {
+            this.text.addPara(var7.toString());
 
+        }
     }
 
     @Override

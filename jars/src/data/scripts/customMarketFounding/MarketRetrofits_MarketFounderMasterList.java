@@ -1,8 +1,11 @@
 package data.scripts.customMarketFounding;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.scripts.MarketRetrofits_Logger;
 import data.scripts.supportCode.MarketRetrofit_dialogShell;
 
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ public class MarketRetrofits_MarketFounderMasterList {
                 return true;
             }
         }
+        list.add(MarketFounder);
         return false;
     }
     public static boolean removeMarketFounder(String ID){
@@ -41,24 +45,25 @@ public class MarketRetrofits_MarketFounderMasterList {
         return null;
     }
 
-    public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(){
-        return getFoundableMarkets(hostilesTemp,noJumpTemp);
+    public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(SectorEntityToken planet){
+        return getFoundableMarkets(planet,hostilesTemp,noJumpTemp);
     }
-    public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(boolean hostiles,boolean noJump){
+    public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(SectorEntityToken planet, boolean hostiles, boolean noJump){
         ArrayList<MarketRetrofits_MarketFounder> output = new ArrayList<>();
         for(int a = 0; a < list.size(); a++){
             MarketRetrofits_MarketFounder b = list.get(a);
-            if(b.canEstablishOutpost() && (!hostiles || b.canFoundWithHostileActivity()) && (!noJump && b.canFoundWithoutJumpPonits())){
+            if(b.canEstablishOutpost(planet) && (!hostiles || b.canFoundWithHostileActivity()) && (!noJump && b.canFoundWithoutJumpPonits())){
                 output.add(b);
             }
         }
+        MarketRetrofits_Logger.logging("the number of foundable markets is: "+output.size()+". the number of possable market is: "+list.size(),new MarketRetrofits_MarketFounderMasterList(),true);
         return output;
     }
-    public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsInOrder(){
-        return getFoundableMarketsInOrder(hostilesTemp,noJumpTemp);
+    public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsInOrder(SectorEntityToken planet){
+        return getFoundableMarketsInOrder(planet,hostilesTemp,noJumpTemp);
     }
-    public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsInOrder(boolean hostiles,boolean noJump){
-        ArrayList<MarketRetrofits_MarketFounder> active = getFoundableMarkets(hostiles,noJump);
+    public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsInOrder(SectorEntityToken planet,boolean hostiles,boolean noJump){
+        ArrayList<MarketRetrofits_MarketFounder> active = getFoundableMarkets(planet,hostiles,noJump);
         ArrayList<MarketRetrofits_MarketFounder> output = new ArrayList<>();
 
         /*todo:
@@ -76,6 +81,7 @@ public class MarketRetrofits_MarketFounderMasterList {
             output.add(active.get(index));
             active.remove(index);
         }
+        MarketRetrofits_Logger.logging("the number of foundable markets is: "+output.size()+". the number of possable market is: "+list.size(),new MarketRetrofits_MarketFounderMasterList(),true);
         return output;
     }
 
@@ -86,7 +92,11 @@ public class MarketRetrofits_MarketFounderMasterList {
     }*/
 
     public static MarketRetrofit_dialogShell activateMarketFoundingListDialog(InteractionDialogAPI dialogAPI){
-        dialog.Dialog = new MarketRetrofits_customMarketFounder_dialog("");
+        dialog.Dialog = new MarketRetrofits_customMarketFounder_dialog(dialogAPI.getInteractionTarget());
+        //Global.getSector().getCampaignUI().showInteractionDialog(dialog, null);
+        dialogAPI.setPlugin(dialog);
+        //MarketRetrofits_Logger.logging("interaction enitity = "+.toString(),new MarketRetrofits_MarketFounderMasterList(),true);
+
         dialog.init(dialogAPI);
         return dialog;
     }

@@ -13,6 +13,6 @@ public class MarketRetrofits_customMarketFounding_CantFoundBecauseOfFleet extend
     @Override
     public boolean execute(String ruleId, InteractionDialogAPI dialog, List<Misc.Token> params, Map<String, MemoryAPI> memoryMap) {
         MarketRetrofits_MarketFounderMasterList.hostilesTemp = true;
-        return MarketRetrofits_MarketFounderMasterList.getFoundableMarkets().size() == 0;
+        return MarketRetrofits_MarketFounderMasterList.getFoundableMarkets(dialog.getInteractionTarget()).size() == 0;
     }
 }
