@@ -14,7 +14,7 @@ import java.util.Map;
 public class MarketRetrofits_customMarketFounding_MarketTypeList extends BaseCommandPlugin {
     @Override
     public boolean execute(String ruleId, InteractionDialogAPI dialog, List<Misc.Token> params, Map<String, MemoryAPI> memoryMap) {
-        MarketRetrofits_MarketFounderMasterList.activateMarketFoundingListDialog(dialog);
+        MarketRetrofits_MarketFounderMasterList.activateMarketFoundingListDialog(this,ruleId,dialog,params,memoryMap);
         return false;
     }
 }

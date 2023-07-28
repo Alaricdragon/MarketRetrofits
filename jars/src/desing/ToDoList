@@ -38,10 +38,10 @@ create the list of wanted libarys:
                     when i leave the space / found a market, set MarketRetrofits_MarketFounderMasterList. hostilesTemp && noJumpTemp to false.
 
             3)(started) create the 'market founder' class. it will require the following functions:
-                3.1) a function to get the required resources to found a market.
-                3.2) a function to set what the text is named for there own market.
-                3.3) a function to set the description of that market type.
-                3.4) a function to deside if this market type is valid on this world.
+                3.1)(done) a function to get the required resources to found a market.
+                3.2)(done) a function to set what the text is named for there own market.
+                3.3)(done) a function to set the description of that market type.
+                3.4)(done) a function to deside if this market type is valid on this world.
                 3.5) a function to run custom code -after- the market has been founded.
             4)(started) a 'market founder master list' class. it will hold and allow you to aquire other market founders.
                 this is hard to understand..
@@ -54,11 +54,11 @@ create the list of wanted libarys:
                 -this needs to:
                 1)(done. untested) read all the items in the master list, and display options for every valid market.
                 2)(started untested) allow the user to click on any option, with will:
-                    a)(done. not tested) run a description page, with a continue button at the bottom, the will move onto the found a market screen.
-                    b)(done. not tested) run a custom dialog plugin thats stored in a given market founder.
-                    c)(i just need to fix a function) run the found a market screen.
+                    a)(done) run a description page, with a continue button at the bottom, the will move onto the found a market screen.
+                    b)(done) run a custom dialog plugin thats stored in a given market founder.
+                    c)(done) run the found a market screen.
                 3)(done. not tested) allow so many items to show up per page, with a next / last button.
-                4)(done. not tested) a back button, to return to the main screen of the world. (the one were you survey and things.)
+                4)(done) a back button, to return to the main screen of the world. (the one were you survey and things.)
 
             issue:
                 i need to move the following data into basically every function:
@@ -69,5 +69,5 @@ create the list of wanted libarys:
                 right now i have a issue with determine if a market can be founded or not... need to work on this.
 
             questions:
-                is there a way to determin if a market is in a 'cut off' (no jump ponits system) with code.
-                is there a way to find out if the 'world im interacting with' / 'my interaction target' is being cut off because of 'hostile activity' with code
+                1) is there a way to determin if a market is in a 'cut off' (no jump ponits system) with code.
+                2) is there a way to find out if the 'world im interacting with' / 'my interaction target' is being cut off because of 'hostile activity' with code

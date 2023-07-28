@@ -19,4 +19,4 @@ surveyOptionPerformSurvey,DialogOptionSelected,$option == surveyPerform,OpenCore
 Establishing a colony here is not an option.",,
 #MarketRetrofits_customMakretFounder_HostilesAreAround,MarketRetrofit_HostilesCanFoundMarket,MarketRetrofits_customMarketFounding_CantFoundBecauseOfFleet,SetEnabled surveyPerform false,"A nearby hostile fleet is tracking your movements, making establishing a colony impossible.",,
 MarketRetrofits_test,PopulateOptions,,,,0:MarketRetrofit_foundList:Establish a colony222,
-MarketRetrofits_test2,DialogOptionSelected,$option == MarketRetrofit_foundList,MarketRetrofits_customMarketFounding_MarketTypeList,,,
+MarketRetrofits_test2,DialogOptionSelected,$option == MarketRetrofit_foundList,MarketRetrofits_customMarketFounding_MarketTypeList CARGO OPEN,,,

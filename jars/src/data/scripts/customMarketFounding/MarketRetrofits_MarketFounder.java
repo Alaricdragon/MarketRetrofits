@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.util.Misc;
+import data.scripts.MarketRetrofits_Logger;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -18,6 +19,8 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     public boolean skipDescriptionIfOnlyOption = false;
     public boolean canFoundWithHostileActivity = false;
     public boolean canFoundWithoutJumpPonits = false;
+    public boolean MarketFounderHasDescription = false;
+    public String MarketFounderDescription = "description to be added latter. if you are a modder, try changeing this market founders 'MarketFounderDescription' or 'MarketFounderHasDescription' variables.";
     public SectorEntityToken planate=null;
     public MarketRetrofits_MarketFounder(String ID,String name){
         this.ID=ID;
@@ -38,7 +41,7 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
         return name;
     }
     public boolean showOutpostFoundingDescription(){
-        return false;
+        return this.MarketFounderHasDescription;
     }
     public boolean canFoundWithHostileActivity(){
         return this.canFoundWithHostileActivity;
@@ -50,7 +53,7 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
         return this.skipDescriptionIfOnlyOption;
     }
     public void getOutpostFoundingDescription(InteractionDialogAPI dialog,SectorEntityToken planet){
-        dialog.getTextPanel().addPara("description test.");
+        dialog.getTextPanel().addPara(this.MarketFounderDescription);
     }
     public Map<String, Integer> getOutpostConsumed() {
         Map<String, Integer> result = new LinkedHashMap<String, Integer>();
@@ -68,6 +71,7 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     protected TextPanelAPI text;
     protected OptionPanelAPI options;
     public final static String backOption="BACK",foundMarketOption="Found Market";
+    public String backOptionName = "back", foundMarketOptionName = "establish a colony";
     public void foundMarket(){
 
     }
@@ -76,6 +80,7 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     }
     @Override
     public void init(InteractionDialogAPI dialog) {
+        MarketRetrofits_Logger.logging("running dialog of market founder ID of: "+this.ID,this,true);
         this.dialog = dialog;
         this.options = dialog.getOptionPanel();
         this.text = dialog.getTextPanel();
@@ -84,8 +89,8 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
 
 
         this.options.clearOptions();
-        this.options.addOption("BACK",backOption);
-        this.options.addOption("Found Market",foundMarketOption);
+        this.options.addOption(this.foundMarketOptionName,foundMarketOption);
+        this.options.addOption(this.backOptionName,backOption);
     }
 
     @Override
@@ -93,11 +98,13 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
         String optionData2 = (String)optionData;
         try {
             if(optionData2.equals(backOption)){
+                MarketRetrofits_MarketFounderMasterList.dialog.Dialog = MarketRetrofits_customMarketFounder_dialog.myself;
                 MarketRetrofits_MarketFounderMasterList.dialog.Dialog.init(dialog);
                 return;
             }
             if(optionData2.equals(foundMarketOption)){
-                MarketRetrofits_customMarketFounder_dialog.openMarketScreen(planate,this);
+                dialog.getOptionPanel().clearOptions();
+                MarketRetrofits_MarketFounderMasterList.foundMarket(this);//MarketRetrofits_customMarketFounder_dialog.openMarketScreen(planate,this);
                 return;
             }
         } catch (Exception var7) {

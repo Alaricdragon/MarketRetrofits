@@ -6,6 +6,8 @@ public class MarketRetrofits_customMarketFounder_BaseMarket extends MarketRetrof
     public MarketRetrofits_customMarketFounder_BaseMarket(String ID, String name) {
         super(ID, name);
         this.skipDescriptionIfOnlyOption = false;
+        this.MarketFounderHasDescription = false;
+        this.MarketFounderDescription = "lololol i gott dat description boi";
     }
 
     @Override

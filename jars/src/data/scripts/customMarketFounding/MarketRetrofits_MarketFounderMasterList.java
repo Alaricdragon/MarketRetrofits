@@ -2,8 +2,11 @@ package data.scripts.customMarketFounding;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
+import com.fs.starfarer.api.campaign.InteractionDialogPlugin;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
+import com.fs.starfarer.api.impl.campaign.rulecmd.BaseCommandPlugin;
+import com.fs.starfarer.api.impl.campaign.rulecmd.OpenCoreTab;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.MarketRetrofits_Logger;
 import data.scripts.supportCode.MarketRetrofit_dialogShell;
@@ -13,9 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 public class MarketRetrofits_MarketFounderMasterList {
+    private static boolean log = true;
     public static ArrayList<MarketRetrofits_MarketFounder> list = new ArrayList<>();
     public static boolean noJumpTemp = false;
     public static boolean hostilesTemp = false;
+    public static BaseCommandPlugin CommandPluginTemp;
     protected static MarketRetrofit_dialogShell dialog = new MarketRetrofit_dialogShell();
     public static boolean addOrReplaceMarketFounder(MarketRetrofits_MarketFounder MarketFounder){
         for(int a = 0; a < list.size(); a++){
@@ -52,7 +57,7 @@ public class MarketRetrofits_MarketFounderMasterList {
         ArrayList<MarketRetrofits_MarketFounder> output = new ArrayList<>();
         for(int a = 0; a < list.size(); a++){
             MarketRetrofits_MarketFounder b = list.get(a);
-            if(b.canEstablishOutpost(planet) && (!hostiles || b.canFoundWithHostileActivity()) && (!noJump && b.canFoundWithoutJumpPonits())){
+            if(b.canEstablishOutpost(planet) && (!hostiles || b.canFoundWithHostileActivity()) && (!noJump || b.canFoundWithoutJumpPonits())){
                 output.add(b);
             }
         }
@@ -91,14 +96,47 @@ public class MarketRetrofits_MarketFounderMasterList {
         }
     }*/
 
-    public static MarketRetrofit_dialogShell activateMarketFoundingListDialog(InteractionDialogAPI dialogAPI){
-        dialog.Dialog = new MarketRetrofits_customMarketFounder_dialog(dialogAPI.getInteractionTarget());
+    public static String ruleIdTemp1;
+    public static InteractionDialogAPI dialogTemp1;
+    public static List<Misc.Token> paramsTemp1;
+    public static Map<String, MemoryAPI> memoryMapTemp1;
+    public static InteractionDialogPlugin dialogTemp2;
+    public static MarketRetrofit_dialogShell activateMarketFoundingListDialog(BaseCommandPlugin CommandPlugin,String ruleIdTemp, InteractionDialogAPI dialogTemp, List<Misc.Token> paramsTemp, Map<String, MemoryAPI> memoryMapTemp){
+        dialogTemp2 = dialogTemp.getPlugin();
+        CommandPluginTemp = CommandPlugin;
+        MarketRetrofits_customMarketFounder_dialog a = new MarketRetrofits_customMarketFounder_dialog(dialogTemp.getInteractionTarget());
+        dialog.Dialog = a;
+
         //Global.getSector().getCampaignUI().showInteractionDialog(dialog, null);
-        dialogAPI.setPlugin(dialog);
+        dialogTemp.setPlugin(dialog);
         //MarketRetrofits_Logger.logging("interaction enitity = "+.toString(),new MarketRetrofits_MarketFounderMasterList(),true);
 
-        dialog.init(dialogAPI);
+        dialog.init(dialogTemp);
+
+        ruleIdTemp1=ruleIdTemp;
+        dialogTemp1=dialogTemp;
+        paramsTemp1=paramsTemp;
+        memoryMapTemp1=memoryMapTemp;
         return dialog;
+    }
+
+    public static void foundMarket(MarketRetrofits_MarketFounder marketFounder){
+        //CommandPluginTemp.
+        dialogTemp1.setPlugin(dialogTemp2);
+        OpenCoreTab a = new OpenCoreTab();
+        //Misc.Token b = new Misc.Token("CARGO OPEN", Misc.TokenType.VARIABLE);
+        //OpenCoreTab CARGO OPEN
+        //paramsTemp1.add(b);//.put("CARGO","OPEN");
+        /*MarketRetrofits_Logger.logging("getting size of data."+paramsTemp1.size()+", "+memoryMapTemp1.size(),new MarketRetrofits_MarketFounderMasterList(),true);
+        MarketRetrofits_Logger.logging("",new MarketRetrofits_MarketFounderMasterList(),true);
+        for(Misc.Token b : paramsTemp1){
+            MarketRetrofits_Logger.logging(""+b.string+", "+b.type+", "+b.varMemoryKey+", "+b.varNameWithoutMemoryKeyIfKeyIsValid,new MarketRetrofits_MarketFounderMasterList(),true);
+        }
+        MarketRetrofits_Logger.logging("",new MarketRetrofits_MarketFounderMasterList(),true);
+        for(MemoryAPI b : memoryMapTemp1.values()){
+        }*/
+        a.execute(ruleIdTemp1,dialogTemp1,paramsTemp1,memoryMapTemp1);
+        //a.execute();
     }
 
 }

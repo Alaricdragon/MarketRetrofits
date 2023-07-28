@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.util.Misc;
+import com.fs.starfarer.campaign.econ.Market;
 import data.scripts.MarketRetrofits_Logger;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MarketRetrofits_customMarketFounder_dialog implements InteractionDialogPlugin{
+    public static MarketRetrofits_customMarketFounder_dialog myself;
     protected InteractionDialogAPI dialog;
     protected TextPanelAPI text;
     protected OptionPanelAPI options;
@@ -34,8 +36,9 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
     protected void populateOptions() {
         this.options.clearOptions();
         ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsInOrder(planet);
-        for(int a = pageLength*page; a < b.size() && a < (pageLength*page)+page; a++){
+        for(int a = pageLength*page; a < b.size() && a < (pageLength*(page+1)); a++){
             this.options.addOption(b.get(a).getOptionText(dialog,planet),b.get(a).ID);
+            MarketRetrofits_Logger.logging("adding market founding option page: "+b.get(a).getOptionText(dialog,planet),this,true);
         }
         this.addBackOption();
     }
@@ -50,14 +53,17 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
             this.populateOptions();
         }
     }
-    public static void openMarketScreen(SectorEntityToken planet,MarketRetrofits_MarketFounder founder){
-
-    }
+    /*public static void openMarketScreen(SectorEntityToken planet,MarketRetrofits_MarketFounder founder){
+        //OpenCoreTab CARGO OPEN
+    }*/
     protected void runMarketFoundingPage(MarketRetrofits_MarketFounder option,int options){
+        MarketRetrofits_Logger.logging("trying to found a market",this,true);
         if((options == 1 && option.skipDescriptionIfOnlyOption) || !option.showOutpostFoundingDescription()){
-            openMarketScreen(planet,option);
+            MarketRetrofits_Logger.logging("running 'open market screen'",this,true);
+            MarketRetrofits_MarketFounderMasterList.foundMarket(option);//openMarketScreen(planet,option);
             return;
         }
+        MarketRetrofits_Logger.logging("running 'description of market type'",this,true);
         option.planate = planet;
         MarketRetrofits_MarketFounderMasterList.dialog.Dialog = option;
         MarketRetrofits_MarketFounderMasterList.dialog.init(dialog);
@@ -82,6 +88,7 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
     }
     @Override
     public void init(InteractionDialogAPI dialog) {
+        myself = this;
         this.dialog = dialog;
         this.options = dialog.getOptionPanel();
         this.text = dialog.getTextPanel();
@@ -113,6 +120,7 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
             this.text.addParagraph(optionText, Global.getSettings().getColor("buttonText"));
         }
         String optionData2 = (String)optionData;
+        MarketRetrofits_Logger.logging("looking for option: "+optionData2,this,true);
         try {
             if (optionData2.equals(nextOption)){//optionData2 == AIRetrofits_RobotForgeDiologPlugin.Menu.NEXT) {
                 ++this.page;
@@ -128,13 +136,15 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
                 return;
             }
             ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsInOrder(planet);
-            for(int a = pageLength*page; a < b.size() && a < (pageLength*page)+page; a++){
-                if(optionData.equals(b.get(a).ID)){
-                        sellected = a;
-                        this.depth++;
-                        this.runMarketFoundingPage(b.get(a),b.size());
-                        return;
-                    }
+            for(int a = pageLength*page; a < b.size() && a < (pageLength*(page+1)); a++){
+                if(optionData2.equals(b.get(a).ID)){
+                    sellected = a;
+                    this.depth++;
+                    this.runMarketFoundingPage(b.get(a),b.size());
+                    return;
+                }else{
+                    MarketRetrofits_Logger.logging("option is not: "+b.get(a).ID,this,true);
+                }
             }
         } catch (Exception var7) {
             this.text.addPara(var7.toString());
