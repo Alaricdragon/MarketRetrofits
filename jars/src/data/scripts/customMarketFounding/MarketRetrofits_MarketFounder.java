@@ -16,7 +16,7 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     public String name = "";
     public String ID = "";
     public int order = 0;
-    public boolean skipDescriptionIfOnlyOption = false;
+    public boolean skipOptionSelectionIfOnlyOption = false;
     public boolean canFoundWithHostileActivity = false;
     public boolean canFoundWithoutJumpPonits = false;
     public boolean MarketFounderHasDescription = false;
@@ -49,13 +49,13 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     public boolean canFoundWithoutJumpPonits(){
         return this.canFoundWithoutJumpPonits;
     }
-    public boolean skipDescriptionIfOnlyOption(){
-        return this.skipDescriptionIfOnlyOption;
+    public boolean skipOptionSelectionIfOnlyOption(){
+        return this.skipOptionSelectionIfOnlyOption;
     }
     public void getOutpostFoundingDescription(InteractionDialogAPI dialog,SectorEntityToken planet){
         dialog.getTextPanel().addPara(this.MarketFounderDescription);
     }
-    public Map<String, Integer> getOutpostConsumed() {
+    public Map<String, Integer> getOutpostConsumed(SectorEntityToken planet) {
         Map<String, Integer> result = new LinkedHashMap<String, Integer>();
         result.put(Commodities.CREW, 1000);
         result.put(Commodities.HEAVY_MACHINERY, 200);
@@ -72,12 +72,6 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     protected OptionPanelAPI options;
     public final static String backOption="BACK",foundMarketOption="Found Market";
     public String backOptionName = "back", foundMarketOptionName = "establish a colony";
-    public void foundMarket(){
-
-    }
-    public void back(){
-
-    }
     @Override
     public void init(InteractionDialogAPI dialog) {
         MarketRetrofits_Logger.logging("running dialog of market founder ID of: "+this.ID,this,true);

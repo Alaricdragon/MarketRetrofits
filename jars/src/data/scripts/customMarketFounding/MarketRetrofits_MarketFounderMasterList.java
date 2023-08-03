@@ -9,11 +9,14 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.BaseCommandPlugin;
 import com.fs.starfarer.api.impl.campaign.rulecmd.OpenCoreTab;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.MarketRetrofits_Logger;
+import data.scripts.customMarketFounding.surveyPlugin.MarketRetrofits_SurveyPlugin;
 import data.scripts.supportCode.MarketRetrofit_dialogShell;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static com.fs.starfarer.api.impl.campaign.ids.Tags.SYSTEM_CUT_OFF_FROM_HYPER;
 
 public class MarketRetrofits_MarketFounderMasterList {
     private static boolean log = true;
@@ -51,6 +54,8 @@ public class MarketRetrofits_MarketFounderMasterList {
     }
 
     public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(SectorEntityToken planet){
+        noJumpTemp = planet.getStarSystem().hasTag(SYSTEM_CUT_OFF_FROM_HYPER);
+        hostilesTemp = false;
         return getFoundableMarkets(planet,hostilesTemp,noJumpTemp);
     }
     public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(SectorEntityToken planet, boolean hostiles, boolean noJump){
@@ -65,6 +70,8 @@ public class MarketRetrofits_MarketFounderMasterList {
         return output;
     }
     public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsInOrder(SectorEntityToken planet){
+        noJumpTemp = planet.getStarSystem().hasTag(SYSTEM_CUT_OFF_FROM_HYPER);
+        hostilesTemp = false;
         return getFoundableMarketsInOrder(planet,hostilesTemp,noJumpTemp);
     }
     public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsInOrder(SectorEntityToken planet,boolean hostiles,boolean noJump){
@@ -101,29 +108,39 @@ public class MarketRetrofits_MarketFounderMasterList {
     public static List<Misc.Token> paramsTemp1;
     public static Map<String, MemoryAPI> memoryMapTemp1;
     public static InteractionDialogPlugin dialogTemp2;
+
+    public static SectorEntityToken Planet = null;
     public static MarketRetrofit_dialogShell activateMarketFoundingListDialog(BaseCommandPlugin CommandPlugin,String ruleIdTemp, InteractionDialogAPI dialogTemp, List<Misc.Token> paramsTemp, Map<String, MemoryAPI> memoryMapTemp){
         dialogTemp2 = dialogTemp.getPlugin();
         CommandPluginTemp = CommandPlugin;
         MarketRetrofits_customMarketFounder_dialog a = new MarketRetrofits_customMarketFounder_dialog(dialogTemp.getInteractionTarget());
         dialog.Dialog = a;
+        Planet = dialogTemp.getInteractionTarget();
 
-        //Global.getSector().getCampaignUI().showInteractionDialog(dialog, null);
         dialogTemp.setPlugin(dialog);
-        //MarketRetrofits_Logger.logging("interaction enitity = "+.toString(),new MarketRetrofits_MarketFounderMasterList(),true);
-
-        dialog.init(dialogTemp);
 
         ruleIdTemp1=ruleIdTemp;
         dialogTemp1=dialogTemp;
         paramsTemp1=paramsTemp;
         memoryMapTemp1=memoryMapTemp;
+
+        ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsInOrder(Planet);
+        if(b.size() == 1 && b.get(0).skipOptionSelectionIfOnlyOption()){
+            a.setData(dialogTemp);
+            a.runMarketFoundingPage(b.get(0));
+            return dialog;
+        }
+        dialog.init(dialogTemp);
         return dialog;
     }
 
     public static void foundMarket(MarketRetrofits_MarketFounder marketFounder){
         //CommandPluginTemp.
+        MarketRetrofits_Logger.logging("got the dialogTemp1: "+dialogTemp1,new MarketRetrofits_MarketFounderMasterList(),true);
+        MarketRetrofits_Logger.logging(", and the dialogTemp2: "+dialogTemp2,new MarketRetrofits_MarketFounderMasterList(),true);
         dialogTemp1.setPlugin(dialogTemp2);
         OpenCoreTab a = new OpenCoreTab();
+        MarketRetrofits_SurveyPlugin.costArray = marketFounder.getOutpostConsumed(Planet);
         //Misc.Token b = new Misc.Token("CARGO OPEN", Misc.TokenType.VARIABLE);
         //OpenCoreTab CARGO OPEN
         //paramsTemp1.add(b);//.put("CARGO","OPEN");

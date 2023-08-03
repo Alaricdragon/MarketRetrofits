@@ -18,9 +18,9 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
     protected TextPanelAPI text;
     protected OptionPanelAPI options;
     public int page = 0;
-    public int pageLength = 10;
-    public int depth = 0;
-    public int sellected = 0;
+    public int pageLength = 5;
+    //public int depth = 0;
+    //public int sellected = 0;
     public SectorEntityToken planet;//this is a string as a temp untill i can change it to whatever a world is.
     public boolean noJumpTemp = MarketRetrofits_MarketFounderMasterList.noJumpTemp;
     public boolean hostilesTemp = MarketRetrofits_MarketFounderMasterList.hostilesTemp;
@@ -34,11 +34,14 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
         this.planet =planet;
     }
     protected void populateOptions() {
-        this.options.clearOptions();
         ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsInOrder(planet);
+        this.options.clearOptions();
         for(int a = pageLength*page; a < b.size() && a < (pageLength*(page+1)); a++){
             this.options.addOption(b.get(a).getOptionText(dialog,planet),b.get(a).ID);
             MarketRetrofits_Logger.logging("adding market founding option page: "+b.get(a).getOptionText(dialog,planet),this,true);
+        }
+        if((page+1) * pageLength < b.size()) {
+            this.addNextOption();
         }
         this.addBackOption();
     }
@@ -46,19 +49,19 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
         this.dialog.dismiss();
     }
     protected void back(){
-        if (depth == 0) {
+        if (page == 0) {
             this.exitDialog();
         } else {
-            depth--;
+            page--;
             this.populateOptions();
         }
     }
     /*public static void openMarketScreen(SectorEntityToken planet,MarketRetrofits_MarketFounder founder){
         //OpenCoreTab CARGO OPEN
     }*/
-    protected void runMarketFoundingPage(MarketRetrofits_MarketFounder option,int options){
+    protected void runMarketFoundingPage(MarketRetrofits_MarketFounder option){
         MarketRetrofits_Logger.logging("trying to found a market",this,true);
-        if((options == 1 && option.skipDescriptionIfOnlyOption) || !option.showOutpostFoundingDescription()){
+        if(!option.showOutpostFoundingDescription()){
             MarketRetrofits_Logger.logging("running 'open market screen'",this,true);
             MarketRetrofits_MarketFounderMasterList.foundMarket(option);//openMarketScreen(planet,option);
             return;
@@ -76,6 +79,10 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
         }
         this.addBackOption();
     }*/
+
+    protected void addNextOption(){
+        this.options.addOption("NEXT",nextOption);
+    }
     protected void addBackOption(){
         if (page == 0){
             addExitOption();
@@ -86,30 +93,17 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
     protected void addExitOption(){
         this.options.addOption("Exit",exitOption);
     }
-    @Override
-    public void init(InteractionDialogAPI dialog) {
+    public void setData(InteractionDialogAPI dialog){
         myself = this;
         this.dialog = dialog;
         this.options = dialog.getOptionPanel();
         this.text = dialog.getTextPanel();
+    }
+    @Override
+    public void init(InteractionDialogAPI dialog) {
+        this.setData(dialog);
         dialog.getVisualPanel().setVisualFade(0.25F, 0.25F);
-        //Iterator var3 = Global.getSector().getScripts().iterator();
-
-        /*while (var3.hasNext()) {
-            EveryFrameScript script = (EveryFrameScript) var3.next();
-            //if (script.getClass() == LootAddScript.class) {
-            //    if (((LootAddScript)script).captiveOfficers == null) {
-            //        ((LootAddScript)script).captiveOfficers = new ArrayList();
-            //    }
-
-            //    this.captiveOfficers = ((LootAddScript)script).captiveOfficers;
-            //}
-        }*/
-
-        //this.text.addParagraph("You currently have " + (int) this.fleet.getCargo().getCommodityQuantity("capturedcrew") + " captive crew and " + this.captiveOfficers.size() + " captive officers.");
         this.text.addParagraph("You cafullys consider what you can produce with the knowlage you have...");
-        //this.lastSelectedMenu = null;
-        //this.lastSelectedItems = null;
         this.populateOptions();
         dialog.setPromptText(Misc.ucFirst("Options"));
     }
@@ -138,9 +132,9 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
             ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsInOrder(planet);
             for(int a = pageLength*page; a < b.size() && a < (pageLength*(page+1)); a++){
                 if(optionData2.equals(b.get(a).ID)){
-                    sellected = a;
-                    this.depth++;
-                    this.runMarketFoundingPage(b.get(a),b.size());
+                    //sellected = a;
+                    //this.depth++;
+                    this.runMarketFoundingPage(b.get(a));
                     return;
                 }else{
                     MarketRetrofits_Logger.logging("option is not: "+b.get(a).ID,this,true);

@@ -24,6 +24,10 @@ create the list of wanted libarys:
                 -need to have this with a built in compatibility patch for crew replacer, or im going to have issues.
                 -will need to beable to change what function is running based off a variable.
             2)(very asic started) edit the rules that normal found a market.
+                -NOTE:
+                    OK: in the base game, when there is no jump onits, the game shows some text about how 'establishing a colonly is not a option', just on the main screen. also, the button to do so is greyed out.
+                    i need to remove this text, provided there is a foundable market on this world.
+                    i also need to grey out the found a market text if there is no foundable market on this world.
                 -need to replace the thing that greys out the market found button if your in a 'closed system'. replace it with a custom function that detects if there is any type of market available to found.
                     -surveySystemIsCutOffCanNotColonize: remove text and script. make this trigger MarketRetrofits_customMarketFounding_CutOffCanNotColonize.
                     -surveyPrintHostilesTextEstColony: (im unsure how this works. might need to experiment. ) remove text and script. make this trigger MarketRetrofits_customMakretFounder_HostilesAreAround.
@@ -34,7 +38,7 @@ create the list of wanted libarys:
                     -MarketRetrofits_customMarketFounding_CutOffCanNotColonize
                     -MarketRetrofits_customMakretFounder_HostilesAreAround
 
-                -put this somewhere:
+                -(NO LONGER REQUIRED)put this somewhere:
                     when i leave the space / found a market, set MarketRetrofits_MarketFounderMasterList. hostilesTemp && noJumpTemp to false.
 
             3)(started) create the 'market founder' class. it will require the following functions:
@@ -59,15 +63,14 @@ create the list of wanted libarys:
                     c)(done) run the found a market screen.
                 3)(done. not tested) allow so many items to show up per page, with a next / last button.
                 4)(done) a back button, to return to the main screen of the world. (the one were you survey and things.)
-
+            6(not started) options:
+                add all text to the settings file.
+                add relevent options for the dialog to the settings file
             issue:
-                i need to move the following data into basically every function:
-                    1)(done) the planet im interacting with.
-                    2)(started) weather or not this world is accessible by jump points.
-                    3)(started) weather or not this world is being blocked by a hostile fleet.
+                    1)(started) weather or not this world is being blocked by a hostile fleet.
                     that's no the issue though. the issue is i have no idea what form all this data will take. so here hoping for the best because scary.
-                right now i have a issue with determine if a market can be founded or not... need to work on this.
 
+                2) right now, when some markets are invalid, and i select a market to found that is valid,
             questions:
-                1) is there a way to determin if a market is in a 'cut off' (no jump ponits system) with code.
-                2) is there a way to find out if the 'world im interacting with' / 'my interaction target' is being cut off because of 'hostile activity' with code
+                1) is there a way to run code right after a player founds a market, like some type of 'market founded listener'?
+                2) how do i grey out options (so you cant click on them), like what happens with 'establish a colony' when in a system with no hyperspace accuses?
