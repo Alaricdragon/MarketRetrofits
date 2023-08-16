@@ -40,16 +40,19 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     public String getOptionText(InteractionDialogAPI dialog, SectorEntityToken planet){//List<Misc.Token> params, Map<String, MemoryAPI> memoryMap){
         return name;
     }
-    public boolean showOutpostFoundingDescription(){
+    public boolean showOutpostFoundingDescription(SectorEntityToken planet){
         return this.MarketFounderHasDescription;
     }
-    public boolean canFoundWithHostileActivity(){
+    public boolean canFoundWithHostileActivity(SectorEntityToken planet){
         return this.canFoundWithHostileActivity;
     }
-    public boolean canFoundWithoutJumpPonits(){
+    public boolean canFoundWithoutJumpPonits(SectorEntityToken planet){
         return this.canFoundWithoutJumpPonits;
     }
-    public boolean skipOptionSelectionIfOnlyOption(){
+    public boolean canEstablishAMarketHere(SectorEntityToken planet,boolean hostileActivity,boolean cutOffFromHyperspace){
+        return (!hostileActivity || canFoundWithHostileActivity(planet)) && (!cutOffFromHyperspace || canFoundWithoutJumpPonits(planet));
+    }
+    public boolean skipOptionSelectionIfOnlyOption(SectorEntityToken planet){
         return this.skipOptionSelectionIfOnlyOption;
     }
     public void getOutpostFoundingDescription(InteractionDialogAPI dialog,SectorEntityToken planet){
@@ -62,7 +65,7 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
         result.put(Commodities.SUPPLIES, 200);
         return result;
     }
-    public void runCodeAfterFoundingMarket(){
+    public void runCodeAfterFoundingMarket(SectorEntityToken planet){
 
     }
 

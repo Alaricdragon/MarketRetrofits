@@ -62,7 +62,7 @@ public class MarketRetrofits_MarketFounderMasterList {
         ArrayList<MarketRetrofits_MarketFounder> output = new ArrayList<>();
         for(int a = 0; a < list.size(); a++){
             MarketRetrofits_MarketFounder b = list.get(a);
-            if(b.canEstablishOutpost(planet) && (!hostiles || b.canFoundWithHostileActivity()) && (!noJump || b.canFoundWithoutJumpPonits())){
+            if(b.canEstablishOutpost(planet) && (b.canEstablishAMarketHere(planet,hostiles,noJump))){
                 output.add(b);
             }
         }
@@ -125,7 +125,7 @@ public class MarketRetrofits_MarketFounderMasterList {
         memoryMapTemp1=memoryMapTemp;
 
         ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsInOrder(Planet);
-        if(b.size() == 1 && b.get(0).skipOptionSelectionIfOnlyOption()){
+        if(b.size() == 1 && b.get(0).skipOptionSelectionIfOnlyOption(Planet)){
             a.setData(dialogTemp);
             a.runMarketFoundingPage(b.get(0));
             return dialog;
@@ -138,6 +138,7 @@ public class MarketRetrofits_MarketFounderMasterList {
         //CommandPluginTemp.
         MarketRetrofits_Logger.logging("got the dialogTemp1: "+dialogTemp1,new MarketRetrofits_MarketFounderMasterList(),true);
         MarketRetrofits_Logger.logging(", and the dialogTemp2: "+dialogTemp2,new MarketRetrofits_MarketFounderMasterList(),true);
+        MarketRetrofits_customMarketFounder_MarketFoundingListiner.marketFounder = marketFounder;
         dialogTemp1.setPlugin(dialogTemp2);
         OpenCoreTab a = new OpenCoreTab();
         MarketRetrofits_SurveyPlugin.costArray = marketFounder.getOutpostConsumed(Planet);

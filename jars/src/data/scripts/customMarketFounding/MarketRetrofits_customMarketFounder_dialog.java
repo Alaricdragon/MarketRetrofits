@@ -61,7 +61,7 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
     }*/
     protected void runMarketFoundingPage(MarketRetrofits_MarketFounder option){
         MarketRetrofits_Logger.logging("trying to found a market",this,true);
-        if(!option.showOutpostFoundingDescription()){
+        if(!option.showOutpostFoundingDescription(planet)){
             MarketRetrofits_Logger.logging("running 'open market screen'",this,true);
             MarketRetrofits_MarketFounderMasterList.foundMarket(option);//openMarketScreen(planet,option);
             return;

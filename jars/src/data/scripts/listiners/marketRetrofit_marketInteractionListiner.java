@@ -2,6 +2,8 @@ package data.scripts.listiners;
 
 import com.fs.starfarer.api.campaign.BaseCampaignEventListener;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import data.scripts.MarketRetrofits_Logger;
+import data.scripts.customMarketFounding.MarketRetrofits_customMarketFounder_MarketFoundingListiner;
 
 public class marketRetrofit_marketInteractionListiner extends BaseCampaignEventListener {
     public marketRetrofit_marketInteractionListiner(boolean permaRegister) {
@@ -46,9 +48,18 @@ public class marketRetrofit_marketInteractionListiner extends BaseCampaignEventL
     }
     @Override
     public void reportPlayerOpenedMarket(MarketAPI market){
-        market.addCondition("marketRetrofit_hiddinCondition");
+        //MarketRetrofits_Logger.logging("adding the thing from the place",this,true);
+        //market.addCondition("marketRetrofit_hiddinCondition");
         //crash();
     }
+
+    @Override
+    public void reportPlayerClosedMarket(MarketAPI market) {
+        //MarketRetrofits_Logger.logging("removing the thing from the place",this,true);
+        MarketRetrofits_customMarketFounder_MarketFoundingListiner.resetMarketFounder();
+        super.reportPlayerClosedMarket(market);
+    }
+
     private void crash(){
         int[] a = {};
         a[0] = a[9999];

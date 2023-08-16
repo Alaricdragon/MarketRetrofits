@@ -2,21 +2,38 @@ id,trigger,conditions,script,text,options,notes
 surveySystemIsCutOffCanNotColonize,PrintSystemCutOffText,"$systemCutOffFromHyper
 $market.isPlanetConditionMarketOnly
 $market.isSurveyed
-!$market.hasUnexploredRuins",SetEnabled surveyPerform false,"This system is cut off from hyperspace and the jump-points are unstable. The crew, and even officers, are muted; on-edge. You judge it unlikely that any amount of hazard pay could overcome the near-superstitious fear spacers have of being stranded in a system like this.
+!$market.hasUnexploredRuins
+!MarketRetrofits_customMarketFounding_CanIFoundAMarketHere $systemCutOffFromHyper HostileFleetNearbyAndAware","SetEnabled MarketRetrofit_foundList false
+SetEnabled surveyPerform false","This system is cut off from hyperspace and the jump-points are unstable. The crew, and even officers, are muted; on-edge. You judge it unlikely that any amount of hazard pay could overcome the near-superstitious fear spacers have of being stranded in a system like this.
 
 Establishing a colony here is not an option.",,
-surveyAddOptionPerformedAlready,PopulateOptions,"$market.isPlanetConditionMarketOnly
+surveySystemIsCutOffCanColonize,PrintSystemCutOffText,"$systemCutOffFromHyper
+$market.isPlanetConditionMarketOnly
+$market.isSurveyed
+!$market.hasUnexploredRuins
+MarketRetrofits_customMarketFounding_CanIFoundAMarketHere $systemCutOffFromHyper HostileFleetNearbyAndAware","SetEnabled MarketRetrofit_foundList true
+SetEnabled surveyPerform false","This system is cut off from hyperspace and the jump-points are unstable. The crew, and even officers, are muted; on-edge. You judge it unlikely that any amount of hazard pay could overcome the near-superstitious fear spacers have of being stranded in a system like this.
+
+However, there might be another way to establish a colony here...",,
+#surveyAddOptionPerformedAlready,PopulateOptions,"$market.isPlanetConditionMarketOnly
 $market.isSurveyed
 !$market.hasUnexploredRuins",FireBest PrintSystemCutOffText,,0:surveyPerform:Establish a colony,
 surveyPrintHostilesTextEstColony,PrintNearbySurveyHostilesTextIfSo,"$market.isPlanetConditionMarketOnly
 $market.isSurveyed
 !$market.hasUnexploredRuins
-HostileFleetNearbyAndAware",SetEnabled surveyPerform false,"A nearby hostile fleet is tracking your movements, making establishing a colony impossible.",,
-surveyOptionPerformSurvey,DialogOptionSelected,$option == surveyPerform,OpenCoreTab CARGO OPEN,Your $shipOrFleet enters low orbit around $entityName.,,
+HostileFleetNearbyAndAware
+!MarketRetrofits_customMarketFounding_CanIFoundAMarketHere $systemCutOffFromHyper HostileFleetNearbyAndAware","SetEnabled MarketRetrofit_foundList false
+SetEnabled surveyPerform false","A nearby hostile fleet is tracking your movements, making establishing a colony impossible.",,
+surveyPrintHostilesTextEstColony_canFound,PrintNearbySurveyHostilesTextIfSo,"$market.isPlanetConditionMarketOnly
+$market.isSurveyed
+!$market.hasUnexploredRuins
+HostileFleetNearbyAndAware
+MarketRetrofits_customMarketFounding_CanIFoundAMarketHere $systemCutOffFromHyper HostileFleetNearbyAndAware","SetEnabled MarketRetrofit_foundList true
+SetEnabled surveyPerform false","A nearby hostile fleet is tracking your movements. normaly this would make establishing a colony impossible, but there might be a way for you to do so in this situation",,
+#surveyOptionPerformSurvey,DialogOptionSelected,$option == surveyPerform,OpenCoreTab CARGO OPEN,Your $shipOrFleet enters low orbit around $entityName.,,
 ,,,,,,
-#MarketRetrofits_customMarketFounding_CutOffCanNotColonize,MarketRetrofit_NoJumpCanFoundMarket,MarketRetrofits_customMarketFounding_CantFoundBecauseOfNoJumpPonits,SetEnabled surveyPerform false,"This system is cut off from hyperspace and the jump-points are unstable. The crew, and even officers, are muted; on-edge. You judge it unlikely that any amount of hazard pay could overcome the near-superstitious fear spacers have of being stranded in a system like this.
-
-Establishing a colony here is not an option.",,
-#MarketRetrofits_customMakretFounder_HostilesAreAround,MarketRetrofit_HostilesCanFoundMarket,MarketRetrofits_customMarketFounding_CantFoundBecauseOfFleet,SetEnabled surveyPerform false,"A nearby hostile fleet is tracking your movements, making establishing a colony impossible.",,
-MarketRetrofits_test,PopulateOptions,,,,0:MarketRetrofit_foundList:Establish a colony222,
+surveyAddOptionPerformedAlready,PopulateOptions,"$market.isPlanetConditionMarketOnly
+$market.isSurveyed
+!$market.hasUnexploredRuins","MarketRetrofits_customMarketFounding_CanIFoundAMarketHere $systemCutOffFromHyper HostileFleetNearbyAndAware
+FireBest PrintSystemCutOffText",,0:MarketRetrofit_foundList:Establish a colony,
 MarketRetrofits_test2,DialogOptionSelected,$option == MarketRetrofit_foundList,MarketRetrofits_customMarketFounding_MarketTypeList CARGO OPEN,,,

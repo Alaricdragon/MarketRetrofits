@@ -3,7 +3,7 @@ MOVED industry.csv FILE TO 'old' FOLDER. MOVE BACK TO 'campaing' to reactavate
 create the list of wanted libarys:
     1) industry replacer (disabled for now) (reason: extra unacceptable lag)
         -to fix, minimize possible causes of lag, like for example, the number of data transfers, and the hundreds of if statements.
-        -possibility: remove about 95% of functions. keep all descriptions, images, apply/unapply. remove checking for current industry every time.
+        -possibility: remove about 95% of functions. keep all descriptions, images, apply/unapply, core and improve functions, remove checking for current industry every time.
         -possability: remove ALL data transfer. have the code run the stored industry directly. when the industry changes, have a function that lets the new industry take whatever it wants from the old one. then i dont need to worry about things.
     2) condition replacer
         -replaces functions in market conditions with ones of my own.
@@ -23,20 +23,22 @@ create the list of wanted libarys:
             1)(done) survey plugging: the survey plugging has a function called found outpost. this is founding a market, and can be set to any commodities.
                 -need to have this with a built in compatibility patch for crew replacer, or im going to have issues.
                 -will need to beable to change what function is running based off a variable.
-            2)(very asic started) edit the rules that normal found a market.
+            2)(almost donestarted) edit the rules that normal found a market.
                 -NOTE:
                     OK: in the base game, when there is no jump onits, the game shows some text about how 'establishing a colonly is not a option', just on the main screen. also, the button to do so is greyed out.
                     i need to remove this text, provided there is a foundable market on this world.
                     i also need to grey out the found a market text if there is no foundable market on this world.
                 -need to replace the thing that greys out the market found button if your in a 'closed system'. replace it with a custom function that detects if there is any type of market available to found.
-                    -surveySystemIsCutOffCanNotColonize: remove text and script. make this trigger MarketRetrofits_customMarketFounding_CutOffCanNotColonize.
+                    -(DONE)surveySystemIsCutOffCanNotColonize: remove text and script. make this trigger MarketRetrofits_customMarketFounding_CutOffCanNotColonize.
                     -surveyPrintHostilesTextEstColony: (im unsure how this works. might need to experiment. ) remove text and script. make this trigger MarketRetrofits_customMakretFounder_HostilesAreAround.
-                    -surveyAddOptionPerformedAlready: change its options to a new option that creates a list of possible markets types, and lets you click on one of them.
-                    -surveyOptionPerformSurvey: founds a market (i think?).
+                        -NOTE: i need to test this one. i have to find a spot that i can find some hostile fleets and a market to interact with...
+                        -also getting patrols to chase you around and round does not work. i need something a letter more hostile then that. maybe i need luna lib for this?
+                    -(DONE)surveyAddOptionPerformedAlready: change its options to a new option that creates a list of possible markets types, and lets you click on one of them.
+                    -(not required)surveyOptionPerformSurvey: founds a market (i think?).
 
-                    -MarketRetrofits_FoundAMarket: runs what surveyAddOptionPreformedAlready normally does. runs only when clicking a item from the list formed in surveyAddOptionPerformedAlready. sends a little bit of extra data back to the survey plugin.
-                    -MarketRetrofits_customMarketFounding_CutOffCanNotColonize
-                    -MarketRetrofits_customMakretFounder_HostilesAreAround
+                -need to replace the script for 'hostile activity nearby', with my own script that does not prevent founding a market provided you have a market type that is foundable.
+                    -the rules for this are:
+                        surveyPrintHostilesTextEstColony
 
                 -(NO LONGER REQUIRED)put this somewhere:
                     when i leave the space / found a market, set MarketRetrofits_MarketFounderMasterList. hostilesTemp && noJumpTemp to false.
@@ -46,31 +48,37 @@ create the list of wanted libarys:
                 3.2)(done) a function to set what the text is named for there own market.
                 3.3)(done) a function to set the description of that market type.
                 3.4)(done) a function to deside if this market type is valid on this world.
-                3.5) a function to run custom code -after- the market has been founded.
-            4)(started) a 'market founder master list' class. it will hold and allow you to aquire other market founders.
+                3.5)(done) a function to run custom code -after- the market has been founded.
+            4)(almost done) a 'market founder master list' class. it will hold and allow you to aquire other market founders.
                 this is hard to understand..
                 so i don't think i can run the dialog from the inputed dialog pluging.
                 well, i might beable to, but i dont understand how to form options so im not even goin to try.
                 so heres what im going to do:
                 1)(done)create a new sell class. it will run a dialog interaction thing. (mimic AIRetrofits_RobotForgeDiologPlugin2 form AIRetrofits.)
                 2)(done)make a cass for the main menu, called MarketRetrofits_customMarketFounder_dialog
-            5)(started) make a interaction dialog plugin for displaying my list of available markets at a given time.
+                3)(not started) make a way for moders to render a system impossible to colonize.
+                    -why? simple. its possible to make a market that can conlinize any system, however this comes with risks. like for example
+                     a system being temporarily, and the user losing all there markets they colonized within. or worse, incountering a hard crash.
+                     so im going to install a system to prevent this.
+            5)(done) make a interaction dialog plugin for displaying my list of available markets at a given time.
                 -this needs to:
-                1)(done. untested) read all the items in the master list, and display options for every valid market.
-                2)(started untested) allow the user to click on any option, with will:
+                1)(done) read all the items in the master list, and display options for every valid market.
+                2)(done) allow the user to click on any option, with will:
                     a)(done) run a description page, with a continue button at the bottom, the will move onto the found a market screen.
                     b)(done) run a custom dialog plugin thats stored in a given market founder.
                     c)(done) run the found a market screen.
-                3)(done. not tested) allow so many items to show up per page, with a next / last button.
+                3)(done) allow so many items to show up per page, with a next / last button.
                 4)(done) a back button, to return to the main screen of the world. (the one were you survey and things.)
             6(not started) options:
                 add all text to the settings file.
                 add relevent options for the dialog to the settings file
+            7(done) a way to safely trigger the exstra code for founding a market of a player, hopefully with no misfires.
+                1)(done) set up a listiner, that if that player founds a market on a world they were just on, runs the market founding world.
+                2)(done) set up a way to reset the market im currently looking at after i leave it, so i dont have situations were the player starts to found a market, leaves, then another mod founds a market there, and all the code that was running is triggered all at once. would suck.
+                    -how would i even do that? is there a way to say 'hey, you left a market?'
             issue:
-                    1)(started) weather or not this world is being blocked by a hostile fleet.
+                1)(done. untested) weather or not this world is being blocked by a hostile fleet.
                     that's no the issue though. the issue is i have no idea what form all this data will take. so here hoping for the best because scary.
 
-                2) right now, when some markets are invalid, and i select a market to found that is valid,
             questions:
-                1) is there a way to run code right after a player founds a market, like some type of 'market founded listener'?
-                2) how do i grey out options (so you cant click on them), like what happens with 'establish a colony' when in a system with no hyperspace accuses?
+                1) hey all, today i learned on the found a market screen, (the one that runs when you run 'OpenCoreTab CARGO OPEN') there is a second check that prevents you from founding a market in a system with no jump points (cut off from hyper space). i was wondering if there is a way to disable, or otherwise interact with this check?
