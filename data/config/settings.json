@@ -6,5 +6,11 @@
   "MarketRetrofits_BaseIndustryLogs": false,#WARNING, exstram lag when active
   "MarketRetrofit_OrbitalStationLogs": false,#WARNING, high lag when active
   "MarketRetrofits_MiltaryBaseLogs": false,#WARNING, marderate lag when active
+
+  #custom market founder options.
+  "MarketREtrofits_CustomMarketFounder_BaseMarketName": "Found A Normal Market",
+  "MarketREtrofits_CustomMarketFounder_BaseMarketBackOption": "Found A Normal Market",
+  "MarketREtrofits_CustomMarketFounder_BaseMarketEstablishOption": "Found A Normal Market",
+  "MarketREtrofits_CustomMarketFounder_Logs":true,#no lag when active. yay
 }
 

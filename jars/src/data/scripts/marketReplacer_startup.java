@@ -3,6 +3,7 @@ import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.campaign.econ.Market;
 import data.scripts.combatabilityPatches.MarketRetrofits_InitCombatabilityPatches;
+import data.scripts.customMarketFounding.MarketRetrofits_CustomMarketFounderType;
 import data.scripts.customMarketFounding.MarketRetrofits_MarketFounderMasterList;
 import data.scripts.customMarketFounding.MarketRetrofits_customMarketFounder_BaseMarket;
 import data.scripts.customMarketFounding.MarketRetrofits_customMarketFounder_MarketFoundingListiner;
@@ -53,8 +54,9 @@ public class marketReplacer_startup extends BaseModPlugin {
     }
     private static void applyDefaultCustomMarketFounder(){
         MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
-                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket","Found a ordinary market")
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket",Global.getSettings().getString("MarketREtrofits_CustomMarketFounder_BaseMarketName"))
         );
+        /*/
         MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
                 new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket1","Found a ordinary market1")
         );
@@ -97,7 +99,6 @@ public class marketReplacer_startup extends BaseModPlugin {
         MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
                 new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket14","Found a ordinary market14")
         );
-        /*/
         MarketRetrofits_customMarketFounder_BaseMarket temp = new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket15","Found a ordinary market15");
         temp.canFoundWithoutJumpPonits=true;
         MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(temp
@@ -106,6 +107,8 @@ public class marketReplacer_startup extends BaseModPlugin {
         temp.canFoundWithoutJumpPonits=true;
         MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(temp
         );/**/
+
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounderType(new MarketRetrofits_CustomMarketFounderType(MarketRetrofits_Constants.BaseMarketFounderID));
     }
     private static void applyDefaultIndustryInstances(){
         MarketRetrofit_MiningInstance miningInstance = new MarketRetrofit_MiningInstance("mining",0);

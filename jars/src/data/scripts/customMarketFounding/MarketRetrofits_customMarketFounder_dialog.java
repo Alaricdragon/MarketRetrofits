@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.campaign.econ.Market;
+import data.scripts.MarketRetrofits_Constants;
 import data.scripts.MarketRetrofits_Logger;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
         this.options.clearOptions();
         for(int a = pageLength*page; a < b.size() && a < (pageLength*(page+1)); a++){
             this.options.addOption(b.get(a).getOptionText(dialog,planet),b.get(a).ID);
-            MarketRetrofits_Logger.logging("adding market founding option page: "+b.get(a).getOptionText(dialog,planet),this,true);
+            MarketRetrofits_Logger.logging("adding market founding option page: "+b.get(a).getOptionText(dialog,planet),this,MarketRetrofits_Constants.CustomMarketFounderLogs);
         }
         if((page+1) * pageLength < b.size()) {
             this.addNextOption();
@@ -60,13 +61,13 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
         //OpenCoreTab CARGO OPEN
     }*/
     protected void runMarketFoundingPage(MarketRetrofits_MarketFounder option){
-        MarketRetrofits_Logger.logging("trying to found a market",this,true);
+        MarketRetrofits_Logger.logging("trying to found a market",this,MarketRetrofits_Constants.CustomMarketFounderLogs);
         if(!option.showOutpostFoundingDescription(planet)){
-            MarketRetrofits_Logger.logging("running 'open market screen'",this,true);
+            MarketRetrofits_Logger.logging("running 'open market screen'",this,MarketRetrofits_Constants.CustomMarketFounderLogs);
             MarketRetrofits_MarketFounderMasterList.foundMarket(option);//openMarketScreen(planet,option);
             return;
         }
-        MarketRetrofits_Logger.logging("running 'description of market type'",this,true);
+        MarketRetrofits_Logger.logging("running 'description of market type'",this,MarketRetrofits_Constants.CustomMarketFounderLogs);
         option.planate = planet;
         MarketRetrofits_MarketFounderMasterList.dialog.Dialog = option;
         MarketRetrofits_MarketFounderMasterList.dialog.init(dialog);
@@ -114,7 +115,7 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
             this.text.addParagraph(optionText, Global.getSettings().getColor("buttonText"));
         }
         String optionData2 = (String)optionData;
-        MarketRetrofits_Logger.logging("looking for option: "+optionData2,this,true);
+        MarketRetrofits_Logger.logging("looking for option: "+optionData2,this, MarketRetrofits_Constants.CustomMarketFounderLogs);
         try {
             if (optionData2.equals(nextOption)){//optionData2 == AIRetrofits_RobotForgeDiologPlugin.Menu.NEXT) {
                 ++this.page;
@@ -137,7 +138,7 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
                     this.runMarketFoundingPage(b.get(a));
                     return;
                 }else{
-                    MarketRetrofits_Logger.logging("option is not: "+b.get(a).ID,this,true);
+                    MarketRetrofits_Logger.logging("option is not: "+b.get(a).ID,this,MarketRetrofits_Constants.CustomMarketFounderLogs);
                 }
             }
         } catch (Exception var7) {

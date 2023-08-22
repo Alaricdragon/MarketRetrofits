@@ -1,0 +1,31 @@
+extends
+
+public String name = "";
+public String ID = "";                                      the ID of this market founder. there can only be one market founder with a given name at a time. if a second market founder with the same name is added to MarketRetorfits_MarketFounderMasterList, it will be overwriten.
+public int order = 0;                                       the order the market founders are displayed. lower numbers are displayed first.
+public boolean skipOptionSelectionIfOnlyOption = false;
+public boolean canFoundWithHostileActivity = false;
+public boolean canFoundWithoutJumpPonits = false;
+public boolean MarketFounderHasDescription = false;
+public String MarketFounderDescription = "description to be added latter. if you are a modder, try changeing this market founders 'MarketFounderDescription' or 'MarketFounderHasDescription' variables.";
+public String backOptionName = "back"                       the text name of the option to go 'back' when seeing the market founder description
+publis String foundMarketOptionName = "establish a colony"; the text name of the option to 'continue' when seeing the market founder description
+
+public MarketRetrofits_MarketFounder(String ID,String name,int order){
+    this.ID=ID;
+    this.name = name;
+    this.order = order;
+}
+
+
+public void getOutpostFoundOption(InteractionDialogAPI dialog, SectorEntityToken planet)        unused. might readd latter.
+public String getOptionText(InteractionDialogAPI dialog, SectorEntityToken planet)              returns this.name by defalt. returns the text of the option to preform this marketFounder.
+public boolean showOutpostFoundingDescription(SectorEntityToken planet)                         returns this.MarketFounderHasDescription by defalt. if true, will show the description of this market founder when this option is selected.
+public boolean skipOptionSelectionIfOnlyOption(SectorEntityToken planet)                        returns this.skipOptionSelectionIfOnlyOption by defalt. if true, and this is the only valid market founder, will skip directly to the found a market screen, bypassing having to click on this option.
+public void getOutpostFoundingDescription(InteractionDialogAPI dialog,SectorEntityToken planet) by defalt runs: addPara(this.MarketFounderDescription);. this runs when the market founder trys to display its description.
+
+public boolean canFoundWithHostileActivity(SectorEntityToken planet)                            returns this.canFoundWithHostileActivity by defalt. if true, allows this market to be found in situations were there is a hostile fleet traking your movements.
+public boolean canFoundWithoutJumpPonits(SectorEntityToken planet)                              returns this.canFoundWithoutJumpPonits by defalt. if true, allows this market to be found in situations were you are cut off from hyperspace.
+public boolean canEstablishAMarketHere(SectorEntityToken planet,boolean hostileActivity,boolean cutOffFromHyperspace) returns true if are able to found a market here. i advice you to run super.canEstablishAMarketHere(...) if you overwrite this.
+public Map<String, Integer> getOutpostConsumed(SectorEntityToken planet)                        returns the 'vanilla' required items to found a market by default. change this to change what items are required to found this market
+public void runCodeAfterFoundingMarket(SectorEntityToken planet)                                runs nothing by defalt. this is for the modders use, to make it so when you found a market useing this market founder, it will run this code.

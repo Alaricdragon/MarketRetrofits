@@ -1,0 +1,31 @@
+
+public static ArrayList<MarketRetrofits_MarketFounder> list = new ArrayList<>();                        the list of all market founders available
+public static ArrayList<MarketRetrofits_CustomMarketFounderType> FoundTypeList = new ArrayList<>();     the list of all market found types available.
+public static MarketRetrofits_CustomMarketFounderType currentMarketFoundType = null;                    the currently being used market found type.
+public static boolean noJumpTemp = false;                                                               false if there are jump ponits. true otherwize.
+public static boolean hostilesTemp = false;                                                             false if you are not being attacked. true otherwize.
+public static BaseCommandPlugin CommandPluginTemp;                                                      the command pluging that activated this code.
+protected static MarketRetrofit_dialogShell dialog = new MarketRetrofit_dialogShell();                  the dialog that this code runs
+
+public static String ruleIdTemp1;                       a temp value. only use if you need to.
+public static InteractionDialogAPI dialogTemp1;         --
+public static List<Misc.Token> paramsTemp1;             --
+public static Map<String, MemoryAPI> memoryMapTemp1;    --
+public static InteractionDialogPlugin dialogTemp2;      --
+public static SectorEntityToken Planet = null;          the world you are interacting with.
+
+
+public static boolean addOrReplaceMarketFounder(MarketRetrofits_MarketFounder MarketFounder)
+
+public static boolean removeMarketFounder(String ID)
+public static MarketRetrofits_MarketFounder getMarketFounder(String ID)
+
+public static boolean addOrReplaceMarketFounderType(MarketRetrofits_CustomMarketFounderType MarketFounderType)
+public static MarketRetrofits_CustomMarketFounderType getMarketFounderType(String ID)
+public static void actavateMarketFounder(String ID)
+public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(SectorEntityToken planet)
+public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(SectorEntityToken planet, boolean hostiles, boolean noJump)
+public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsInOrder(SectorEntityToken planet)
+public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsInOrder(SectorEntityToken planet,boolean hostiles,boolean noJump)
+public static MarketRetrofit_dialogShell activateMarketFoundingListDialog(BaseCommandPlugin CommandPlugin,String ruleIdTemp, InteractionDialogAPI dialogTemp, List<Misc.Token> paramsTemp, Map<String, MemoryAPI> memoryMapTemp)
+public static void foundMarket(MarketRetrofits_MarketFounder marketFounder)

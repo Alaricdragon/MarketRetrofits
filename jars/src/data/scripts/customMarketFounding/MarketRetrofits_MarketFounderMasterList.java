@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogPlugin;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
+import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.rulecmd.BaseCommandPlugin;
 import com.fs.starfarer.api.impl.campaign.rulecmd.OpenCoreTab;
 import com.fs.starfarer.api.util.Misc;
@@ -19,8 +20,9 @@ import java.util.Map;
 import static com.fs.starfarer.api.impl.campaign.ids.Tags.SYSTEM_CUT_OFF_FROM_HYPER;
 
 public class MarketRetrofits_MarketFounderMasterList {
-    private static boolean log = true;
     public static ArrayList<MarketRetrofits_MarketFounder> list = new ArrayList<>();
+    public static ArrayList<MarketRetrofits_CustomMarketFounderType> FoundTypeList = new ArrayList<>();
+    public static MarketRetrofits_CustomMarketFounderType currentMarketFoundType = null;
     public static boolean noJumpTemp = false;
     public static boolean hostilesTemp = false;
     public static BaseCommandPlugin CommandPluginTemp;
@@ -52,7 +54,32 @@ public class MarketRetrofits_MarketFounderMasterList {
         }
         return null;
     }
+    public static boolean addOrReplaceMarketFounderType(MarketRetrofits_CustomMarketFounderType MarketFounderType){
+        for(int a = 0; a < FoundTypeList.size(); a++){
+            if(FoundTypeList.get(a).ID.equals(MarketFounderType.ID)){
+                FoundTypeList.set(a,MarketFounderType);
+                return true;
+            }
+        }
+        FoundTypeList.add(MarketFounderType);
+        return false;
+    }
+    public static MarketRetrofits_CustomMarketFounderType getMarketFounderType(String ID){
+        for(int a = 0; a < FoundTypeList.size(); a++){
+            if(FoundTypeList.get(a).ID.equals(ID)){
+                return FoundTypeList.get(a);
+            }
+        }
+        return null;
+    }
+    public static void actavateMarketFounder(String ID){
+        for(int a = 0; a < FoundTypeList.size(); a++){
+            if(FoundTypeList.get(a).ID.equals(ID)){
+                 currentMarketFoundType = FoundTypeList.get(a);
+            }
+        }
 
+    }
     public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(SectorEntityToken planet){
         noJumpTemp = planet.getStarSystem().hasTag(SYSTEM_CUT_OFF_FROM_HYPER);
         hostilesTemp = false;
@@ -62,7 +89,7 @@ public class MarketRetrofits_MarketFounderMasterList {
         ArrayList<MarketRetrofits_MarketFounder> output = new ArrayList<>();
         for(int a = 0; a < list.size(); a++){
             MarketRetrofits_MarketFounder b = list.get(a);
-            if(b.canEstablishOutpost(planet) && (b.canEstablishAMarketHere(planet,hostiles,noJump))){
+            if(/*b.canEstablishOutpost(planet) && */(b.canEstablishAMarketHere(planet,hostiles,noJump))){
                 output.add(b);
             }
         }
@@ -135,26 +162,7 @@ public class MarketRetrofits_MarketFounderMasterList {
     }
 
     public static void foundMarket(MarketRetrofits_MarketFounder marketFounder){
-        //CommandPluginTemp.
-        MarketRetrofits_Logger.logging("got the dialogTemp1: "+dialogTemp1,new MarketRetrofits_MarketFounderMasterList(),true);
-        MarketRetrofits_Logger.logging(", and the dialogTemp2: "+dialogTemp2,new MarketRetrofits_MarketFounderMasterList(),true);
-        MarketRetrofits_customMarketFounder_MarketFoundingListiner.marketFounder = marketFounder;
-        dialogTemp1.setPlugin(dialogTemp2);
-        OpenCoreTab a = new OpenCoreTab();
-        MarketRetrofits_SurveyPlugin.costArray = marketFounder.getOutpostConsumed(Planet);
-        //Misc.Token b = new Misc.Token("CARGO OPEN", Misc.TokenType.VARIABLE);
-        //OpenCoreTab CARGO OPEN
-        //paramsTemp1.add(b);//.put("CARGO","OPEN");
-        /*MarketRetrofits_Logger.logging("getting size of data."+paramsTemp1.size()+", "+memoryMapTemp1.size(),new MarketRetrofits_MarketFounderMasterList(),true);
-        MarketRetrofits_Logger.logging("",new MarketRetrofits_MarketFounderMasterList(),true);
-        for(Misc.Token b : paramsTemp1){
-            MarketRetrofits_Logger.logging(""+b.string+", "+b.type+", "+b.varMemoryKey+", "+b.varNameWithoutMemoryKeyIfKeyIsValid,new MarketRetrofits_MarketFounderMasterList(),true);
-        }
-        MarketRetrofits_Logger.logging("",new MarketRetrofits_MarketFounderMasterList(),true);
-        for(MemoryAPI b : memoryMapTemp1.values()){
-        }*/
-        a.execute(ruleIdTemp1,dialogTemp1,paramsTemp1,memoryMapTemp1);
-        //a.execute();
+        currentMarketFoundType.foundAMarket(marketFounder,noJumpTemp,hostilesTemp,Planet);
     }
 
 }

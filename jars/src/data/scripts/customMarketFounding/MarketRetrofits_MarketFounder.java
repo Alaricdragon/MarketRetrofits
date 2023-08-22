@@ -1,5 +1,6 @@
 package data.scripts.customMarketFounding;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
@@ -31,9 +32,6 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
         this.name = name;
         this.order = order;
     }
-    public boolean canEstablishOutpost(SectorEntityToken planet){
-        return true;
-    }
     public void getOutpostFoundOption(InteractionDialogAPI dialog, SectorEntityToken planet){//List<Misc.Token> params, Map<String, MemoryAPI> memoryMap){
         dialog.getOptionPanel().addOption(getOptionText(dialog, planet),this.ID);
     }
@@ -43,6 +41,13 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     public boolean showOutpostFoundingDescription(SectorEntityToken planet){
         return this.MarketFounderHasDescription;
     }
+    public boolean skipOptionSelectionIfOnlyOption(SectorEntityToken planet){
+        return this.skipOptionSelectionIfOnlyOption;
+    }
+    public void getOutpostFoundingDescription(InteractionDialogAPI dialog,SectorEntityToken planet){
+        dialog.getTextPanel().addPara(this.MarketFounderDescription);
+    }
+
     public boolean canFoundWithHostileActivity(SectorEntityToken planet){
         return this.canFoundWithHostileActivity;
     }
@@ -51,12 +56,6 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     }
     public boolean canEstablishAMarketHere(SectorEntityToken planet,boolean hostileActivity,boolean cutOffFromHyperspace){
         return (!hostileActivity || canFoundWithHostileActivity(planet)) && (!cutOffFromHyperspace || canFoundWithoutJumpPonits(planet));
-    }
-    public boolean skipOptionSelectionIfOnlyOption(SectorEntityToken planet){
-        return this.skipOptionSelectionIfOnlyOption;
-    }
-    public void getOutpostFoundingDescription(InteractionDialogAPI dialog,SectorEntityToken planet){
-        dialog.getTextPanel().addPara(this.MarketFounderDescription);
     }
     public Map<String, Integer> getOutpostConsumed(SectorEntityToken planet) {
         Map<String, Integer> result = new LinkedHashMap<String, Integer>();
@@ -74,7 +73,7 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     protected TextPanelAPI text;
     protected OptionPanelAPI options;
     public final static String backOption="BACK",foundMarketOption="Found Market";
-    public String backOptionName = "back", foundMarketOptionName = "establish a colony";
+    public String backOptionName = Global.getSettings().getString("MarketREtrofits_CustomMarketFounder_BaseMarketBackOption"), foundMarketOptionName = Global.getSettings().getString("MarketREtrofits_CustomMarketFounder_BaseMarketEstablishOption");
     @Override
     public void init(InteractionDialogAPI dialog) {
         MarketRetrofits_Logger.logging("running dialog of market founder ID of: "+this.ID,this,true);
