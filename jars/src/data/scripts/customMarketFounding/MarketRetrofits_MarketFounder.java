@@ -16,7 +16,7 @@ import java.util.Map;
 public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     public String name = "";
     public String ID = "";
-    public int order = 0;
+    public float order = 0;
     public boolean skipOptionSelectionIfOnlyOption = false;
     public boolean canFoundWithHostileActivity = false;
     public boolean canFoundWithoutJumpPonits = false;
@@ -27,7 +27,7 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
         this.ID=ID;
         this.name = name;
     }
-    public MarketRetrofits_MarketFounder(String ID,String name,int order){
+    public MarketRetrofits_MarketFounder(String ID,String name,float order){
         this.ID=ID;
         this.name = name;
         this.order = order;
