@@ -1,4 +1,4 @@
-extends
+implements InteractionDialogPlugin
 
 public String name = "";
 public String ID = "";                                      the ID of this market founder. there can only be one market founder with a given name at a time. if a second market founder with the same name is added to MarketRetorfits_MarketFounderMasterList, it will be overwriten.

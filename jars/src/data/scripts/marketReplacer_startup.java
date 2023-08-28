@@ -53,9 +53,9 @@ public class marketReplacer_startup extends BaseModPlugin {
         Global.getSector().addTransientListener(new marketRetrofit_marketInteractionListiner(false));
     }
     private static void applyDefaultCustomMarketFounder(){
-        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
-                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket",Global.getSettings().getString("MarketREtrofits_CustomMarketFounder_BaseMarketName"))
-        );
+        //MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+        new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket",Global.getSettings().getString("MarketREtrofits_CustomMarketFounder_BaseMarketName"));
+        //);
         /*/
         MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
                 new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket1","Found a ordinary market1")

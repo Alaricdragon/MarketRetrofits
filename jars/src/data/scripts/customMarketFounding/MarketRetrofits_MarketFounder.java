@@ -26,11 +26,13 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     public MarketRetrofits_MarketFounder(String ID,String name){
         this.ID=ID;
         this.name = name;
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(this);
     }
     public MarketRetrofits_MarketFounder(String ID,String name,float order){
         this.ID=ID;
         this.name = name;
         this.order = order;
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(this);
     }
     public void getOutpostFoundOption(InteractionDialogAPI dialog, SectorEntityToken planet){//List<Misc.Token> params, Map<String, MemoryAPI> memoryMap){
         dialog.getOptionPanel().addOption(getOptionText(dialog, planet),this.ID);
