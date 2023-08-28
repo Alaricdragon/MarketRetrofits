@@ -6,6 +6,7 @@ import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.plugins.SurveyPlugin;
 import data.scripts.customMarketFounding.MarketRetrofits_MarketFounder;
+import data.scripts.customMarketFounding.MarketRetrofits_MarketFounderMasterList;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -66,6 +67,9 @@ public class MarketRetrofits_SurveyPlugin implements SurveyPlugin {
     @Override
     public Map<String, Integer> getOutpostConsumed() {
         //CrewReplacer_Log.loging("getOutpostConsumed",this,true);
+        if (costArray == null) {
+            costArray = MarketRetrofits_MarketFounderMasterList.getMarketFounder("MarketRetrofits_DefaultMarket").getOutpostConsumed(null);
+        }
         Map<String, Integer> result = costArray;//new LinkedHashMap<String, Integer>();
         /*
         result.put(Commodities.CREW, 9999);

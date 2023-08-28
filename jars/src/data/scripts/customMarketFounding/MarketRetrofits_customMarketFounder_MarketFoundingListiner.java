@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.PlayerColonizationListener;
 import data.scripts.MarketRetrofits_Logger;
+import data.scripts.customMarketFounding.surveyPlugin.MarketRetrofits_SurveyPlugin;
 
 public class MarketRetrofits_customMarketFounder_MarketFoundingListiner implements PlayerColonizationListener {
     public static MarketRetrofits_MarketFounder marketFounder=null;
@@ -33,5 +34,6 @@ public class MarketRetrofits_customMarketFounder_MarketFoundingListiner implemen
     public static void resetMarketFounder(){
         MarketRetrofits_Logger.logging("reseting the market founder",new MarketRetrofits_MarketFounderMasterList(),true);
         marketFounder = null;
+        MarketRetrofits_SurveyPlugin.costArray = null;
     }
 }

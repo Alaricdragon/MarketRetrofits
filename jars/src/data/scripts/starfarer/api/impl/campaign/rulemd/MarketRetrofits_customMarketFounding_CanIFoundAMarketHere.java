@@ -13,6 +13,7 @@ import java.util.Map;
 public class MarketRetrofits_customMarketFounding_CanIFoundAMarketHere extends BaseCommandPlugin {
     @Override
     public boolean execute(String ruleId, InteractionDialogAPI dialog, List<Misc.Token> params, Map<String, MemoryAPI> memoryMap) {
+        MarketRetrofits_Logger.logging("runing a thing.",this,true);
         boolean cutOff = params.get(0).getBoolean(memoryMap);
         boolean hostileActivity = params.get(1).getBoolean(memoryMap);
         MarketRetrofits_Logger.logging("jumpPoints, hostileActivity: "+cutOff+", "+hostileActivity,this,true);
