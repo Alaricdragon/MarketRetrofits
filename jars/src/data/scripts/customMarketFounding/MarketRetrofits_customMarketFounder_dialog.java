@@ -5,12 +5,10 @@ import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.campaign.econ.Market;
 import data.scripts.MarketRetrofits_Constants;
 import data.scripts.MarketRetrofits_Logger;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class MarketRetrofits_customMarketFounder_dialog implements InteractionDialogPlugin{
@@ -35,11 +33,12 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
         this.planet =planet;
     }
     protected void populateOptions() {
-        ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsInOrder(planet);
+        ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsForDialog(planet);
         this.options.clearOptions();
         for(int a = pageLength*page; a < b.size() && a < (pageLength*(page+1)); a++){
-            this.options.addOption(b.get(a).getOptionText(dialog,planet),b.get(a).ID);
-            MarketRetrofits_Logger.logging("adding market founding option page: "+b.get(a).getOptionText(dialog,planet),this,MarketRetrofits_Constants.CustomMarketFounderLogs);
+            //this.options.addOption(b.get(a).getOptionText(dialog,planet),b.get(a).ID);
+            b.get(a).addOption(planet,options,dialog);
+            //MarketRetrofits_Logger.logging("adding market founding option page: "+b.get(a).getOptionText(dialog,planet),this,MarketRetrofits_Constants.CustomMarketFounderLogs);
         }
         if((page+1) * pageLength < b.size()) {
             this.addNextOption();
@@ -130,9 +129,9 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
                 this.back();
                 return;
             }
-            ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsInOrder(planet);
+            ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsForDialog(planet);
             for(int a = pageLength*page; a < b.size() && a < (pageLength*(page+1)); a++){
-                if(optionData2.equals(b.get(a).ID)){
+                if(b.get(a).wasOptionSelected(optionData)){//optionData2.equals(b.get(a).ID)){
                     //sellected = a;
                     //this.depth++;
                     this.runMarketFoundingPage(b.get(a));

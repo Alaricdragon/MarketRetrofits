@@ -21,6 +21,7 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     public boolean canFoundWithHostileActivity = false;
     public boolean canFoundWithoutJumpPonits = false;
     public boolean MarketFounderHasDescription = false;
+    public boolean showOptionIfUnavalable = true;
     public String MarketFounderDescription = "description to be added latter. if you are a modder, try changeing this market founders 'MarketFounderDescription' or 'MarketFounderHasDescription' variables.";
     public SectorEntityToken planate=null;
     public MarketRetrofits_MarketFounder(String ID,String name){
@@ -49,7 +50,25 @@ public class MarketRetrofits_MarketFounder implements InteractionDialogPlugin {
     public void getOutpostFoundingDescription(InteractionDialogAPI dialog,SectorEntityToken planet){
         dialog.getTextPanel().addPara(this.MarketFounderDescription);
     }
-
+    public boolean showOptionIfUnavalable(SectorEntityToken planet){
+        return showOptionIfUnavalable;
+    }
+    public boolean showOption(SectorEntityToken planet,boolean hostileActivity,boolean cutOffFromHyperspace){
+        return this.canEstablishAMarketHere(planet,hostileActivity,cutOffFromHyperspace) || showOptionIfUnavalable(planet);
+    }
+    public void addOption(SectorEntityToken planet, OptionPanelAPI options, InteractionDialogAPI dialog){
+        options.addOption(getOptionText(dialog,planet),ID);
+        if(!this.canEstablishAMarketHere(planet,MarketRetrofits_MarketFounderMasterList.hostilesTemp,MarketRetrofits_MarketFounderMasterList.noJumpTemp)) {
+            options.setEnabled(ID, false);
+        }
+    }
+    public boolean wasOptionSelected(Object optionData){
+        try {
+            return (String) optionData == this.ID;
+        }catch (Exception e){
+            return false;
+        }
+    }
     public boolean canFoundWithHostileActivity(SectorEntityToken planet){
         return this.canFoundWithHostileActivity;
     }

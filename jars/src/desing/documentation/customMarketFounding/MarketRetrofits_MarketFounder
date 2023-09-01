@@ -3,10 +3,11 @@ implements InteractionDialogPlugin
 public String name = "";
 public String ID = "";                                      the ID of this market founder. there can only be one market founder with a given name at a time. if a second market founder with the same name is added to MarketRetorfits_MarketFounderMasterList, it will be overwriten.
 public int order = 0;                                       the order the market founders are displayed. lower numbers are displayed first.
-public boolean skipOptionSelectionIfOnlyOption = false;
-public boolean canFoundWithHostileActivity = false;
-public boolean canFoundWithoutJumpPonits = false;
-public boolean MarketFounderHasDescription = false;
+public boolean skipOptionSelectionIfOnlyOption = false;     set this to true if you want to skip the options selection page, provided this is the only option available
+public boolean canFoundWithHostileActivity = false;         set this to true if you want to be able to found a market well a 'hostile fleet is tracking your movements'
+public boolean canFoundWithoutJumpPonits = false;           set this to true if you want to be able to found a market in a system with no hyperspace access
+public boolean MarketFounderHasDescription = false;         set this to true if you want to show the description of your market founder
+public boolean showOptionIfUnavalable = false;              set this to true if you want this market founder to show up on the options page, even when its not available.
 public String MarketFounderDescription = "description to be added latter. if you are a modder, try changeing this market founders 'MarketFounderDescription' or 'MarketFounderHasDescription' variables.";
 public String backOptionName = "back"                       the text name of the option to go 'back' when seeing the market founder description
 publis String foundMarketOptionName = "establish a colony"; the text name of the option to 'continue' when seeing the market founder description
@@ -18,11 +19,17 @@ public MarketRetrofits_MarketFounder(String ID,String name,int order){
 }
 
 
-public void getOutpostFoundOption(InteractionDialogAPI dialog, SectorEntityToken planet)        unused. might readd latter.
-public String getOptionText(InteractionDialogAPI dialog, SectorEntityToken planet)              returns this.name by defalt. returns the text of the option to preform this marketFounder.
-public boolean showOutpostFoundingDescription(SectorEntityToken planet)                         returns this.MarketFounderHasDescription by defalt. if true, will show the description of this market founder when this option is selected.
-public boolean skipOptionSelectionIfOnlyOption(SectorEntityToken planet)                        returns this.skipOptionSelectionIfOnlyOption by defalt. if true, and this is the only valid market founder, will skip directly to the found a market screen, bypassing having to click on this option.
-public void getOutpostFoundingDescription(InteractionDialogAPI dialog,SectorEntityToken planet) by defalt runs: addPara(this.MarketFounderDescription);. this runs when the market founder trys to display its description.
+public void getOutpostFoundOption(InteractionDialogAPI dialog, SectorEntityToken planet)                unused. might readd latter.
+public String getOptionText(InteractionDialogAPI dialog, SectorEntityToken planet)                      returns this.name by defalt. returns the text of the option to preform this marketFounder.
+public boolean showOutpostFoundingDescription(SectorEntityToken planet)                                 returns this.MarketFounderHasDescription by defalt. if true, will show the description of this market founder when this option is selected.
+public boolean skipOptionSelectionIfOnlyOption(SectorEntityToken planet)                                returns this.skipOptionSelectionIfOnlyOption by defalt. if true, and this is the only valid market founder, will skip directly to the found a market screen, bypassing having to click on this option.
+public void getOutpostFoundingDescription(InteractionDialogAPI dialog,SectorEntityToken planet)         by defalt runs: addPara(this.MarketFounderDescription);. this runs when the market founder trys to display its description.
+public boolean showOptionIfUnavalable(SectorEntityToken planet)                                         returns showOptionIfUnavalable by deflat. used to get wether or not you want to display your marketfounders option when its unavailable
+public boolean showOption(SectorEntityToken planet,boolean hostileActivity,boolean cutOffFromHyperspace) returns showOptionIfUnavalable || canEstablishAMarketHere . this is weather or not to add this option to the dialog
+public void addOption(SectorEntityToken planet, OptionPanelAPI options, InteractionDialogAPI dialog)    adds your option to the option panel.
+public boolean wasOptionSelected(Object optionData)                                                     used to determing if this market founder was selected when the options are clicked on.
+
+
 
 public boolean canFoundWithHostileActivity(SectorEntityToken planet)                            returns this.canFoundWithHostileActivity by defalt. if true, allows this market to be found in situations were there is a hostile fleet traking your movements.
 public boolean canFoundWithoutJumpPonits(SectorEntityToken planet)                              returns this.canFoundWithoutJumpPonits by defalt. if true, allows this market to be found in situations were you are cut off from hyperspace.

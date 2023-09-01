@@ -23,7 +23,7 @@ create the list of wanted libarys:
             1)(done) survey plugging: the survey plugging has a function called found outpost. this is founding a market, and can be set to any commodities.
                 -need to have this with a built in compatibility patch for crew replacer, or im going to have issues.
                 -will need to beable to change what function is running based off a variable.
-            2)(almost donestarted) edit the rules that normal found a market.
+            2)(done) edit the rules that normal found a market.
                 -NOTE:
                     OK: in the base game, when there is no jump onits, the game shows some text about how 'establishing a colonly is not a option', just on the main screen. also, the button to do so is greyed out.
                     i need to remove this text, provided there is a foundable market on this world.
@@ -36,7 +36,7 @@ create the list of wanted libarys:
                     -(DONE)surveyAddOptionPerformedAlready: change its options to a new option that creates a list of possible markets types, and lets you click on one of them.
                     -(not required)surveyOptionPerformSurvey: founds a market (i think?).
 
-                -(done. untested)need to replace the script for 'hostile activity nearby', with my own script that does not prevent founding a market provided you have a market type that is foundable.
+                -(done)need to replace the script for 'hostile activity nearby', with my own script that does not prevent founding a market provided you have a market type that is foundable.
                     -the rules for this are:
                         surveyPrintHostilesTextEstColony
 
@@ -76,9 +76,12 @@ create the list of wanted libarys:
                 1)(done) set up a listiner, that if that player founds a market on a world they were just on, runs the market founding world.
                 2)(done) set up a way to reset the market im currently looking at after i leave it, so i dont have situations were the player starts to found a market, leaves, then another mod founds a market there, and all the code that was running is triggered all at once. would suck.
                     -how would i even do that? is there a way to say 'hey, you left a market?'
-            8)(started) documentation
+            8)(done) documentation
                 -need to write out all the documentation for this inter section of code.
                 -only need to write the read me, and the function descriptions for MarketRetrofits_MarketFounderMasterList
+            9() touchups:
+                1) (done)create a way to display / get a option for a market founder.
+                2) (done)create a way boolean, that makes the option appear greyed out if unusable, as apposed to just not being there.
+                3) (done)make marketfounders automatically add themselves to market retrofits on creation.
             issue:
-                make marketFounder automaticly add themselfs to the masterlist?
             questions:

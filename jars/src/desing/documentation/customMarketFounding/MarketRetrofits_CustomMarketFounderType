@@ -1,6 +1,6 @@
 public String ID;
 
-public (String ID) {
+MarketRetrofits_CustomMarketFounderType(String ID) {
     this.ID = ID;
 }
 

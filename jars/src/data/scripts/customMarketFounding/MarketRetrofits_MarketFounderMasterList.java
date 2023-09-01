@@ -1,16 +1,13 @@
 package data.scripts.customMarketFounding;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogPlugin;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
-import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.rulecmd.BaseCommandPlugin;
-import com.fs.starfarer.api.impl.campaign.rulecmd.OpenCoreTab;
+import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.HostileFleetNearbyAndAware;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.MarketRetrofits_Logger;
-import data.scripts.customMarketFounding.surveyPlugin.MarketRetrofits_SurveyPlugin;
 import data.scripts.supportCode.MarketRetrofit_dialogShell;
 
 import java.util.ArrayList;
@@ -20,8 +17,10 @@ import java.util.Map;
 import static com.fs.starfarer.api.impl.campaign.ids.Tags.SYSTEM_CUT_OFF_FROM_HYPER;
 
 public class MarketRetrofits_MarketFounderMasterList {
-    public static ArrayList<MarketRetrofits_MarketFounder> list = new ArrayList<>();
-    public static ArrayList<MarketRetrofits_CustomMarketFounderType> FoundTypeList = new ArrayList<>();
+    private static ArrayList<MarketRetrofits_MarketFounder> list = new ArrayList<>();
+    private static ArrayList<MarketRetrofits_CustomMarketFounderType> FoundTypeList = new ArrayList<>();
+    public static ArrayList<String> CantFoundMarketTags_Planet = new ArrayList<>();
+    public static ArrayList<String> CantFoundMarketTags_System = new ArrayList<>();
     public static MarketRetrofits_CustomMarketFounderType currentMarketFoundType = null;
     public static boolean noJumpTemp = false;
     public static boolean hostilesTemp = false;
@@ -82,11 +81,12 @@ public class MarketRetrofits_MarketFounderMasterList {
     }
     public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(SectorEntityToken planet){
         noJumpTemp = planet.getStarSystem().hasTag(SYSTEM_CUT_OFF_FROM_HYPER);
-        hostilesTemp = false;
+        hostilesTemp = new HostileFleetNearbyAndAware().execute(null,null,null,null);
         return getFoundableMarkets(planet,hostilesTemp,noJumpTemp);
     }
     public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(SectorEntityToken planet, boolean hostiles, boolean noJump){
         ArrayList<MarketRetrofits_MarketFounder> output = new ArrayList<>();
+        if (hasCantFoundMarketTag(planet)) return output;
         for(int a = 0; a < list.size(); a++){
             MarketRetrofits_MarketFounder b = list.get(a);
             if(/*b.canEstablishOutpost(planet) && */(b.canEstablishAMarketHere(planet,hostiles,noJump))){
@@ -96,15 +96,43 @@ public class MarketRetrofits_MarketFounderMasterList {
         MarketRetrofits_Logger.logging("the number of foundable markets is: "+output.size()+". the number of possable market is: "+list.size(),new MarketRetrofits_MarketFounderMasterList(),true);
         return output;
     }
-    public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsInOrder(SectorEntityToken planet){
-        noJumpTemp = planet.getStarSystem().hasTag(SYSTEM_CUT_OFF_FROM_HYPER);
-        hostilesTemp = false;
-        return getFoundableMarketsInOrder(planet,hostilesTemp,noJumpTemp);
-    }
-    public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsInOrder(SectorEntityToken planet,boolean hostiles,boolean noJump){
-        ArrayList<MarketRetrofits_MarketFounder> active = getFoundableMarkets(planet,hostiles,noJump);
-        ArrayList<MarketRetrofits_MarketFounder> output = new ArrayList<>();
+    public static boolean hasCantFoundMarketTag(SectorEntityToken planet){
+        for(String a : CantFoundMarketTags_Planet){
+            try {
+                if (planet.hasTag(a)) {
+                    return true;
+                }
+            }catch (Exception e){
 
+            }
+        }
+        for(String a : CantFoundMarketTags_System){
+            try {
+                if (planet.getStarSystem().hasTag(a)) {
+                    return true;
+                }
+            }catch (Exception e){
+
+            }
+        }
+        return false;
+    }
+    public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsForDialog(SectorEntityToken planet){
+        noJumpTemp = planet.getStarSystem().hasTag(SYSTEM_CUT_OFF_FROM_HYPER);
+        hostilesTemp = new HostileFleetNearbyAndAware().execute(null,null,null,null);
+        return getFoundableMarketsForDialog(planet,hostilesTemp,noJumpTemp);
+    }
+    public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsForDialog(SectorEntityToken planet, boolean hostiles, boolean noJump){
+        //ArrayList<MarketRetrofits_MarketFounder> active = getFoundableMarkets(planet,hostiles,noJump);
+        ArrayList<MarketRetrofits_MarketFounder> output = new ArrayList<>();
+        if (hasCantFoundMarketTag(planet)) return output;
+        ArrayList<MarketRetrofits_MarketFounder> active = new ArrayList<>();
+        for(int a = 0; a < list.size(); a++){
+            MarketRetrofits_MarketFounder b = list.get(a);
+            if(/*b.canEstablishOutpost(planet) && */(b.showOption(planet,hostiles,noJump))){
+                output.add(b);
+            }
+        }
         /*todo:
         *  this while loop is the most inefficient thing i could possibly make. plz improve with a better system that does not take arraylength^2 runs to commpleat.*/
         while(active.size() != 0){
@@ -151,7 +179,7 @@ public class MarketRetrofits_MarketFounderMasterList {
         paramsTemp1=paramsTemp;
         memoryMapTemp1=memoryMapTemp;
 
-        ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsInOrder(Planet);
+        ArrayList<MarketRetrofits_MarketFounder> b = MarketRetrofits_MarketFounderMasterList.getFoundableMarketsForDialog(Planet);
         if(b.size() == 1 && b.get(0).skipOptionSelectionIfOnlyOption(Planet)){
             a.setData(dialogTemp);
             a.runMarketFoundingPage(b.get(0));
