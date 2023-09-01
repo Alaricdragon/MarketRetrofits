@@ -2,6 +2,11 @@ package data.scripts;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.campaign.econ.Market;
+import data.scripts.combatabilityPatches.MarketRetrofits_InitCombatabilityPatches;
+import data.scripts.customMarketFounding.MarketRetrofits_CustomMarketFounderType;
+import data.scripts.customMarketFounding.MarketRetrofits_MarketFounderMasterList;
+import data.scripts.customMarketFounding.MarketRetrofits_customMarketFounder_BaseMarket;
+import data.scripts.customMarketFounding.MarketRetrofits_customMarketFounder_MarketFoundingListiner;
 import data.scripts.industries.Implementation.defaultIndustrys.*;
 import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.listiners.marketRetrofit_marketInteractionListiner;
@@ -29,7 +34,9 @@ public class marketReplacer_startup extends BaseModPlugin {
         }else if(b.equals(null)){
             MarketRetrofits_Logger.logging("is null",this);
         }*/
-        applyDefaultIndustryInstances();
+        //applyDefaultIndustryInstances();
+        MarketRetrofits_InitCombatabilityPatches.onApplicationLoad();
+        applyDefaultCustomMarketFounder();
     }
 
     @Override
@@ -37,11 +44,71 @@ public class marketReplacer_startup extends BaseModPlugin {
         super.onGameLoad(newGame);
         applyListeners();
         MarketRetrofit_CCMasterList.startup();
+        MarketRetrofits_InitCombatabilityPatches.onGameLoad(newGame);
     }
     private static void applyListeners(){
         marketRetrofit_marketListiner a = new marketRetrofit_marketListiner();
         Global.getSector().getEconomy().addUpdateListener(a);
-        //Global.getSector().addTransientListener(new marketRetrofit_marketInteractionListiner(false));
+        MarketRetrofits_customMarketFounder_MarketFoundingListiner.addListiner();
+        Global.getSector().addTransientListener(new marketRetrofit_marketInteractionListiner(false));
+    }
+    private static void applyDefaultCustomMarketFounder(){
+        //MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+        new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket",Global.getSettings().getString("MarketREtrofits_CustomMarketFounder_BaseMarketName"));
+        //);
+        /*/
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket1","Found a ordinary market1")
+        );
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket2","Found a ordinary market2")
+        );
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket3","Found a ordinary market3")
+        );
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket4","Found a ordinary market4")
+        );
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket5","Found a ordinary market5")
+        );
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket6","Found a ordinary market6")
+        );
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket7","Found a ordinary market7")
+        );
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket8","Found a ordinary market8")
+        );
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket9","Found a ordinary market9")
+        );
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket10","Found a ordinary market10")
+        );
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket11","Found a ordinary market11")
+        );
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket12","Found a ordinary market12")
+        );
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket13","Found a ordinary market13")
+        );
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(
+                new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket14","Found a ordinary market14")
+        );
+        MarketRetrofits_customMarketFounder_BaseMarket temp = new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket15","Found a ordinary market15");
+        temp.canFoundWithoutJumpPonits=true;
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(temp
+        );
+        temp = new MarketRetrofits_customMarketFounder_BaseMarket("MarketRetrofits_DefaultMarket16","Found a ordinary market16");
+        temp.canFoundWithoutJumpPonits=true;
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounder(temp
+        );/**/
+
+        MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounderType(new MarketRetrofits_CustomMarketFounderType(MarketRetrofits_Constants.BaseMarketFounderID));
     }
     private static void applyDefaultIndustryInstances(){
         MarketRetrofit_MiningInstance miningInstance = new MarketRetrofit_MiningInstance("mining",0);

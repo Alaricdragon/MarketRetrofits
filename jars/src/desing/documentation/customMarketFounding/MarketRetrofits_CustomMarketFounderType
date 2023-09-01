@@ -1,0 +1,7 @@
+public String ID;
+
+MarketRetrofits_CustomMarketFounderType(String ID) {
+    this.ID = ID;
+}
+
+public void foundAMarket(MarketRetrofits_MarketFounder marketFounder, boolean noJumpTemp, boolean hostilesTemp, SectorEntityToken Planet)       runs the code that opens the 'found a market' screen with the big planet in the background. also does some other things that dont matter to most users.

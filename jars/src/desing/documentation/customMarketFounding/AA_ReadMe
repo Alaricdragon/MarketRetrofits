@@ -1,0 +1,26 @@
+this libarys function revolves around added new 'establish a market screens'.
+said screens can have there own requirements, conditions that disable the ability to add said screens, and can be made to run code after you found a market with one of them.
+in this there are 2 parts:
+1) MarketRetrofits_MarketFounder
+    -this is what desides what your market costs, what the option to sellect it looks like, the market description, the exstra code you want to run when a market is found useing it is ran exstra
+    -for most users this should be the only part of this mini-library that you should interface with.
+    -any MarketRetrofits_MarketFounder that is created is automatically added to MarketRetrofits_MarketFounderMasterList
+
+    how to use:
+        1) create a class that extends MarketRetrofits_MarketFounder. the inputed id must be diffrent from any other market founders ID, or it will overwrite / be overwriten. use something like "modname_colonlyType" as your name, to help avoid this.
+        2) change relevent values (like setting canFoundWithoutJumpPonits = true; if you want your market to be foundable in systems with no hyperstpace access.) view the MarketRetrofits_MarketFounder documentation for all variables.
+        3) overwrite relevent functions. some examples of functions you might want to overwrite are:
+            3.a) public Map<String, Integer> getOutpostConsumed(SectorEntityToken planet), to change what your market costs.
+            3.b) public void runCodeAfterFoundingMarket(SectorEntityToken planet), if you want to run code on a market just as it is created.
+            3.c) public boolean canEstablishAMarketHere(SectorEntityToken planet,boolean hostileActivity,boolean cutOffFromHyperspace), to change weather or not a market is findable at a given location, based off more data then just the booleans.
+            3.d) view the MarketRetrofits_MarketFounder documentation for all functions this class uses.
+
+2) MarketRetrofits_MarketFounderMasterList
+    -this is were the MarketRetrofits_MarketFounder are stored, and can be accessed.
+    -this is useful for moders that want to use the different MarketRetrofits_MarketFounder's stored here, to for example, found a market a diffrent way. or whatever.
+        -) this is done by createing a new 'MarketRetrofits_CustomMarketFounderType' and overrideing the function it has, then runing MarketRetrofits_MarketFounderMasterList.addOrReplaceMarketFounderType(MarketRetrofits_CustomMarketFounderType MarketFounderType), to add it to marketRetorfits.
+           from there, you may run 'MarketRetrofits_MarketFounderMasterList.actavateMarketFounder(String ID)' to turn it on.
+        -) if you have any questions about that, feel free to send me(the mod maker) a dm.
+    -this is also usefull for modders who want to make it so there systems can never have a market founded in them.
+        -) this is done by adding tags to the 'CantFoundMarketTags_Planet' and 'CantFoundMarketTags_System' static varubles. this will cause MarketRetrofits to refuse to acsept the world / system as a valid place to colonize
+    -this will not be usefull for most users. most of you will never have any reason at all to do anything with this. so dont worry about doing so.

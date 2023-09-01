@@ -1,0 +1,34 @@
+
+public static ArrayList<MarketRetrofits_MarketFounder> list = new ArrayList<>();                        the list of all market founders available
+public static ArrayList<MarketRetrofits_CustomMarketFounderType> FoundTypeList = new ArrayList<>();     the list of all market found types available.
+public static ArrayList<String> CantFoundMarketTags_Planet = new ArrayList<>();                         the list of 'tags' that will instantly cause MarketRetrofits to refuse to found a market on a given world, if its on the planet its trying to found a market on
+public static ArrayList<String> CantFoundMarketTags_System = new ArrayList<>();                         the list of 'tags' that will instantly cause MarketRetrofits to refuse to found a market in a given system, if its on the systems of wish the planet its truing to found a market on is.
+public static MarketRetrofits_CustomMarketFounderType currentMarketFoundType = null;                    the currently being used market found type.
+public static boolean noJumpTemp = false;                                                               false if there are jump ponits. true otherwize.
+public static boolean hostilesTemp = false;                                                             false if you are not being attacked. true otherwize.
+public static BaseCommandPlugin CommandPluginTemp;                                                      the command pluging that activated this code.
+protected static MarketRetrofit_dialogShell dialog = new MarketRetrofit_dialogShell();                  the dialog that this code runs
+
+public static String ruleIdTemp1;                       a temp value. only use if you need to.
+public static InteractionDialogAPI dialogTemp1;         --
+public static List<Misc.Token> paramsTemp1;             --
+public static Map<String, MemoryAPI> memoryMapTemp1;    --
+public static InteractionDialogPlugin dialogTemp2;      --
+public static SectorEntityToken Planet = null;          the world you are interacting with.
+
+
+public static boolean addOrReplaceMarketFounder(MarketRetrofits_MarketFounder MarketFounder)                    tries to add the inputted 'market founder' to memory. if the inputted 'market founder' has the same ID as another inputted 'market founder', it will replace the old 'market founder'.
+
+public static boolean removeMarketFounder(String ID)                                                            remove the 'market founder' with the inputted id. returns true if a 'market founder' with a matching ID was found, false otherwise.
+public static MarketRetrofits_MarketFounder getMarketFounder(String ID)                                         returns the 'market founder' with the inputted ID. returns null otherwise.
+
+public static boolean addOrReplaceMarketFounderType(MarketRetrofits_CustomMarketFounderType MarketFounderType)  tries to add the inputted 'market founder type' to memory. if the inputted 'market founder type' has the same ID as another inputted 'market founder type', it will replace the old 'market founder type'
+public static MarketRetrofits_CustomMarketFounderType getMarketFounderType(String ID)                           returns the 'market founder type' with the inputted ID. returns null otherwise.
+public static void actavateMarketFounder(String ID)                                                             sets whatever 'market founder type' that has the matching ID to be 'active' if no 'market founder type' with this ID exsists, does nothing.
+public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(SectorEntityToken planet)                                            runs getFoundableMarkets(planet, false,planet.getStarSystem().hasTag(SYSTEM_CUT_OFF_FROM_HYPER))
+public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(SectorEntityToken planet, boolean hostiles, boolean noJump)          runs canEstablishAMarketHere(planet,hostiles,noJump) on each 'marketFounder'. returns every 'market founder' that returned true ont his function
+public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsInOrder(SectorEntityToken planet)                                     runs getFoundableMarketsInOrder(planet, false,planet.getStarSystem().hasTag(SYSTEM_CUT_OFF_FROM_HYPER))
+public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarketsInOrder(SectorEntityToken planet,boolean hostiles,boolean noJump)     runs getFoundableMarkets(planet,hostiles,noJump), then reorganizes them by there 'order' attribute.
+public static boolean hasCantFoundMarketTag(SectorEntityToken planet)                                                                           checks
+public static MarketRetrofit_dialogShell activateMarketFoundingListDialog(BaseCommandPlugin CommandPlugin,String ruleIdTemp, InteractionDialogAPI dialogTemp, List<Misc.Token> paramsTemp, Map<String, MemoryAPI> memoryMapTemp)        actavates the market founder dialog, showing the list of foundable markets, and allowing you to sellect one to use.
+public static void foundMarket(MarketRetrofits_MarketFounder marketFounder)                                                                     runs the active market founder type. by defalt, this opens the normal 'establish a colonly' screen.
