@@ -1,4 +1,4 @@
-package data.scripts.starfarer.api.impl.campaign.rulemd;
+package com.fs.starfarer.api.impl.campaign.rulecmd;
 
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;

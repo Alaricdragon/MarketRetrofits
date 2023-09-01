@@ -1,6 +1,6 @@
 V0.2:
-    started work on the MarketFounder class and related functions.
-    added compatibility with the new library for crew replacer.
+    completed the 'MarketFounder' class and related functions.
+    added additional compatibility with the new library for crew replacer.
     started work on the documentation (almost nothing done there is mush to do.)
     added the following classes:
         for compatibility patches:
