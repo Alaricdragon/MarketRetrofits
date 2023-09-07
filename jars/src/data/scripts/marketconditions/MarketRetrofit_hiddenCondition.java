@@ -3,6 +3,7 @@ package data.scripts.marketconditions;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketImmigrationModifier;
+import com.fs.starfarer.api.impl.campaign.econ.BaseHazardCondition;
 import com.fs.starfarer.api.impl.campaign.econ.BaseMarketConditionPlugin;
 import data.scripts.supplyDemandLibary.lists.MarketRetrofit_CCIndustrySet;
 import data.scripts.supplyDemandLibary.lists.MarketRetrofit_CCMasterList;
@@ -12,6 +13,7 @@ public class MarketRetrofit_hiddenCondition extends BaseMarketConditionPlugin {
     public void apply(String id) {
         super.apply(id);
         applyCC();
+        BaseHazardCondition a = new BaseHazardCondition();
     }
     @Override
     public void unapply(String id) {

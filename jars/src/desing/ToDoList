@@ -1,5 +1,10 @@
 current:
 MOVED industry.csv FILE TO 'old' FOLDER. MOVE BACK TO 'campaing' to reactavate
+questions:
+    1) is there a way to edit the 'hazard rating' of a 'market condition' conditionally? or to otherwise change the 'hazard' of a 'market condition' with code?
+    2) is there a way to edit the code that runs when you click the 'hazard pay' button on the market screen?
+    3) is there a way to edit the code that runs when you click the 'free port' button on the market screen?
+    4) is there a way to change the text and descriptions for the 'free port' and 'hazard pay' buttons on the market screen? ether conditionally or overall?
 create the list of wanted libarys:
     1) industry replacer (disabled for now) (reason: extra unacceptable lag)
         -to fix, minimize possible causes of lag, like for example, the number of data transfers, and the hundreds of if statements.
@@ -7,7 +12,21 @@ create the list of wanted libarys:
         -possability: remove ALL data transfer. have the code run the stored industry directly. when the industry changes, have a function that lets the new industry take whatever it wants from the old one. then i dont need to worry about things.
     2) condition replacer
         -replaces functions in market conditions with ones of my own.
-    3) supply demand library (functional)
+        notes:
+            hazard rating is stored in the '\data\campaign\procgen\condition_gen_data.csv'.
+                -this looks very hard to do anything with....
+                -market.getHazard().modifyFlat(id, hazard, condition.getName()); is how the market changes what the hazard is for said condition.
+                -BaseHazardCondition class? is this the thing?
+                IDEA:
+                    1) replace everything in '\data\campaign\procgen\condition_gen_data.csv' with my own custom hazard things, that allow for conditional hazards (with the defalt being the inputed values...)
+                    2) allow some type of 'condition replacer' to replace hazard of the same ID of this. link the IDs of the 'condition replacer' to the ones used in the market condition classes themselves.
+            all other modifiers seem to be stored in the '\data\campaign\market_conditions.csv'
+                -this looks almost easy to override...
+                IDEA:
+                    1) replace everything in '\data\campaign\market_conditions.csv' with my own code that will act as a 'shell' of the normal code..
+                    2) add a new class in 'condition replacer' that acts as the 'filling' of a given market condition...
+                    3) set that 'condition replacer' to have the same functions as all the classes it replaced.
+    3)(functional) supply demand library
         -allows the mass or pacific changing of supply or demand on a industry
         issues:
             might possibly not effect the cargo supply fleets carry to and from the market? need to check that because i might be wrong.
@@ -17,71 +36,4 @@ create the list of wanted libarys:
         -allows for changing in the hazard button name, description, looks, and function.
     6) free port changer
         -allows the change in the free-port name, and description.
-    7) found a market change
-        -allows players to have there own requirements and addition code run when founding a market. multiple options available.
-        -here is the plan for this:
-            1)(done) survey plugging: the survey plugging has a function called found outpost. this is founding a market, and can be set to any commodities.
-                -need to have this with a built in compatibility patch for crew replacer, or im going to have issues.
-                -will need to beable to change what function is running based off a variable.
-            2)(done) edit the rules that normal found a market.
-                -NOTE:
-                    OK: in the base game, when there is no jump onits, the game shows some text about how 'establishing a colonly is not a option', just on the main screen. also, the button to do so is greyed out.
-                    i need to remove this text, provided there is a foundable market on this world.
-                    i also need to grey out the found a market text if there is no foundable market on this world.
-                -need to replace the thing that greys out the market found button if your in a 'closed system'. replace it with a custom function that detects if there is any type of market available to found.
-                    -(DONE)surveySystemIsCutOffCanNotColonize: remove text and script. make this trigger MarketRetrofits_customMarketFounding_CutOffCanNotColonize.
-                    -(Done. untested)surveyPrintHostilesTextEstColony: (im unsure how this works. might need to experiment. ) remove text and script. make this trigger MarketRetrofits_customMakretFounder_HostilesAreAround.
-                        -NOTE: i need to test this one. i have to find a spot that i can find some hostile fleets and a market to interact with...
-                        -also getting patrols to chase you around and round does not work. i need something a letter more hostile then that. maybe i need luna lib for this?
-                    -(DONE)surveyAddOptionPerformedAlready: change its options to a new option that creates a list of possible markets types, and lets you click on one of them.
-                    -(not required)surveyOptionPerformSurvey: founds a market (i think?).
-
-                -(done)need to replace the script for 'hostile activity nearby', with my own script that does not prevent founding a market provided you have a market type that is foundable.
-                    -the rules for this are:
-                        surveyPrintHostilesTextEstColony
-
-                -(NO LONGER REQUIRED)put this somewhere:
-                    when i leave the space / found a market, set MarketRetrofits_MarketFounderMasterList. hostilesTemp && noJumpTemp to false.
-
-            3)(done) create the 'market founder' class. it will require the following functions:
-                3.1)(done) a function to get the required resources to found a market.
-                3.2)(done) a function to set what the text is named for there own market.
-                3.3)(done) a function to set the description of that market type.
-                3.4)(done) a function to deside if this market type is valid on this world.
-                3.5)(done) a function to run custom code -after- the market has been founded.
-            4)(done) a 'market founder master list' class. it will hold and allow you to aquire other market founders.
-                this is hard to understand..
-                so i don't think i can run the dialog from the inputed dialog pluging.
-                well, i might beable to, but i dont understand how to form options so im not even goin to try.
-                so heres what im going to do:
-                1)(done)create a new sell class. it will run a dialog interaction thing. (mimic AIRetrofits_RobotForgeDiologPlugin2 form AIRetrofits.)
-                2)(done)make a cass for the main menu, called MarketRetrofits_customMarketFounder_dialog
-                3)(done) make a way for moders to render a system impossible to colonize.
-                    -why? simple. its possible to make a market that can conlinize any system, however this comes with risks. like for example
-                     a system being temporarily, and the user losing all there markets they colonized within. or worse, incountering a hard crash.
-                     so im going to install a system to prevent this.
-            5)(done) make a interaction dialog plugin for displaying my list of available markets at a given time.
-                -this needs to:
-                1)(done) read all the items in the master list, and display options for every valid market.
-                2)(done) allow the user to click on any option, with will:
-                    a)(done) run a description page, with a continue button at the bottom, the will move onto the found a market screen.
-                    b)(done) run a custom dialog plugin thats stored in a given market founder.
-                    c)(done) run the found a market screen.
-                3)(done) allow so many items to show up per page, with a next / last button.
-                4)(done) a back button, to return to the main screen of the world. (the one were you survey and things.)
-            6(done) options:
-                add all text to the settings file.
-                add relevent options for the dialog to the settings file
-            7(done) a way to safely trigger the exstra code for founding a market of a player, hopefully with no misfires.
-                1)(done) set up a listiner, that if that player founds a market on a world they were just on, runs the market founding world.
-                2)(done) set up a way to reset the market im currently looking at after i leave it, so i dont have situations were the player starts to found a market, leaves, then another mod founds a market there, and all the code that was running is triggered all at once. would suck.
-                    -how would i even do that? is there a way to say 'hey, you left a market?'
-            8)(done) documentation
-                -need to write out all the documentation for this inter section of code.
-                -only need to write the read me, and the function descriptions for MarketRetrofits_MarketFounderMasterList
-            9() touchups:
-                1) (done)create a way to display / get a option for a market founder.
-                2) (done)create a way boolean, that makes the option appear greyed out if unusable, as apposed to just not being there.
-                3) (done)make marketfounders automatically add themselves to market retrofits on creation.
-            issue:
-            questions:
+    7)(done) custom market founder
