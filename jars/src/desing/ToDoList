@@ -1,10 +1,6 @@
 current:
 MOVED industry.csv FILE TO 'old' FOLDER. MOVE BACK TO 'campaing' to reactavate
 questions:
-    1) is there a way to edit the 'hazard rating' of a 'market condition' conditionally? or to otherwise change the 'hazard' of a 'market condition' with code?
-    2) is there a way to edit the code that runs when you click the 'hazard pay' button on the market screen?
-    3) is there a way to edit the code that runs when you click the 'free port' button on the market screen?
-    4) is there a way to change the text and descriptions for the 'free port' and 'hazard pay' buttons on the market screen? ether conditionally or overall?
 create the list of wanted libarys:
     1) industry replacer (disabled for now) (reason: extra unacceptable lag)
         -to fix, minimize possible causes of lag, like for example, the number of data transfers, and the hundreds of if statements.
@@ -18,8 +14,23 @@ create the list of wanted libarys:
                 -market.getHazard().modifyFlat(id, hazard, condition.getName()); is how the market changes what the hazard is for said condition.
                 -BaseHazardCondition class? is this the thing?
                 IDEA:
-                    1) replace everything in '\data\campaign\procgen\condition_gen_data.csv' with my own custom hazard things, that allow for conditional hazards (with the defalt being the inputed values...)
-                    2) allow some type of 'condition replacer' to replace hazard of the same ID of this. link the IDs of the 'condition replacer' to the ones used in the market condition classes themselves.
+                    3.a) make a new class that hold a set of marketConditionReplacer classes.
+                        -each class hold a ID, and the marketConditionID they are normally applied to
+                        -each class holds 2 functions: 1 tells me what condition this new market condition represents. the other tells me weather or not this condition can be applyed to this market at this time.
+                        -NOTE: this does not represent the market condition itself. this only determines if the market condition should change..
+                    3.b) make it so everytime a market is applied to, it looks at its market conditions, to determine if any of them should change, useing a priority system, then doing the base one..?
+                        -i could put a system that stores what market conditions were orginaly on the world, and what ones are active now. having this stored will save a lot of processing time.
+                            -ISSUE: unless i make it recalculate on every startup, i might fail to beagle to tell what market is one what thingy mabob?
+                        -if i notice that one is gone, i will assume that the market condition should be gone -forever- and deleate it...
+                    3.c) copy all base game market conditions. set one to be 'hidden' and have 0 hazzard. also store the generating plugin on that market condition.
+                         set one to be 'shown'. it will look like the old market condition, and will hold its hazard rating onto itself. it will be the market condition that is the 'base' market condition.
+                    3.d) setup a system in marketConditionReplacerSet were i can change what the 'base' market condition is. be default it will be ID, but it can be not ID instead...
+                    -ISSUE:
+                        1) there is a possability that a 'invisable' market condition of my own gets overriding by someone else.
+                    -SOLLUTIONS?
+                        1) make it so i can detect when the 'invisable' market condition is set right, but making them all extend a class that only does that.
+                           if set up to be automatic, would let other people support this mod with litterly no issue on my end, and little on there own.. yes that sohuld work
+
             all other modifiers seem to be stored in the '\data\campaign\market_conditions.csv'
                 -this looks almost easy to override...
                 IDEA:

@@ -1,8 +1,6 @@
 package data.scripts.marketconditions;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.Industry;
-import com.fs.starfarer.api.campaign.econ.MarketImmigrationModifier;
 import com.fs.starfarer.api.impl.campaign.econ.BaseHazardCondition;
 import com.fs.starfarer.api.impl.campaign.econ.BaseMarketConditionPlugin;
 import data.scripts.supplyDemandLibary.lists.MarketRetrofit_CCIndustrySet;
@@ -13,7 +11,11 @@ public class MarketRetrofit_hiddenCondition extends BaseMarketConditionPlugin {
     public void apply(String id) {
         super.apply(id);
         applyCC();
-        BaseHazardCondition a = new BaseHazardCondition();
+        //BaseHazardCondition a = new BaseHazardCondition();
+        /**/if(market.hasCondition("AIRetrofit_AIPop")) {
+            String id2 = "mild_climate";
+            market.getHazard().modifyFlat(id2, 20, market.getCondition(id2).getName());
+        }/**/
     }
     @Override
     public void unapply(String id) {
