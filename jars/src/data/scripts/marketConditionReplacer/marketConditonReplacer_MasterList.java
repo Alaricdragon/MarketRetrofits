@@ -1,5 +1,7 @@
 package data.scripts.marketConditionReplacer;
 
+import com.fs.starfarer.api.Global;
+
 import java.util.ArrayList;
 
 public class marketConditonReplacer_MasterList {
@@ -10,7 +12,8 @@ public class marketConditonReplacer_MasterList {
                 return sets.get(a);
             }
         }
-        marketConditionReplacer_ConditionSet a = new marketConditionReplacer_ConditionSet(marketConditionID);
+        marketConditionReplacer_ConditionSet a;
+        a = new marketConditionReplacer_ConditionSet(marketConditionID);
         sets.add(a);
         return a;
     }

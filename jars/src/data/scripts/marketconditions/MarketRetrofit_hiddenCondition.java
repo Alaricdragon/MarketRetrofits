@@ -1,16 +1,23 @@
 package data.scripts.marketconditions;
 
 import com.fs.starfarer.api.campaign.econ.Industry;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.BaseHazardCondition;
 import com.fs.starfarer.api.impl.campaign.econ.BaseMarketConditionPlugin;
+import data.scripts.MarketRetrofits_Logger;
+import data.scripts.marketConditionReplacer.marketConditionReplacer_ConditionSet;
+import data.scripts.marketConditionReplacer.marketConditonReplacer_MasterList;
 import data.scripts.supplyDemandLibary.lists.MarketRetrofit_CCIndustrySet;
 import data.scripts.supplyDemandLibary.lists.MarketRetrofit_CCMasterList;
+
+import java.util.ArrayList;
 
 public class MarketRetrofit_hiddenCondition extends BaseMarketConditionPlugin {
     @Override
     public void apply(String id) {
         super.apply(id);
         applyCC();
+        applyMarketConditionReplacer(market);
         //BaseHazardCondition a = new BaseHazardCondition();
         /**/if(market.hasCondition("AIRetrofit_AIPop")) {
             String id2 = "mild_climate";
@@ -38,6 +45,19 @@ public class MarketRetrofit_hiddenCondition extends BaseMarketConditionPlugin {
             }
             if(b == null && c != null){
                 c.apply(a);
+            }
+        }
+    }
+
+    public ArrayList<String> ActiveMarketCondition = new ArrayList();
+    private void applyMarketConditionReplacer(MarketAPI market){
+        for (String a : ActiveMarketCondition){
+            marketConditionReplacer_ConditionSet b = marketConditonReplacer_MasterList.getOrCreateSet(a);
+            if(!b.isThisSetActive(market)){
+                ActiveMarketCondition.remove(a);
+            }
+            if (!b.isConditionSet) {
+                b.activateMarketCondition(market);
             }
         }
     }

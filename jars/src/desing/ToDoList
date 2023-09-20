@@ -14,11 +14,11 @@ create the list of wanted libarys:
                 -market.getHazard().modifyFlat(id, hazard, condition.getName()); is how the market changes what the hazard is for said condition.
                 -BaseHazardCondition class? is this the thing?
                 IDEA:
-                    3.a) make a new class that hold a set of marketConditionReplacer classes.
+                    3.a)(done) make a new class that hold a set of marketConditionReplacer classes.
                         -each class hold a ID, and the marketConditionID they are normally applied to
                         -each class holds 2 functions: 1 tells me what condition this new market condition represents. the other tells me weather or not this condition can be applyed to this market at this time.
                         -NOTE: this does not represent the market condition itself. this only determines if the market condition should change..
-                    3.b) make it so everytime a market is applied to, it looks at its market conditions, to determine if any of them should change, useing a priority system, then doing the base one..?
+                    3.b)(done) make it so everytime a market is applied to, it looks at its market conditions, to determine if any of them should change, useing a priority system, then doing the base one..?
                         -i could put a system that stores what market conditions were orginaly on the world, and what ones are active now. having this stored will save a lot of processing time.
                             -ISSUE: unless i make it recalculate on every startup, i might fail to beagle to tell what market is one what thingy mabob?
                         -if i notice that one is gone, i will assume that the market condition should be gone -forever- and deleate it...
@@ -27,10 +27,17 @@ create the list of wanted libarys:
                     3.d) setup a system in marketConditionReplacerSet were i can change what the 'base' market condition is. be default it will be ID, but it can be not ID instead...
                     -ISSUE:
                         1) there is a possability that a 'invisable' market condition of my own gets overriding by someone else.
+                        2) in regards to market conditions hazzard rating and its display, wont it not be displayed right because of the constant changes?
+                        3) issue regarding things that call market conditions, to like get data from them.
+                            -the issue is the fact that some fucntions will try to cast market conditions over to a certen type of market condition. this causes issues.
+                            -were? how? simple: the market condition is cast to say (marketCondtionTypeA)genaricMarketCondition, but because i replace all market condition with my own script, said market condition no longer exsists....
                     -SOLLUTIONS?
                         1) make it so i can detect when the 'invisable' market condition is set right, but making them all extend a class that only does that.
                            if set up to be automatic, would let other people support this mod with litterly no issue on my end, and little on there own.. yes that sohuld work
-
+                        2) no, it will be fine. the hazzard rating is not linked to the original market condition, so it should be good out there.
+                        3) the only way i see that could do this is to -remove- all the 'base' market conditions. or alturnitvely, keep them, but set them to be invisable when not in play, in addition to countering there modifers when they are not inplay?
+                    -NOTE:
+                        apply and un apply run constantly in market conditions. just so you know.
             all other modifiers seem to be stored in the '\data\campaign\market_conditions.csv'
                 -this looks almost easy to override...
                 IDEA:
