@@ -17,9 +17,9 @@ public class MarketRetrofit_hiddenCondition extends BaseMarketConditionPlugin {
     public void apply(String id) {
         super.apply(id);
         applyCC();
-        applyMarketConditionReplacer(market);
+        //applyMarketConditionReplacer();
         //BaseHazardCondition a = new BaseHazardCondition();
-        /**/if(market.hasCondition("AIRetrofit_AIPop")) {
+        /*/if(market.hasCondition("AIRetrofit_AIPop")) {
             String id2 = "mild_climate";
             market.getHazard().modifyFlat(id2, 20, market.getCondition(id2).getName());
         }/**/
@@ -49,16 +49,6 @@ public class MarketRetrofit_hiddenCondition extends BaseMarketConditionPlugin {
         }
     }
 
-    public ArrayList<String> ActiveMarketCondition = new ArrayList();
-    private void applyMarketConditionReplacer(MarketAPI market){
-        for (String a : ActiveMarketCondition){
-            marketConditionReplacer_ConditionSet b = marketConditonReplacer_MasterList.getOrCreateSet(a);
-            if(!b.isThisSetActive(market)){
-                ActiveMarketCondition.remove(a);
-            }
-            if (!b.isConditionSet) {
-                b.activateMarketCondition(market);
-            }
-        }
+    public void applyMarketConditionReplacer(){
     }
 }

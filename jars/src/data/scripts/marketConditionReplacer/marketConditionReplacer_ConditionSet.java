@@ -1,6 +1,7 @@
 package data.scripts.marketConditionReplacer;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.campaign.econ.MarketCondition;
 import data.scripts.marketconditions.MarketRetrofits_marketConditionReplacer_DefaltCondition;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class marketConditionReplacer_ConditionSet {
     public marketConditionReplacer_Condition base = null;//base is no longer required. i can now get the base off of the ID of this set.
     public String ID;
     public boolean isConditionSet = false;
+    public boolean conditionChecked = false;
     public marketConditionReplacer_ConditionSet(/*marketConditionReplacer_Condition base,*/String ID){
         //this.base = base;
         this.ID = ID;
@@ -61,9 +63,17 @@ public class marketConditionReplacer_ConditionSet {
         }
         return ID;
     }
+    public void disactavateMarketCondition(MarketAPI market){
+        for(int a = 0; a < possabilitys.size(); a++) {
+            if (market.hasCondition(possabilitys.get(a).ID)){
+                market.removeCondition(possabilitys.get(a).ID);
+            }
+        }
+    }
     public void activateMarketCondition(MarketAPI market){
+        boolean got = false;
         for(int a = 0; a < possabilitys.size(); a++){
-            if(possabilitys.get(a).canApply(market)){
+            if(!got && possabilitys.get(a).canApply(market)){
                 possabilitys.get(a);
                 if (!market.hasCondition(possabilitys.get(a).ID)){
                     String temp = getActiveMarketConditon(market);
@@ -76,10 +86,19 @@ public class marketConditionReplacer_ConditionSet {
                         d.activeConditionID = possabilitys.get(a).ID;
                     }
                 }
-                return;
+                got = true;
+                //return;
+            }else{
+                if (market.hasCondition(possabilitys.get(a).ID)){
+                    market.removeCondition(possabilitys.get(a).ID);
+                }
             }
         }
-        actavateBaseMarketCondition(market);
+        if (!got) {
+            actavateBaseMarketCondition(market);
+        }else{
+            deactivateBaseMarketCondition(market);
+        }
     }
     public void actavateBaseMarketCondition(MarketAPI market){
         if (this.isConditionSet){
@@ -92,6 +111,18 @@ public class marketConditionReplacer_ConditionSet {
             market.addCondition(this.ID);
         }
     }
+    public void deactivateBaseMarketCondition(MarketAPI market){
+        if (this.isConditionSet){
+            if (market.hasCondition(this.base.ID)){
+                market.removeCondition(this.base.ID);
+            }
+            return;
+        }
+        if (market.hasCondition(this.ID)){
+            market.removeCondition(this.ID);
+        }
+
+    }
     public boolean isThisSetActive(MarketAPI market){
         if (this.isConditionSet){
             return market.hasCondition(this.ID);
@@ -102,5 +133,22 @@ public class marketConditionReplacer_ConditionSet {
             }
         }
         return market.hasCondition(this.ID);
+    }
+    public boolean setConditionSet(MarketAPI market){
+        if (market.hasCondition(this.ID)){
+            if (market.getCondition(this.ID) instanceof MarketRetrofits_marketConditionReplacer_DefaltCondition) {
+                isConditionSet = true;
+            }else{
+                isConditionSet = false;
+
+            }
+            return true;
+        }
+        return false;
+    }
+    public void checkCondition(MarketAPI market){
+        if (!this.conditionChecked){
+            setConditionSet(market);
+        }
     }
 }

@@ -25,8 +25,10 @@ create the list of wanted libarys:
                     3.c) copy all base game market conditions. set one to be 'hidden' and have 0 hazzard. also store the generating plugin on that market condition.
                          set one to be 'shown'. it will look like the old market condition, and will hold its hazard rating onto itself. it will be the market condition that is the 'base' market condition.
                     3.d) setup a system in marketConditionReplacerSet were i can change what the 'base' market condition is. be default it will be ID, but it can be not ID instead...
+                    -NOTE: i am only going to set up market conditions to be the defalt only when they are in PGen. and maybe freeport as well.
+                           why? a lot of condition are, um already invisible. so like not doing that no sir arg.
                     -ISSUE:
-                        1) there is a possability that a 'invisable' market condition of my own gets overriding by someone else.
+                        1) there is a possibility that a 'invisable' market condition of my own gets overriding by someone else.
                         2) in regards to market conditions hazzard rating and its display, wont it not be displayed right because of the constant changes?
                         3) issue regarding things that call market conditions, to like get data from them.
                             -the issue is the fact that some fucntions will try to cast market conditions over to a certen type of market condition. this causes issues.
@@ -38,6 +40,78 @@ create the list of wanted libarys:
                         3) the only way i see that could do this is to -remove- all the 'base' market conditions. or alturnitvely, keep them, but set them to be invisable when not in play, in addition to countering there modifers when they are not inplay?
                     -NOTE:
                         apply and un apply run constantly in market conditions. just so you know.
+                    -list:
+                        a list of market conditions it is unsafe to compleatly replace, because they hold data or functions that might be used elsewhere.
+
+                        type 0: require to static data in main hiddin function:
+                            solar_array
+                            high_gravity
+                            low_gravity
+                        type 1: holds some data that looks important, and might cause issues if not saved
+                            comm_relay
+                            hostile_activity
+                            pirate_activity
+                            event_bounty
+                            event_food_shortage
+                            luddic_majority
+                            decivilized_subpop
+                        type 2: would be extremely difficult to separate from its core function.
+                            #resorse deposit conditions
+                            #in regars to this: everything here can [probably] be hidden by exstending the condition they all exstend, as it requires static data.
+                            ore_sparse
+                            ore_moderate
+                            ore_abundant
+                            ore_rich
+                            ore_ultrarich
+                            rare_ore_sparse
+                            rare_ore_moderate
+                            rare_ore_abundant
+                            rare_ore_rich
+                            rare_ore_ultrarich
+                            volatiles_trace
+                            volatiles_diffuse
+                            volatiles_abundant
+                            volatiles_plentiful
+                            organics_trace
+                            organics_common
+                            organics_abundant
+                            organics_plentiful
+                            farmland_poor
+                            farmland_adequate
+                            farmland_rich
+                            farmland_bountiful
+                            water_surface
+                            volturnian_lobster_pens
+
+                            #other
+                            shipping_disruption
+                            pather_cells
+                            ai_core_admin
+                            rogue_ai_core
+                            recent_unrest
+                            free_market
+
+
+                        type ?? proboly not even in the game, but would proboly require at least type 1 to implement
+                            event_smuggling
+                            event_trade_disruption
+
+                        type ?001 farther info required. i dont quite know what to think of this, or it exstends something that will reuqire digging to find
+                           #exstends something called 'world farming'
+                           #note: world farming eather lands in type ??, or type 2. i am unsure.
+                           tundra
+                           twilight
+                           barren_marginal
+                           terran
+                           jungle
+                           water
+                           arid
+                           desert
+                           ice
+
+                           #other
+
+
             all other modifiers seem to be stored in the '\data\campaign\market_conditions.csv'
                 -this looks almost easy to override...
                 IDEA:
