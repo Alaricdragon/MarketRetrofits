@@ -1,5 +1,9 @@
 V0.3:
     save combatable with V0.2+:
+V0.2.0.4(private):
+    save combatable with V0.2+:
+    created a way to add all the market conditions to my thingy mabob in marketRetrofits_startup.
+    worked on the all mighty todo list.
 V0.2.0.3(private):
     save combatable with V0.2+:
     updates a few random functions. disconected the ability to change active market conditions, as well as moved the function into marketConditionReplacer master list.

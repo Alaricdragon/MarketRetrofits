@@ -17,6 +17,7 @@ public class MarketRetrofit_hiddenCondition extends BaseMarketConditionPlugin {
     public void apply(String id) {
         super.apply(id);
         applyCC();
+        marketConditonReplacer_MasterList.applyToMarket(market);
         //applyMarketConditionReplacer();
         //BaseHazardCondition a = new BaseHazardCondition();
         /*/if(market.hasCondition("AIRetrofit_AIPop")) {
