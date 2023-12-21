@@ -1,5 +1,10 @@
 current:
 MOVED industry.csv FILE TO 'old' FOLDER. MOVE BACK TO 'campaing' to reactavate
+questions:
+
+non libary things:
+    add version checker support.
+    cry a lot
 create the list of wanted libarys:
     1) industry replacer (disabled for now) (reason: extra unacceptable lag)
         -to fix, minimize possible causes of lag, like for example, the number of data transfers, and the hundreds of if statements.
@@ -7,7 +12,130 @@ create the list of wanted libarys:
         -possability: remove ALL data transfer. have the code run the stored industry directly. when the industry changes, have a function that lets the new industry take whatever it wants from the old one. then i dont need to worry about things.
     2) condition replacer
         -replaces functions in market conditions with ones of my own.
-    3) supply demand library (functional)
+        notes:
+            hazard rating is stored in the '\data\campaign\procgen\condition_gen_data.csv'.
+                -this looks very hard to do anything with....
+                -market.getHazard().modifyFlat(id, hazard, condition.getName()); is how the market changes what the hazard is for said condition.
+                -BaseHazardCondition class? is this the thing?
+                IDEA:
+                    3.a)(done) make a new class that hold a set of marketConditionReplacer classes.
+                        -each class hold a ID, and the marketConditionID they are normally applied to
+                        -each class holds 2 functions: 1 tells me what condition this new market condition represents. the other tells me weather or not this condition can be applyed to this market at this time.
+                        -NOTE: this does not represent the market condition itself. this only determines if the market condition should change..
+                    3.b)(done) make it so everytime a market is applied to, it looks at its market conditions, to determine if any of them should change, useing a priority system, then doing the base one..?
+                        -i could put a system that stores what market conditions were orginaly on the world, and what ones are active now. having this stored will save a lot of processing time.
+                            -ISSUE: unless i make it recalculate on every startup, i might fail to beagle to tell what market is one what thingy mabob?
+                        -if i notice that one is gone, i will assume that the market condition should be gone -forever- and deleate it...
+                    3.c)(done. have not done any that have a type >= 0) copy all base game market conditions. set one to be 'hidden' and have 0 hazzard. also store the generating plugin on that market condition.
+                         set one to be 'shown'. it will look like the old market condition, and will hold its hazard rating onto itself. it will be the market condition that is the 'base' market condition.
+                    3.d)(started. all conditions that are possable are like this right now.) setup a system in marketConditionReplacerSet were i can change what the 'base' market condition is. be default it will be ID, but it can be not ID instead...
+                    -NOTE:(maybe. i dont remember why i would want this, other then there being a lot of them....) i am only going to set up market conditions to be the defalt only when they are in PGen. and maybe freeport as well.
+                           why? a lot of condition are, um already invisible. so like not doing that no sir arg.
+                    3.e)(done. done is marketRetrofits_startup) set up all the condition sets into code, so they all get setup on startup.
+                        -NOTE: only set the market conditions as base market conditions. thats all im doing.
+                    3.f) change the way the data works so there is two of things.....
+                            -there HAS TO be a better way to go about that. there just has to. this is so inefishant.
+                            -idea: make the master list hold 2 lists. one for items that have been marked as having the condition they are replacer exstend the defaltCondition, and one for thoughs that dont.
+                                   the first would be able to be ran only from its own marketcondition, and when the condition is removed, i can simply remove all reference to its existence, hopefully?
+                                   the second meanwhile, can be ran through the market condition changer from the master list.
+                                   -there is a possable issue were i remove a condition, and fail to detect that it was removed and not remove the display? i will need to look into this...
+                    3.g) actavate the market condition changer in MarketREtrofits_hiddencondition....
+                        -note: i did attempt a test, and i noticed that none of the 'base' conditions apeard, for unknown reasons. i will need to look into this later.
+                               -for now i am done for today.
+                    -ISSUE:
+                        1) there is a possibility that a 'invisable' market condition of my own gets overriding by someone else.
+                        2) in regards to market conditions hazzard rating and its display, wont it not be displayed right because of the constant changes?
+                        3) issue regarding things that call market conditions, to like get data from them.
+                            -the issue is the fact that some fucntions will try to cast market conditions over to a certen type of market condition. this causes issues.
+                            -were? how? simple: the market condition is cast to say (marketCondtionTypeA)genaricMarketCondition, but because i replace all market condition with my own script, said market condition no longer exsists....
+                    -SOLLUTIONS?
+                        1) make it so i can detect when the 'invisable' market condition is set right, but making them all extend a class that only does that.
+                           if set up to be automatic, would let other people support this mod with litterly no issue on my end, and little on there own.. yes that sohuld work
+                        2) no, it will be fine. the hazzard rating is not linked to the original market condition, so it should be good out there.
+                        3) the only way i see that could do this is to -remove- all the 'base' market conditions. or alturnitvely, keep them, but set them to be invisable when not in play, in addition to countering there modifers when they are not inplay?
+                    -NOTE:
+                        apply and un apply run constantly in market conditions. just so you know.
+                    -list:
+                        a list of market conditions it is unsafe to completely replace, because they hold data or functions that might be used elsewhere.
+
+                        type 0: require to static data in main hiddin function:
+                            solar_array
+                            high_gravity
+                            low_gravity
+                        type 1: holds some data that looks important, and might cause issues if not saved
+                            comm_relay
+                            hostile_activity
+                            pirate_activity
+                            event_bounty
+                            event_food_shortage
+                            luddic_majority
+                            decivilized_subpop
+                        type 2: would be extremely difficult to separate from its core function.
+                            #resorse deposit conditions
+                            #in regars to this: everything here can [probably] be hidden by exstending the condition they all exstend, as it requires static data.
+                            ore_sparse
+                            ore_moderate
+                            ore_abundant
+                            ore_rich
+                            ore_ultrarich
+                            rare_ore_sparse
+                            rare_ore_moderate
+                            rare_ore_abundant
+                            rare_ore_rich
+                            rare_ore_ultrarich
+                            volatiles_trace
+                            volatiles_diffuse
+                            volatiles_abundant
+                            volatiles_plentiful
+                            organics_trace
+                            organics_common
+                            organics_abundant
+                            organics_plentiful
+                            farmland_poor
+                            farmland_adequate
+                            farmland_rich
+                            farmland_bountiful
+                            water_surface
+                            volturnian_lobster_pens
+
+                            #other
+                            shipping_disruption
+                            pather_cells
+                            ai_core_admin
+                            rogue_ai_core
+                            recent_unrest
+                            free_market
+
+
+                        type ?? proboly not even in the game, but would proboly require at least type 1 to implement
+                            event_smuggling
+                            event_trade_disruption
+
+                        type ?001 farther info required. i dont quite know what to think of this, or it exstends something that will reuqire digging to find
+                           #exstends something called 'world farming'
+                           #note: world farming eather lands in type ??, or type 2. i am unsure.
+                           #      world farming is.. empty. it has no data and no functions. why does it exsist? this is compleatly unknown. i dont know. i have no clue at all....
+                           #      i will need time to think about it.
+                           tundra
+                           twilight
+                           barren_marginal
+                           terran
+                           jungle
+                           water
+                           arid
+                           desert
+                           ice
+
+                           #other
+
+
+            all other modifiers seem to be stored in the '\data\campaign\market_conditions.csv'
+                -this looks almost easy to override...
+                IDEA:
+                    1) replace everything in '\data\campaign\market_conditions.csv' with my own code that will act as a 'shell' of the normal code..
+                    2) add a new class in 'condition replacer' that acts as the 'filling' of a given market condition...
+                    3) set that 'condition replacer' to have the same functions as all the classes it replaced.
+    3)(functional) supply demand library
         -allows the mass or pacific changing of supply or demand on a industry
         issues:
             might possibly not effect the cargo supply fleets carry to and from the market? need to check that because i might be wrong.
@@ -17,71 +145,4 @@ create the list of wanted libarys:
         -allows for changing in the hazard button name, description, looks, and function.
     6) free port changer
         -allows the change in the free-port name, and description.
-    7) found a market change
-        -allows players to have there own requirements and addition code run when founding a market. multiple options available.
-        -here is the plan for this:
-            1)(done) survey plugging: the survey plugging has a function called found outpost. this is founding a market, and can be set to any commodities.
-                -need to have this with a built in compatibility patch for crew replacer, or im going to have issues.
-                -will need to beable to change what function is running based off a variable.
-            2)(done) edit the rules that normal found a market.
-                -NOTE:
-                    OK: in the base game, when there is no jump onits, the game shows some text about how 'establishing a colonly is not a option', just on the main screen. also, the button to do so is greyed out.
-                    i need to remove this text, provided there is a foundable market on this world.
-                    i also need to grey out the found a market text if there is no foundable market on this world.
-                -need to replace the thing that greys out the market found button if your in a 'closed system'. replace it with a custom function that detects if there is any type of market available to found.
-                    -(DONE)surveySystemIsCutOffCanNotColonize: remove text and script. make this trigger MarketRetrofits_customMarketFounding_CutOffCanNotColonize.
-                    -(Done. untested)surveyPrintHostilesTextEstColony: (im unsure how this works. might need to experiment. ) remove text and script. make this trigger MarketRetrofits_customMakretFounder_HostilesAreAround.
-                        -NOTE: i need to test this one. i have to find a spot that i can find some hostile fleets and a market to interact with...
-                        -also getting patrols to chase you around and round does not work. i need something a letter more hostile then that. maybe i need luna lib for this?
-                    -(DONE)surveyAddOptionPerformedAlready: change its options to a new option that creates a list of possible markets types, and lets you click on one of them.
-                    -(not required)surveyOptionPerformSurvey: founds a market (i think?).
-
-                -(done)need to replace the script for 'hostile activity nearby', with my own script that does not prevent founding a market provided you have a market type that is foundable.
-                    -the rules for this are:
-                        surveyPrintHostilesTextEstColony
-
-                -(NO LONGER REQUIRED)put this somewhere:
-                    when i leave the space / found a market, set MarketRetrofits_MarketFounderMasterList. hostilesTemp && noJumpTemp to false.
-
-            3)(done) create the 'market founder' class. it will require the following functions:
-                3.1)(done) a function to get the required resources to found a market.
-                3.2)(done) a function to set what the text is named for there own market.
-                3.3)(done) a function to set the description of that market type.
-                3.4)(done) a function to deside if this market type is valid on this world.
-                3.5)(done) a function to run custom code -after- the market has been founded.
-            4)(done) a 'market founder master list' class. it will hold and allow you to aquire other market founders.
-                this is hard to understand..
-                so i don't think i can run the dialog from the inputed dialog pluging.
-                well, i might beable to, but i dont understand how to form options so im not even goin to try.
-                so heres what im going to do:
-                1)(done)create a new sell class. it will run a dialog interaction thing. (mimic AIRetrofits_RobotForgeDiologPlugin2 form AIRetrofits.)
-                2)(done)make a cass for the main menu, called MarketRetrofits_customMarketFounder_dialog
-                3)(done) make a way for moders to render a system impossible to colonize.
-                    -why? simple. its possible to make a market that can conlinize any system, however this comes with risks. like for example
-                     a system being temporarily, and the user losing all there markets they colonized within. or worse, incountering a hard crash.
-                     so im going to install a system to prevent this.
-            5)(done) make a interaction dialog plugin for displaying my list of available markets at a given time.
-                -this needs to:
-                1)(done) read all the items in the master list, and display options for every valid market.
-                2)(done) allow the user to click on any option, with will:
-                    a)(done) run a description page, with a continue button at the bottom, the will move onto the found a market screen.
-                    b)(done) run a custom dialog plugin thats stored in a given market founder.
-                    c)(done) run the found a market screen.
-                3)(done) allow so many items to show up per page, with a next / last button.
-                4)(done) a back button, to return to the main screen of the world. (the one were you survey and things.)
-            6(done) options:
-                add all text to the settings file.
-                add relevent options for the dialog to the settings file
-            7(done) a way to safely trigger the exstra code for founding a market of a player, hopefully with no misfires.
-                1)(done) set up a listiner, that if that player founds a market on a world they were just on, runs the market founding world.
-                2)(done) set up a way to reset the market im currently looking at after i leave it, so i dont have situations were the player starts to found a market, leaves, then another mod founds a market there, and all the code that was running is triggered all at once. would suck.
-                    -how would i even do that? is there a way to say 'hey, you left a market?'
-            8)(done) documentation
-                -need to write out all the documentation for this inter section of code.
-                -only need to write the read me, and the function descriptions for MarketRetrofits_MarketFounderMasterList
-            9() touchups:
-                1) (done)create a way to display / get a option for a market founder.
-                2) (done)create a way boolean, that makes the option appear greyed out if unusable, as apposed to just not being there.
-                3) (done)make marketfounders automatically add themselves to market retrofits on creation.
-            issue:
-            questions:
+    7)(done) custom market founder

@@ -1,18 +1,17 @@
 package data.scripts;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.campaign.econ.Market;
 import data.scripts.combatabilityPatches.MarketRetrofits_InitCombatabilityPatches;
 import data.scripts.customMarketFounding.MarketRetrofits_CustomMarketFounderType;
 import data.scripts.customMarketFounding.MarketRetrofits_MarketFounderMasterList;
 import data.scripts.customMarketFounding.MarketRetrofits_customMarketFounder_BaseMarket;
 import data.scripts.customMarketFounding.MarketRetrofits_customMarketFounder_MarketFoundingListiner;
 import data.scripts.industries.Implementation.defaultIndustrys.*;
-import data.scripts.industries.MarketRetorfits_ExstraData;
 import data.scripts.listiners.marketRetrofit_marketInteractionListiner;
 import data.scripts.listiners.marketRetrofit_marketListiner;
-import data.scripts.supplyDemandLibary.base.MarketRetrofit_CCSetBase;
-import data.scripts.supplyDemandLibary.base.MarketRetrofit_CCSwapperBase;
+import data.scripts.marketConditionReplacer.marketConditionReplacer_Condition;
+import data.scripts.marketConditionReplacer.marketConditionReplacer_ConditionSet;
+import data.scripts.marketConditionReplacer.marketConditonReplacer_MasterList;
 import data.scripts.supplyDemandLibary.changes.MarketRetrofit_CCAddDemand;
 import data.scripts.supplyDemandLibary.changes.MarketRetrofit_CCSwapSupply;
 import data.scripts.supplyDemandLibary.lists.MarketRetrofit_CCMasterList;
@@ -37,6 +36,7 @@ public class marketReplacer_startup extends BaseModPlugin {
         //applyDefaultIndustryInstances();
         MarketRetrofits_InitCombatabilityPatches.onApplicationLoad();
         applyDefaultCustomMarketFounder();
+        setupDefaultConditionReplaces();
     }
 
     @Override
@@ -213,5 +213,123 @@ public class marketReplacer_startup extends BaseModPlugin {
         //b.addChange(a);
         //b.applyToIndustry("IndustryName0");
         //b.applyToIndustry("IndustryName1");
+    }
+    private static void setupDefaultConditionReplaces(){
+        String[] list = {
+                "id",
+                "urbanized_polity",
+                "industrial_polity",
+                "rural_polity",
+                "large_refugee_population",
+                //"volturnian_lobster_pens",
+                "vice_demand",
+                "organized_crime",
+                "frontier",
+                "shipbreaking_center",
+                "trade_center",
+                "decivilized",
+                "decivilized_subpop",
+                "abandoned_station",
+                "cottage_industry",
+                "outpost",
+                //"luddic_majority",
+                "stealth_minefields",
+                "regional_capital",
+                //"free_market",
+                "closed_immigration",
+                "uninhabitable",
+                "ice",
+                "desert",
+                "arid",
+                "water",
+                "jungle",
+                "terran",
+                "barren_marginal",
+                "twilight",
+                "tundra",
+                "cryovolcanic",
+                "dissident",
+                "headquarters",
+                "hydroponics_complex",
+                "population_1",
+                "population_2",
+                "population_3",
+                "population_4",
+                "population_5",
+                "population_6",
+                "population_7",
+                "population_8",
+                "population_9",
+                "population_10",
+
+                //"event_food_shortage",
+                //"recent_unrest",
+                "event_trade_disruption",
+                "event_smuggling",
+                //"System Bounty",
+                //"rogue_ai_core",
+                //"ai_core_admin",
+                //"pirate_activity",
+                //"hostile_activity",
+                //"pather_cells",
+
+                //"shipping_disruption",
+
+                //"comm_relay",
+
+                "habitable",
+                "ruins_scattered",
+                "ruins_widespread",
+                "ruins_extensive",
+                "ruins_vast",
+                "cold",
+                "very_cold",
+                "hot",
+                "very_hot",
+                "tectonic_activity",
+                "extreme_tectonic_activity",
+                "no_atmosphere",
+                "thin_atmosphere",
+                "toxic_atmosphere",
+                "dense_atmosphere",
+                "mild_climate",
+                "extreme_weather",
+                //"low_gravity",
+                //"high_gravity",
+                "irradiated",
+                "inimical_biosphere",
+                //"water_surface",
+                "poor_light",
+                "dark",
+                "meteor_impacts",
+                "pollution",
+                /*"ore_sparse",
+                "ore_moderate",
+                "ore_abundant",
+                "ore_rich",
+                "ore_ultrarich",
+                "rare_ore_sparse",
+                "rare_ore_moderate",
+                "rare_ore_abundant",
+                "rare_ore_rich",
+                "rare_ore_ultrarich",
+                "volatiles_trace",
+                "volatiles_diffuse",
+                "volatiles_abundant",
+                "volatiles_plentiful",
+                "organics_trace",
+                "organics_common",
+                "organics_abundant",
+                "organics_plentiful",
+                "farmland_poor",
+                "farmland_adequate",
+                "farmland_rich",
+                "farmland_bountiful",*/
+                //"solar_array",
+        };
+        for(String b : list) {
+            marketConditionReplacer_ConditionSet a = marketConditonReplacer_MasterList.getOrCreateSet(b);
+            a.base = new marketConditionReplacer_Condition("MarketRetrofits_"+b, 0);
+        }
     }
 }
