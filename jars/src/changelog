@@ -1,5 +1,13 @@
-V0.3:
+V0.2.1:
+    save compatible with V0.2+:
+    fixes:
+        maybe fixed a issue that caused a crash on pressing escape in a normadic survival operation. but could not replicate it to check.
+    background:
+        did some background work for adding a few more things, that are never going to be ready at this rate.
+V0.2.0.4(private):
     save combatable with V0.2+:
+    fixes:
+        added a catch statment to hopefully catch anything -wired- entering market retrofits dialog options. this somehow happend. what thenf maskdsadasd
 V0.2.0.4(private):
     save combatable with V0.2+:
     created a way to add all the market conditions to my thingy mabob in marketRetrofits_startup.

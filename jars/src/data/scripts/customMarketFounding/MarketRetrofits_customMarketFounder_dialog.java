@@ -113,7 +113,12 @@ public class MarketRetrofits_customMarketFounder_dialog implements InteractionDi
         if (optionText != null) {
             this.text.addParagraph(optionText, Global.getSettings().getColor("buttonText"));
         }
-        String optionData2 = (String)optionData;
+        String optionData2 = "";
+        try {
+            optionData2 = (String) optionData;
+        }catch (Exception e){
+
+        }
         MarketRetrofits_Logger.logging("looking for option: "+optionData2,this, MarketRetrofits_Constants.CustomMarketFounderLogs);
         try {
             if (optionData2.equals(nextOption)){//optionData2 == AIRetrofits_RobotForgeDiologPlugin.Menu.NEXT) {
