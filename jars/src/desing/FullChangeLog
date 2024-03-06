@@ -1,6 +1,10 @@
+V0.2.3:
+    save combatable with V0.2+:
+    fixed rare issue with being unable errors when AOTD pre-collaps facility on them
 V0.2.2:
     save combatable with V0.2+:
     updated to the latest version
+    added version checker support
 V0.2.1.1(private):
     save combatable with V0.2+:
     made sure all the borken things were disabled.

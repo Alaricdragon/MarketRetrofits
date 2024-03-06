@@ -80,8 +80,18 @@ public class MarketRetrofits_MarketFounderMasterList {
 
     }
     public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(SectorEntityToken planet){
-        noJumpTemp = planet.getStarSystem().hasTag(SYSTEM_CUT_OFF_FROM_HYPER);
-        hostilesTemp = new HostileFleetNearbyAndAware().execute(null,null,null,null);
+        noJumpTemp = false;
+        try {
+            noJumpTemp = planet.getStarSystem().hasTag(SYSTEM_CUT_OFF_FROM_HYPER);
+        }catch (Exception e){
+            MarketRetrofits_Logger.logging("failled to get tag 'SYSTEM_CUT_OFF_FROM_HYPER'. error: "+e,new MarketRetrofits_MarketFounderMasterList(),true);
+        }
+        hostilesTemp = false;
+        try {
+            hostilesTemp = new HostileFleetNearbyAndAware().execute(null, null, null, null);
+        }catch (Exception e){
+            MarketRetrofits_Logger.logging("failed to get data: 'HostileFleetNearbyAndAware()'. error: "+e,new MarketRetrofits_MarketFounderMasterList(),true);
+        }
         return getFoundableMarkets(planet,hostilesTemp,noJumpTemp);
     }
     public static ArrayList<MarketRetrofits_MarketFounder> getFoundableMarkets(SectorEntityToken planet, boolean hostiles, boolean noJump){
