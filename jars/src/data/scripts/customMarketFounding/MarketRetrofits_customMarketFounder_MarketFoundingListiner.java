@@ -34,6 +34,8 @@ public class MarketRetrofits_customMarketFounder_MarketFoundingListiner implemen
     public static void resetMarketFounder(){
         MarketRetrofits_Logger.logging("reseting the market founder",new MarketRetrofits_MarketFounderMasterList(),true);
         marketFounder = null;
-        MarketRetrofits_SurveyPlugin.costArray = null;
+        //MarketRetrofits_SurveyPlugin.costArray = null;
+        MarketRetrofits_SurveyPlugin.activeFounder = null;
+        MarketRetrofits_SurveyPlugin.planet = null;
     }
 }

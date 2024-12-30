@@ -2,6 +2,7 @@ package data.scripts.customMarketFounding.surveyPlugin;
 
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.PlanetAPI;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.plugins.SurveyPlugin;
@@ -14,6 +15,8 @@ import java.util.Map;
 public class MarketRetrofits_SurveyPlugin implements SurveyPlugin {
     public static SurveyPlugin plugin = new MarketRetrofits_SurveyPlugin_Base();
     public static Map<String, Integer> costArray = null;
+    public static MarketRetrofits_MarketFounder activeFounder = null;
+    public static SectorEntityToken planet = null;
     @Override
     public void init(CampaignFleetAPI fleet, PlanetAPI planet) {
         plugin.init(fleet,planet);
@@ -67,9 +70,11 @@ public class MarketRetrofits_SurveyPlugin implements SurveyPlugin {
     @Override
     public Map<String, Integer> getOutpostConsumed() {
         //CrewReplacer_Log.loging("getOutpostConsumed",this,true);
-        if (costArray == null) {
-            costArray = MarketRetrofits_MarketFounderMasterList.getMarketFounder("MarketRetrofits_DefaultMarket").getOutpostConsumed(null);
+        if (activeFounder == null) {
+            activeFounder = MarketRetrofits_MarketFounderMasterList.getMarketFounder("MarketRetrofits_DefaultMarket");
+            costArray = activeFounder.getOutpostConsumed(null);
         }
+        costArray = activeFounder.getOutpostConsumed(planet);
         Map<String, Integer> result = costArray;//new LinkedHashMap<String, Integer>();
         /*
         result.put(Commodities.CREW, 9999);

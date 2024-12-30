@@ -34,9 +34,9 @@ public class marketReplacer_startup extends BaseModPlugin {
             MarketRetrofits_Logger.logging("is null",this);
         }*/
         //applyDefaultIndustryInstances();
-        MarketRetrofits_InitCombatabilityPatches.onApplicationLoad();
         applyDefaultCustomMarketFounder();
         setupDefaultConditionReplaces();
+        MarketRetrofits_InitCombatabilityPatches.onApplicationLoad();
     }
 
     @Override

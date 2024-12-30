@@ -2,6 +2,8 @@ current:
 MOVED industry.csv FILE TO 'old' FOLDER. MOVE BACK TO 'campaing' to reactavate
 questions:
 
+issues:
+    possibly in MarketRetrofits_CCAddSupply not adding supply?
 non libary things:
     add version checker support.
     cry a lot

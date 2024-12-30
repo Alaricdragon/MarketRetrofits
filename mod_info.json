@@ -2,7 +2,7 @@
 	"id":"aaamarketRetrofits", # internal id
 	"name":"market retrofits", # displayed to the player
 	"author":"Alricdragon",
-	"version":"0.2.3",
+	"version":"0.2.4",
 	"description":"libary for changeing stats of markets",
 	"gameVersion":"0.97a-RC10",
 	"jars":["jars/marketRetrofit.jar"],
