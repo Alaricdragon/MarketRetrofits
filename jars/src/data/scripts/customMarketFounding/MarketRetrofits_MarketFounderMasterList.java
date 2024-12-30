@@ -29,7 +29,8 @@ public class MarketRetrofits_MarketFounderMasterList {
     public static boolean addOrReplaceMarketFounder(MarketRetrofits_MarketFounder MarketFounder){
         for(int a = 0; a < list.size(); a++){
             if(list.get(a).ID.equals(MarketFounder.ID)){
-                list.set(a,MarketFounder);
+                list.remove(a);
+                list.add(MarketFounder);
                 return true;
             }
         }
@@ -56,7 +57,8 @@ public class MarketRetrofits_MarketFounderMasterList {
     public static boolean addOrReplaceMarketFounderType(MarketRetrofits_CustomMarketFounderType MarketFounderType){
         for(int a = 0; a < FoundTypeList.size(); a++){
             if(FoundTypeList.get(a).ID.equals(MarketFounderType.ID)){
-                FoundTypeList.set(a,MarketFounderType);
+                FoundTypeList.remove(a);
+                FoundTypeList.add(MarketFounderType);
                 return true;
             }
         }

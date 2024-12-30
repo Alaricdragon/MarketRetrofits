@@ -22,7 +22,9 @@ public class MarketRetrofits_CustomMarketFounderType {
         }
         MarketRetrofits_MarketFounderMasterList.dialogTemp1.setPlugin(MarketRetrofits_MarketFounderMasterList.dialogTemp2);
         OpenCoreTab a = new OpenCoreTab();
-        MarketRetrofits_SurveyPlugin.costArray = marketFounder.getOutpostConsumed(Planet);
+        //MarketRetrofits_SurveyPlugin.costArray = marketFounder.getOutpostConsumed(Planet);
+        MarketRetrofits_SurveyPlugin.activeFounder = marketFounder;
+        MarketRetrofits_SurveyPlugin.planet = Planet;
         //Misc.Token b = new Misc.Token("CARGO OPEN", Misc.TokenType.VARIABLE);
         //OpenCoreTab CARGO OPEN
         //paramsTemp1.add(b);//.put("CARGO","OPEN");
